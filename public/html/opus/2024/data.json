@@ -1,0 +1,65 @@
+[
+  {
+    "id": 1,
+    "picPath": "1.image/图片10.png",
+    "title": "2013-2022年中国三农发展数据分析报告",
+    "author": "朱雯雯 牛梦杰 张玉晨 马雨昕",
+    "cover": 10
+  },
+  {
+    "id": 2,
+    "picPath": "2.image/图片10.png",
+    "title": "2024年中国大学（软科）排名数据分析",
+    "author": "李慧婷 王梦晗 丁晓旭 邹抒函",
+    "cover": 10
+  },
+  {
+    "id": 3,
+    "picPath": "3.image/图片4.png",
+    "title": "BOSS直聘北京地区广告营销行业招聘数据分析报告",
+    "author": "张紫茹",
+    "cover": 4
+  },
+  {
+    "id": 4,
+    "picPath": "4.image/图片17.png",
+    "title": "中国非遗数据分析报告",
+    "author": "苏婷婷 石艺菲 罗茵薇 李玉婷 席鹏霞 刘昱宁",
+    "cover": 17
+  },
+  {
+    "id": 5,
+    "picPath": "5.image/图片3.png",
+    "title": "有关2020-2023年淄博旅游业变化情况及其原因的数据分析报告",
+    "author": "臧禹晰",
+    "cover": 3
+  },
+  {
+    "id": 6,
+    "picPath": "6.image/图片5.png",
+    "title": "北京二手房及房价数据分析报告",
+    "author": "阳晴 石智灵 麦迪乃",
+    "cover": 5
+  },
+  {
+    "id": 7,
+    "picPath": "7.image/图片14.png",
+    "title": "北京市二手房数据分析报告",
+    "author": "赵晨辉 贺小愚 付兴彤 牛子艺",
+    "cover": 14
+  },
+  {
+    "id": 8,
+    "picPath": "8.image/图片12.png",
+    "title": "当当网畅销书top500榜单数据分析报告",
+    "author": "陈介祺 胡俊希 趙德芳 崔奡楠",
+    "cover": 12
+  },
+  {
+    "id": 9,
+    "picPath": "9.image/图片3.png",
+    "title": "疫情下的就业问题分析",
+    "author": "冯月媱 柯雅晗 杨婷琳 马菡若",
+    "cover": 3
+  }
+]
