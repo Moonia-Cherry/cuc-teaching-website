@@ -211,11 +211,9 @@ const toggleFAQ = (id: string) => {
         class="faq-item"
       >
         <div class="faq-question" @click="toggleFAQ(faq.id)">
-          {{ faq.question }}
-          <span>
-            <span class="question-type">{{ faq.type }}</span>
-            <span class="toggle-icon">{{ faq.isOpen ? "－" : "＋" }}</span>
-          </span>
+          <span class="question-title">{{ faq.question }}</span>
+          <span class="question-type">{{ faq.type }}</span>
+          <span class="toggle-icon">{{ faq.isOpen ? "－" : "＋" }}</span>
         </div>
 
         <div v-if="faq.isOpen" class="faq-answer">
@@ -272,6 +270,7 @@ const toggleFAQ = (id: string) => {
 
 .faq-question {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   padding: 15px;
   font-weight: 500;
@@ -281,6 +280,10 @@ const toggleFAQ = (id: string) => {
 
   &:hover {
     background: #e9ecef;
+  }
+
+  .question-title {
+    flex-grow: 1;
   }
 }
 

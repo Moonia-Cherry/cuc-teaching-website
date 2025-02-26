@@ -108,7 +108,7 @@ const goBack = () => {
 }
 
 .showcase-title {
-  margin-bottom: 1.5rem;
+  margin: 1.5rem 0;
   text-align: center;
 }
 
@@ -180,6 +180,24 @@ const goBack = () => {
   .work-author {
     font-size: 0.9rem;
     color: var(--el-text-color-secondary);
+  }
+}
+
+@media (width <= 768px) {
+  .text-content {
+    flex: 1; // 占据剩余25%空间
+    padding: 0 8px;
+
+    .work-title {
+      margin-bottom: 6px;
+      font-size: 4vw;
+      color: var(--el-text-color-primary);
+    }
+
+    .work-author {
+      font-size: 3vw;
+      color: var(--el-text-color-secondary);
+    }
   }
 }
 </style>
