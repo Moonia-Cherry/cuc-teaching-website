@@ -4,7 +4,7 @@ import { Search } from "@element-plus/icons-vue";
 import MarkdownIt from "markdown-it";
 import Fuse from "fuse.js";
 import { Segment, useDefault } from "segmentit";
-import { debounce } from 'lodash-es'
+import { debounce } from "lodash-es";
 
 // 初始化中文分词器
 const segment = useDefault(new Segment());
@@ -13,7 +13,7 @@ const segment = useDefault(new Segment());
 const md = new MarkdownIt({
   html: true,
   linkify: true,
-  typographer: true,
+  typographer: true
 });
 
 // 定义FAQ类型
@@ -28,34 +28,36 @@ interface FAQ {
 // 初始化FAQ列表
 const faqs = ref<FAQ[]>([
   {
-    id: 1,
+    id: "1",
     question: "如何注册账号？",
     answer:
       "## 注册步骤\n1. 点击**注册**按钮\n2. 填写表格\n![示意图](/images/register.png)",
     isOpen: false,
-    type: '账号相关',
+    type: "账号相关"
   },
   {
-    id: 2,
+    id: "2",
     question: "忘记密码怎么办？",
-    answer: "**重置密码步骤**：\n- 访问登录页\n- 点击'忘记密码'\n- 验证邮箱后重置",
+    answer:
+      "**重置密码步骤**：\n- 访问登录页\n- 点击'忘记密码'\n- 验证邮箱后重置",
     isOpen: false,
-    type: '账号相关',
+    type: "账号相关"
   },
   {
-    id: 3,
+    id: "3",
     question: "如何联系客服？",
     answer: "客服联系方式：\n- 电话：400-123-4567\n- 邮箱：support@example.com",
     isOpen: false,
-    type: '客服',
+    type: "客服"
   },
   {
-    id: 101,
+    id: "101",
     question: "Python中关于0.1+0.2!=0.3的解释",
-    answer: "![图1](src/assets/faq/101-1.png)\n\n这里涉及到一个知识点，叫做不确定尾数。因为Python在计算前会将我们输入的十进制数字转换为二进制，计算后，然后将二进制的结果又转换为十进制数字显示出来。\n\n![图2](src/assets/faq/101-2.png)\n\n对于小数而言，因为十进制小数与二进制小数之间并不是完全对等转换的，一般来说，一个十进制小数会转换为无限位数的二进制小数，但是呢，因为计算机一般只截取无限位数中前53位，所以造成同一个小数的十进制表示结果与二进制表示结果并不等价。\n\n![图3](src/assets/faq/101-3.png)\n\n<div style='text-align:center;color:gray'>0.1用二进制表示(截取前53位)</div>\n\n经过两次转换就造成了不确定尾数。\n\n下面是0.1,0.2及0.3在内存中25位有效位数的表示，可以看出0.1+0.2!=0.3\n\n![图4](src/assets/faq/101-4.png)\n",
+    answer:
+      "![图1](src/assets/faq/101-1.png)\n\n这里涉及到一个知识点，叫做不确定尾数。因为Python在计算前会将我们输入的十进制数字转换为二进制，计算后，然后将二进制的结果又转换为十进制数字显示出来。\n\n![图2](src/assets/faq/101-2.png)\n\n对于小数而言，因为十进制小数与二进制小数之间并不是完全对等转换的，一般来说，一个十进制小数会转换为无限位数的二进制小数，但是呢，因为计算机一般只截取无限位数中前53位，所以造成同一个小数的十进制表示结果与二进制表示结果并不等价。\n\n![图3](src/assets/faq/101-3.png)\n\n<div style='text-align:center;color:gray'>0.1用二进制表示(截取前53位)</div>\n\n经过两次转换就造成了不确定尾数。\n\n下面是0.1,0.2及0.3在内存中25位有效位数的表示，可以看出0.1+0.2!=0.3\n\n![图4](src/assets/faq/101-4.png)\n",
     isOpen: false,
-    type: 'python',
-  },
+    type: "python"
+  }
 ]);
 
 const searchText = ref("");
@@ -65,9 +67,9 @@ const smartSplitKeywords = (query: string) => {
   return query
     .split(/\s+/) // 先处理手动分隔
     .flatMap(
-      (term) => segment.doSegment(term, { simple: true }) // 自动分词
+      term => segment.doSegment(term, { simple: true }) // 自动分词
     )
-    .filter((word) => word.length >= 2);
+    .filter(word => word.length >= 2);
 };
 
 // 清除Markdown格式
@@ -88,21 +90,21 @@ watchEffect(() => {
       {
         name: "question",
         weight: 0.7,
-        getFn: (item) => item.question.toLowerCase(),
+        getFn: item => item.question.toLowerCase()
       },
       {
         name: "answer",
         weight: 0.3,
-        getFn: (item) => stripMarkdown(item.answer).toLowerCase(),
-      },
+        getFn: item => stripMarkdown(item.answer).toLowerCase()
+      }
     ],
     threshold: 1, // 提高容错率
     ignoreLocation: true,
     minMatchCharLength: 2,
     useExtendedSearch: true,
-    findAllMatches: true, // 查找所有匹配项
-    tokenize: true,
-    matchAllTokens: false,
+    findAllMatches: true // 查找所有匹配项
+    // tokenize: true,
+    // matchAllTokens: false
   });
 });
 
@@ -118,7 +120,7 @@ watchEffect(() => {
 //     filteredFaqs.value = [];
 //   }
 //   filteredFaqs.value = queryResult;
-// }, 500) 
+// }, 500)
 
 // 过滤后的FAQ列表
 const filteredFaqs = computed(() => {
@@ -151,9 +153,11 @@ const filteredFaqs = computed(() => {
   console.log("根据拼接分词搜索", fuse.value?.search(keywords.join(" ")));
 
   // let queryResult = fuse.value?.search(keywords.join(' '))
-  console.log(fuse.value?.search(keywords.join(" ")).map((item) => item.item));
+  console.log(fuse.value?.search(keywords.join(" ")).map(item => item.item));
   console.log(keywords);
-  let queryResult = fuse.value?.search(keywords.join("|")).map((item) => item.item);
+  let queryResult = fuse.value
+    ?.search(keywords.join("|"))
+    .map(item => item.item);
   if (queryResult?.length === 0) {
     return [];
   }
@@ -175,8 +179,8 @@ const filteredFaqs = computed(() => {
 // })
 
 // 切换展开状态
-const toggleFAQ = (id: number) => {
-  const faqToToggle = faqs.value.find((faq) => faq.id === id);
+const toggleFAQ = (id: string) => {
+  const faqToToggle = faqs.value.find(faq => faq.id === id);
   faqToToggle.isOpen = !faqToToggle.isOpen;
 };
 </script>
@@ -201,7 +205,7 @@ const toggleFAQ = (id: number) => {
       <!-- <div v-if="searchText" class="faq-answer">test</div>
   searchText -->
       <div
-        v-for="(faq, index) in filteredFaqs"
+        v-for="faq in filteredFaqs"
         :id="faq.id"
         :key="faq.id"
         class="faq-item"
@@ -212,7 +216,6 @@ const toggleFAQ = (id: number) => {
             <span class="question-type">{{ faq.type }}</span>
             <span class="toggle-icon">{{ faq.isOpen ? "－" : "＋" }}</span>
           </span>
-          
         </div>
 
         <div v-if="faq.isOpen" class="faq-answer">
@@ -288,16 +291,12 @@ const toggleFAQ = (id: number) => {
 }
 
 .question-type {
+  padding-right: 10px;
   color: var(--el-text-color-secondary);
-  padding-right: 10px
 }
 
 .markdown-content {
   line-height: 1.6;
-
-  h1 {
-    // text-align: center;
-  }
 
   h1,
   h2,

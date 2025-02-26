@@ -20,7 +20,14 @@
 
       <div class="year-selector-card-container">
         <ElRow :gutter="40" justify="center" class="year-selector-showcase-row">
-          <ElCol v-for="year in yearOptions" :key="year" :xs="24" :sm="8" :lg="8" :xl="6">
+          <ElCol
+            v-for="year in yearOptions"
+            :key="year"
+            :xs="24"
+            :sm="8"
+            :lg="8"
+            :xl="6"
+          >
             <router-link :to="{ path: `${year}` }">
               <el-card class="year-selector-card"> {{ year }} </el-card>
             </router-link>
@@ -53,7 +60,7 @@ import {
   ElUpload,
   ElIcon,
   ElRow,
-  ElCol,
+  ElCol
 } from "element-plus";
 import { Upload } from "@element-plus/icons-vue";
 
@@ -65,26 +72,27 @@ const yearOptions = ref(Array.from({ length: 5 }, (_, i) => 2024 - i));
 console.log(yearOptions.value);
 // 选中的年份
 const selectedYear = ref(currentYear);
-
 </script>
 
 <style scoped>
 .opus-container {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-height: 100vh;
   background-color: #f5f7fa;
 }
 
 .header-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
+
   /* height: 300px; */
+
   /* background-color: #e4e7ed; */
   margin-bottom: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .year-selector-card-container {
@@ -93,25 +101,25 @@ const selectedYear = ref(currentYear);
 }
 
 .year-selector-card {
-  border-radius: 25px;
   margin-bottom: 25px;
+  border-radius: 25px;
 }
 
 .image-placeholder {
-  color: #909399;
   font-size: 24px;
+  color: #909399;
 }
 
 .content {
-  text-align: center;
   width: 80%;
   max-width: 1200px;
+  text-align: center;
 }
 
 .title {
+  margin-bottom: 40px;
   font-size: 2.5rem;
   color: #303133;
-  margin-bottom: 40px;
 }
 
 .year-selector {
@@ -122,7 +130,7 @@ const selectedYear = ref(currentYear);
   margin-top: 30px;
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .title {
     font-size: 6vw;
   }

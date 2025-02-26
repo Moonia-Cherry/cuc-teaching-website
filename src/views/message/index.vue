@@ -11,7 +11,7 @@ import {
   ElMessage
 } from "element-plus";
 import "element-plus/dist/index.css";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 // import {Refresh} from "@iconify-json/material-symbols-light"
 import { Refresh } from "@element-plus/icons-vue";
 
@@ -77,6 +77,7 @@ const addMessage = async () => {
 };
 
 async function fetchComments(needEcho: boolean = true) {
+  let response: AxiosResponse<any, any>;
   try {
     const response = await axios.get("http://localhost:5000/comment/");
 

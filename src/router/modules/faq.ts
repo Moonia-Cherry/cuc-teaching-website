@@ -12,8 +12,8 @@ export default {
       name: "Faq",
       component: () => import("@/views/faq/index.vue"),
       meta: {
-        title: "问题索引",
+        title: "问题索引"
       }
-    },
+    }
   ]
 } satisfies RouteConfigsTable;
