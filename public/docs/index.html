@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Docsify Docs</title>
+    <link
+      rel="stylesheet"
+      href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css"
+    />
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <style>
+      .run-button {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        backgroundcolor: #f9f9f9;
+        border: 1px solid #ccc;
+        borderradius: 3px;
+        padding: 3px 6px;
+        cursor: pointer;
+        fontsize: 12px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app"></div>
+    <script>
+      window.$docsify = {
+        name: "",
+        repo: "",
+        loadSidebar: false,
+        loadNavbar: false,
+        subMaxLevel: 2,
+        coverpage: false,
+        // 通过 URL 参数动态加载 Markdown 文件
+        alias: {
+          "/": "README.md"
+        }
+      };
+    </script>
+    <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+    <script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>
+    <script src="./docsify-run-plugin.js"></script>
+  </body>
+</html>

@@ -1,0 +1,283 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Online Editor</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .header {
+      background-color: #1b8aec;
+      color: white;
+      padding: 10px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .container {
+      display: flex;
+      width: 80%;
+      margin: 20px 0;
+      background-color: #fff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      flex: 1;
+    }
+
+    .editor-container,
+    .result-container {
+      flex: 1;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .editor-container {
+      border-right: 1px solid #e1e1e1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .editor {
+      margin-top: 0;
+      padding: 10px;
+      flex: 1;
+      overflow-y: auto;
+      border: none;
+      resize: none;
+      outline: none;
+      font-family: Consolas, monospace;
+      font-size: 14px;
+    }
+
+    .run-btn {
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      background-color: #1b8aec;
+      color: white;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .run-btn:hover {
+      background-color: #1b8aec;
+    }
+
+    .result {
+      border: none;
+      padding: 10px;
+      flex: 1;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <h1>Python在线编辑器</h1>
+  </div>
+  <div class="container">
+    <div class="editor-container">
+      <textarea class="editor" contenteditable="true">#Welcome！</textarea>
+      <button class="run-btn" onclick="runCode()">点击运行</button>
+    </div>
+    <div class="result-container">
+      <div>运行结果:</div>
+      <div class="result"></div>
+    </div>
+  </div>
+
+  <script>
+    function runCode() {
+      const code = document.querySelector('.editor').value;
+      console.log('Code:', code);
+      fetch('http://localhost:5000/run', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ code: code })
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          document.querySelector('.result').innerText = data.output;
+          console.log('Result:', data.output);
+        })
+        .catch(error => {
+          document.querySelector('.result').innerText = 'Error: ' + error.message;
+          console.error('Error:', error);
+        });
+    }
+  </script>
+</body>
+
+</html> -->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python Online Editor</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f9;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .header {
+        background-color: #1b8aec;
+        color: white;
+        padding: 10px;
+        width: 100%;
+        text-align: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .container {
+        display: flex;
+        width: 80%;
+        margin: 20px 0;
+        background-color: #fff;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        flex: 1;
+      }
+
+      .editor-container,
+      .result-container {
+        flex: 1;
+        padding: 20px;
+        box-sizing: border-box;
+      }
+
+      .editor-container {
+        border-right: 1px solid #e1e1e1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .editor {
+        margin-top: 0;
+        padding: 10px;
+        flex: 1;
+        overflow-y: auto;
+        border: none;
+        resize: none;
+        outline: none;
+        font-family: Consolas, monospace;
+        font-size: 14px;
+      }
+
+      .run-btn {
+        padding: 10px;
+        font-size: 16px;
+        border: none;
+        background-color: #1b8aec;
+        color: white;
+        cursor: pointer;
+        border-radius: 4px;
+        margin-top: 10px;
+      }
+
+      .run-btn:hover {
+        background-color: #1b8aec;
+      }
+
+      .result {
+        border: none;
+        padding: 10px;
+        flex: 1;
+        overflow-y: auto;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="header">
+      <h1>Python在线编辑器</h1>
+    </div>
+    <div class="container">
+      <div class="editor-container">
+        <textarea class="editor" contenteditable="true">#Welcome！</textarea>
+        <button class="run-btn" onclick="runCodeRemotely()">运行</button>
+      </div>
+      <div class="result-container">
+        <div>运行结果:</div>
+        <div class="result"></div>
+      </div>
+    </div>
+
+    <script>
+      // 从 URL 参数中获取代码并显示在编辑器中
+      const urlParams = new URLSearchParams(window.location.search);
+      const codeFromURL = urlParams.get("code");
+      if (codeFromURL) {
+        document.querySelector(".editor").value =
+          decodeURIComponent(codeFromURL);
+      }
+
+      // 本地运行代码
+      function runCodeLocally() {
+        const code = document.querySelector(".editor").value;
+        const output = document.querySelector(".result");
+        output.innerHTML = ""; // 清空输出
+        try {
+          // 使用 eval 运行代码（注意安全性）
+          eval(code);
+        } catch (e) {
+          output.innerHTML = `<span style="color: red;">Error: ${e.message}</span>`;
+        }
+      }
+
+      // 远程运行代码
+      function runCodeRemotely() {
+        const code = document.querySelector(".editor").value;
+        console.log("Code:", code);
+        fetch("http://localhost:5000/run", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ code: code })
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then(data => {
+            document.querySelector(".result").innerText = data.output;
+            console.log("Result:", data.output);
+          })
+          .catch(error => {
+            document.querySelector(".result").innerText =
+              "Error: " + error.message;
+            console.error("Error:", error);
+          });
+      }
+    </script>
+  </body>
+</html>
