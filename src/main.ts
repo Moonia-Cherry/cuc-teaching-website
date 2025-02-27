@@ -21,6 +21,8 @@ import "element-plus/dist/index.css";
 // 导入字体图标
 import "./assets/iconfont/iconfont.js";
 import "./assets/iconfont/iconfont.css";
+// 导入echarts
+import * as echarts from "echarts";
 
 const app = createApp(App);
 
@@ -29,6 +31,9 @@ import * as directives from "@/directives";
 Object.keys(directives).forEach(key => {
   app.directive(key, (directives as { [key: string]: Directive })[key]);
 });
+
+// 全局引入echarts
+app.config.globalProperties.$echarts = echarts;
 
 // 全局注册@iconify/vue图标库
 import {
