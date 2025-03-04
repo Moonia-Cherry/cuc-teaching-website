@@ -2,19 +2,21 @@
 
 </script>
 <template>
-  <div class="home">
-    <img src="@/assets/home/background.png" alt="">
-  </div>
-  <div class="content">
-    <div>
-      <h1>欢迎来到<br><span>计算机思维系列课程平台</span></h1>
-      <p>Welcome to the Computational Thinking Series </p>
-      <p class="mod">计算思维系列课程通过系统化训练、多元化问题求解方解析及Python实践培养学生抽象建模、逻辑分解和算法设计核心能力，助力高效解决科学、工程与生活中的复杂问题</p>
+  <main>
+    <div class="home">
+      <img src="@/assets/home/background.png" alt="">
     </div>
-    <div class="begin">
-      <a href="#">点击进入</a>
+    <div class="content">
+      <div>
+        <h1>欢迎来到<br><span>计算机思维系列课程平台</span></h1>
+        <p>Welcome to the Computational Thinking Series </p>
+        <p class="mod">计算思维系列课程通过系统化训练、多元化问题求解方解析及Python实践培养学生抽象建模、逻辑分解和算法设计核心能力，助力高效解决科学、工程与生活中的复杂问题</p>
+      </div>
+      <div class="begin">
+        <a href="#">点击进入</a>
+      </div>
     </div>
-  </div>
+  </main>
 </template>
 <style scoped>
   .home img {
