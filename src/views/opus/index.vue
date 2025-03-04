@@ -36,7 +36,8 @@
       </div>
 
       <!-- 上传按钮 -->
-      <div class="upload-section">
+      <!-- wip:日后完善 -->
+      <!-- <div class="upload-section">
         <el-upload action="#" :show-file-list="false" :on-change="handleUpload">
           <el-button type="primary" size="large">
             <el-icon class="el-icon--left">
@@ -45,7 +46,7 @@
             上传作品
           </el-button>
         </el-upload>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -68,7 +69,7 @@ import { Upload } from "@element-plus/icons-vue";
 const currentYear = new Date().getFullYear();
 // const yearOptions = ref(Array.from({ length: 5 }, (_, i) => currentYear - i));
 
-const yearOptions = ref(Array.from({ length: 5 }, (_, i) => 2024 - i));
+const yearOptions = ref(Array.from({ length: 2 }, (_, i) => 2024 - i));
 console.log(yearOptions.value);
 // 选中的年份
 const selectedYear = ref(currentYear);
