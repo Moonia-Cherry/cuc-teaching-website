@@ -1,10 +1,7 @@
 <template>
   <div>
     <!-- 引入Docsify的index.html内容 -->
-    <iframe
-      src="/docs/index.html"
-      style="width: 100%; height: 100vh; border: none"
-    />
+    <iframe src="/docs/index.html" />
   </div>
 </template>
 
@@ -13,3 +10,12 @@ export default {
   name: "DocsView"
 };
 </script>
+
+<style scoped>
+iframe {
+  width: 100%;
+  height: 100vh;
+  overflow: auto;
+  border: none;
+}
+</style>
