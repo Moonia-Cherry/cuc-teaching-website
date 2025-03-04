@@ -11,6 +11,7 @@ const permissionRouter = {
   meta: {
     title: "权限管理",
     icon: "ep:lollipop",
+    showLink: process.env.NODE_ENV === "production" ? false : true,
     rank: 10
   },
   children: [

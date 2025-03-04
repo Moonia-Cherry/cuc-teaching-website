@@ -2,10 +2,10 @@ export default {
   path: "/docs",
   redirect: "/docs/docsify",
   meta: {
-    icon: "ri:information-line",
+    icon: "material-symbols:docs-outline-rounded",
     // showLink: false,
-    title: "docs",
-    rank: 9
+    title: "课程案例",
+    rank: 35
   },
   children: [
     {
@@ -13,7 +13,7 @@ export default {
       name: "Docsify",
       component: () => import("@/views/DocsView.vue"),
       meta: {
-        title: "docsify"
+        title: "课程案例"
       }
     }
   ]

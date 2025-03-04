@@ -3,7 +3,7 @@ export default {
   redirect: "/error/403",
   meta: {
     icon: "ri:information-line",
-    // showLink: false,
+    showLink: process.env.NODE_ENV === "production" ? false : true,
     title: "异常页面",
     rank: 9
   },
