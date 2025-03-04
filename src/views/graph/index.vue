@@ -8,10 +8,22 @@ const { VITE_BACKEND_ROOT_PATH } = import.meta.env;
 
 // 初始化ECharts
 const chartRef = ref();
+// let setOptions;
+
 let echarts: ECharts.ECharts;
+// onMounted(() => {
+//   // const { setOptions: so } = useECharts(chartRef);
+//   setOptions = so;
+//   console.log("打印setOptions：", setOptions);
+
+//   console.log("拿到的值：" + chartRef.value);
+//   getGraphData();
+// });
+
 onMounted(() => {
   echarts = ECharts.init(chartRef.value); // echartsInstance
   console.log(chartRef);
+  getGraphData();
 });
 // const echarts = useECharts(chartRef);
 // 这里的echarts应该是一个echartsInstance
@@ -183,6 +195,7 @@ async function getGraphData() {
         // }
       ]
     });
+    console.log("reach here.");
   } catch (error) {
     ElMessage.error("后端无返回");
   }
@@ -191,8 +204,6 @@ async function getGraphData() {
 // const graphData = getGraphData().then(item => item.graphData);
 // const graphData2 = getGraphData().then(item => item.graphData2);
 // console.log(graphData.nodes);
-
-getGraphData();
 
 function updateData() {
   graphData.value.nodes.pop();
@@ -232,17 +243,33 @@ function updateData() {
 </script>
 
 <template>
-  <div ref="chartRef" style="width: 100%; height: 100%" />
-  <ElButton
-    id="return-button"
-    class="update_button shadow"
-    round
-    @click="updateData()"
-    >更新
-  </ElButton>
+  <div class="graph-container">
+    <div
+      ref="chartRef"
+      class="chart-container"
+      style="width: 100%; height: 100%"
+    />
+    <!-- <ElButton
+      id="return-button"
+      class="update_button shadow"
+      round
+      @click="updateData()"
+      >更新
+    </ElButton> -->
+  </div>
 </template>
 
 <style lang="scss" scoped>
+.graph-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+// .chart-container {
+//   flex-grow: 1;
+// }
+
 .update_button {
   position: fixed;
 }
