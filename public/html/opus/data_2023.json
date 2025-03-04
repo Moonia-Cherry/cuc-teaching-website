@@ -1,0 +1,100 @@
+[
+    {
+        "id": 1,
+        "picPath": "indexpic/1.png",
+        "title": "2020年与2021年世界幸福指数排名前八十国家数据分析报告",
+        "author": "杨茜 李章媛 闫大琰",
+        "cover": 1
+    },
+    {
+        "id": 2,
+        "picPath": "indexpic/2.png",
+        "title": "高校录取分数线及就业趋势数据分析报告",
+        "author": "雒梓湲 陈思越 宋心艺",
+        "cover": 2
+    },
+    {
+        "id": 3,
+        "picPath": "indexpic/6.png",
+        "title": "2023年CUC部分大学生 暑假安排意向数据分析报告",
+        "author": "袁鸣英、刘钰洁、李心旖",
+        "cover": 6
+    },
+    {
+        "id": 3,
+        "picPath": "indexpic/9.png",
+        "title": "基于文本词语的豆瓣丧文化青年心理情感分析报告",
+        "author": "张雨菲 张冬青 陈雨豪",
+        "cover": 9
+    },
+    {
+        "id": 13,
+        "picPath": "indexpic/13.png",
+        "title": "2023年上半年中传校园墙数据分析报告",
+        "author": "齐梦 袁佩琪 陈艺菲 关远新",
+        "cover": 13
+    },
+    {
+        "id": 8,
+        "picPath": "indexpic/8.png",
+        "title": "世界大学排名与国家教育开支数据分析报告",
+        "author": "林芳馨 包苏雅 王子漩 赵琪",
+        "cover": 8
+    },
+    {
+        "id": 4,
+        "picPath": "indexpic/4.png",
+        "title": "豆瓣电影TOP250数据分析报告",
+        "author": "李景琳 王皓纯 陈昱祯 马晓敏",
+        "cover": 4
+    },
+    {
+        "id": 5,
+        "picPath": "indexpic/5.png",
+        "title": "中国各省份GDP状况与影响因素分析报告",
+        "author": "田尚玺 杨赫 黄明豪",
+        "cover": 5
+    },
+    {
+        "id": 7,
+        "picPath": "indexpic/7.png",
+        "title": "近五年中国各行业工资数据分析报告",
+        "author": "---",
+        "cover": 7
+    },
+    {
+        "id": 11,
+        "picPath": "indexpic/11.png",
+        "title": "关于元宇宙发展现状及影响因素的基础研究",
+        "author": "高越臣 闫玉凤 秦佳悦",
+        "cover": 11
+    },
+    {
+        "id": 10,
+        "picPath": "indexpic/10.png",
+        "title": "2022年中国传媒大学戏剧影视学院本科毕业生去向",
+        "author": "---",
+        "cover": 10
+    },
+    {
+        "id": 12,
+        "picPath": "indexpic/12.png",
+        "title": "中传生源地前五省市高考相关数据分析报告",
+        "author": "汪子渲 刘天洋 余彤",
+        "cover": 12
+    },
+    {
+        "id": 3,
+        "picPath": "indexpic/3.png",
+        "title": "Google页面广告投放效果数据分析报告",
+        "author": "彭槿玉 黄越 张乐桐 高璐瑶",
+        "cover": 3
+    },
+    {
+        "id": 14,
+        "picPath": "indexpic/14.png",
+        "title": "NBA 2022-2023赛季 常规赛球员数据分析报告",
+        "author": "李新宇 唐宇翔",
+        "cover": 14
+    }
+]
