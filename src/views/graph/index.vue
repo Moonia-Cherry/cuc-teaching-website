@@ -4,6 +4,7 @@ import { onMounted, ref } from "vue";
 import * as ECharts from "echarts";
 import axios from "axios";
 import { ElMessage } from "element-plus";
+const { VITE_BACKEND_ROOT_PATH } = import.meta.env;
 
 // 初始化ECharts
 const chartRef = ref();
@@ -59,7 +60,9 @@ interface GraphDataItem {
 const graphData = ref();
 
 // 数据api
-const GRAPH_API_PATH = "http://127.0.0.1:3002/echarts";
+const GRAPH_API_PATH = `${VITE_BACKEND_ROOT_PATH}echarts`;
+console.log(GRAPH_API_PATH);
+
 // const graphData;
 // const graphData2;
 async function getGraphData() {

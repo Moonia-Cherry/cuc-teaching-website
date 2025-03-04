@@ -2,11 +2,16 @@
 import { ref, computed, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
+console.log(`Now running in ${process.env.NODE_ENV} mode.`);
+
+const { VITE_OPUS_ROOT_PATH } = import.meta.env;
+
 const route = useRoute();
 const router = useRouter();
 
 // const rootLink = "./src/assets/opus/"; // 随情况更改
-const rootLink = "http://101.200.63.31:8080/stuWorks/2024/";
+// const rootLink = "http://101.200.63.31:8080/stuWorks/2024/";
+const rootLink = VITE_OPUS_ROOT_PATH;
 const crawl = true;
 
 // 处理年份参数
@@ -14,7 +19,10 @@ const displayedYear = computed(() => {
   return route.params.year || new Date().getFullYear(); // 默认当前年份
 });
 
+console.log(displayedYear);
 console.log(displayedYear.value);
+
+const showOpusDataJsonApi = `html/opus/data_${displayedYear.value}.json`;
 
 // {{ id }}.image/图片 {{ id }}.png
 
@@ -32,7 +40,7 @@ const works = ref<Work[]>();
 
 onMounted(async () => {
   try {
-    const response = await fetch(`html/opus/${displayedYear.value}/data.json`);
+    const response = await fetch(showOpusDataJsonApi);
     if (response.ok) {
       const data = await response.json();
       works.value = data;
@@ -65,7 +73,10 @@ const goBack = () => {
         :xl="6"
       >
         <!-- <router-link :to="{ path: 'display', query: { id: work.id } }"> -->
-        <a :href="`html/opus/${displayedYear}/${work.id}.html`" target="_blank">
+        <a
+          :href="`${VITE_OPUS_ROOT_PATH}/${displayedYear}/${work.id}.html`"
+          target="_blank"
+        >
           <ElCard class="work-card">
             <!-- 图片区域 -->
             <div class="image-container">
@@ -76,7 +87,7 @@ const goBack = () => {
               <!-- :src="'./src/assets/opus/' + work.picPath" -->
               <img
                 v-else
-                :src="rootLink + work.picPath"
+                :src="`${rootLink}/${displayedYear}/${work.picPath}`"
                 class="work-image"
                 alt="作品图片"
               />
@@ -173,12 +184,12 @@ const goBack = () => {
 
   .work-title {
     margin-bottom: 6px;
-    font-size: 1.1rem;
+    font-size: 1vw;
     color: var(--el-text-color-primary);
   }
 
   .work-author {
-    font-size: 0.9rem;
+    font-size: 0.8vw;
     color: var(--el-text-color-secondary);
   }
 }
@@ -190,12 +201,30 @@ const goBack = () => {
 
     .work-title {
       margin-bottom: 6px;
-      font-size: 4vw;
+      font-size: 3.6vw;
       color: var(--el-text-color-primary);
     }
 
     .work-author {
-      font-size: 3vw;
+      font-size: 2.8vw;
+      color: var(--el-text-color-secondary);
+    }
+  }
+}
+
+@media ((768px < width) and (width <= 1200px)) {
+  .text-content {
+    flex: 1; // 占据剩余25%空间
+    padding: 0 8px;
+
+    .work-title {
+      margin-bottom: 6px;
+      font-size: 2vw;
+      color: var(--el-text-color-primary);
+    }
+
+    .work-author {
+      font-size: 1.5vw;
       color: var(--el-text-color-secondary);
     }
   }
