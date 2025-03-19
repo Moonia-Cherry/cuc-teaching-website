@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch, watchEffect } from "vue";
+import { ref, computed, watch, watchEffect, onMounted, reactive } from "vue";
 import { Search } from "@element-plus/icons-vue";
 import MarkdownIt from "markdown-it";
 import Fuse from "fuse.js";
@@ -24,6 +24,23 @@ interface FAQ {
   isOpen: boolean;
   type: string;
 }
+
+const mdContent = ref("");
+
+async function f() {
+  try {
+    const response = await fetch("/faq/101.md"); // 直接从 public 目录加载
+    mdContent.value = await response.text();
+    console.log(mdContent.value);
+    console.log(typeof mdContent.value);
+  } catch (error) {
+    console.error("Failed to load Markdown file:", error);
+  }
+}
+
+onMounted(() => {
+  f();
+});
 
 // 初始化FAQ列表
 const faqs = ref<FAQ[]>([
@@ -54,11 +71,20 @@ const faqs = ref<FAQ[]>([
     id: "101",
     question: "Python中关于0.1+0.2!=0.3的解释",
     answer:
-      "![图1](src/assets/faq/101-1.png)\n\n这里涉及到一个知识点，叫做不确定尾数。因为Python在计算前会将我们输入的十进制数字转换为二进制，计算后，然后将二进制的结果又转换为十进制数字显示出来。\n\n![图2](src/assets/faq/101-2.png)\n\n对于小数而言，因为十进制小数与二进制小数之间并不是完全对等转换的，一般来说，一个十进制小数会转换为无限位数的二进制小数，但是呢，因为计算机一般只截取无限位数中前53位，所以造成同一个小数的十进制表示结果与二进制表示结果并不等价。\n\n![图3](src/assets/faq/101-3.png)\n\n<div style='text-align:center;color:gray'>0.1用二进制表示(截取前53位)</div>\n\n经过两次转换就造成了不确定尾数。\n\n下面是0.1,0.2及0.3在内存中25位有效位数的表示，可以看出0.1+0.2!=0.3\n\n![图4](src/assets/faq/101-4.png)\n",
+      // "![图1](src/assets/faq/101-1.png)\n\n这里涉及到一个知识点，叫做不确定尾数。因为Python在计算前会将我们输入的十进制数字转换为二进制，计算后，然后将二进制的结果又转换为十进制数字显示出来。\n\n![图2](src/assets/faq/101-2.png)\n\n对于小数而言，因为十进制小数与二进制小数之间并不是完全对等转换的，一般来说，一个十进制小数会转换为无限位数的二进制小数，但是呢，因为计算机一般只截取无限位数中前53位，所以造成同一个小数的十进制表示结果与二进制表示结果并不等价。\n\n![图3](src/assets/faq/101-3.png)\n\n<div style='text-align:center;color:gray'>0.1用二进制表示(截取前53位)</div>\n\n经过两次转换就造成了不确定尾数。\n\n下面是0.1,0.2及0.3在内存中25位有效位数的表示，可以看出0.1+0.2!=0.3\n\n![图4](src/assets/faq/101-4.png)\n",
+      mdContent.value,
     isOpen: false,
     type: "python"
   }
 ]);
+
+// 监听faqs更改
+watch(mdContent, newValue => {
+  const targetFaq = faqs.value.find(faq => faq.id === "101");
+  if (targetFaq) {
+    targetFaq.answer = newValue;
+  }
+});
 
 const searchText = ref("");
 
@@ -183,6 +209,11 @@ const toggleFAQ = (id: string) => {
   const faqToToggle = faqs.value.find(faq => faq.id === id);
   faqToToggle.isOpen = !faqToToggle.isOpen;
 };
+
+const renderer = (strToBeRend: string) => {
+  console.log("good");
+  return md.render(strToBeRend);
+};
 </script>
 
 <template>
@@ -190,7 +221,7 @@ const toggleFAQ = (id: string) => {
     <div class="container">
       <div class="header-container">
         <h1>常见问题</h1>
-        <el-button circle class="add-faq-button" />
+        <!-- <el-button circle class="add-faq-button" /> -->
       </div>
 
       <div class="search-container">
@@ -217,7 +248,11 @@ const toggleFAQ = (id: string) => {
         </div>
 
         <div v-if="faq.isOpen" class="faq-answer">
-          <div class="markdown-content" v-html="md.render(faq.answer)" />
+          <div
+            id="markdown-content"
+            class="markdown-content"
+            v-html="renderer(faq.answer)"
+          />
         </div>
       </div>
     </div>
@@ -298,7 +333,7 @@ const toggleFAQ = (id: string) => {
   color: var(--el-text-color-secondary);
 }
 
-.markdown-content {
+#markdown-content {
   line-height: 1.6;
 
   h1,
@@ -314,8 +349,9 @@ const toggleFAQ = (id: string) => {
   }
 
   img {
-    max-width: 100%;
-    margin: 1em 0;
+    // max-width: 100%;
+    height: auto;
+    margin: 0 auto;
     border-radius: 4px;
     box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
   }
