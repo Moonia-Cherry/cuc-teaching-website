@@ -1,7 +1,7 @@
 FROM node:20-alpine as build-stage
 
 WORKDIR /app
-RUN npm config set registry https://registry.npmjs.org/
+RUN npm config set registry https://mirrors.cloud.tencent.com/npm/
 
 # RUN corepack enable
 # RUN corepack prepare pnpm@latest --activate
@@ -12,7 +12,7 @@ COPY .npmrc package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
 COPY . .
-RUN pnpm build
+# RUN pnpm build
 
 FROM nginx:stable-alpine as production-stage
 
