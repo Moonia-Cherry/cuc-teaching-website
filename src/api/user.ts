@@ -34,12 +34,34 @@ export type RefreshTokenResult = {
   };
 };
 
+const { VITE_BACKEND_ROOT_PATH } = import.meta.env;
+
 /** 登录 */
 export const getLogin = (data?: object) => {
-  return http.request<UserResult>("post", "/login", { data });
+  return http.request<UserResult>(
+    "post",
+    `${VITE_BACKEND_ROOT_PATH}auth/login`,
+    {
+      data
+    }
+  );
 };
 
-/** 刷新`token` */
+// /** 刷新`token` */
 export const refreshTokenApi = (data?: object) => {
-  return http.request<RefreshTokenResult>("post", "/refresh-token", { data });
+  return http.request<RefreshTokenResult>(
+    "post",
+    `${VITE_BACKEND_ROOT_PATH}/refresh-token`,
+    { data }
+  );
 };
+
+// /** 登录 */
+// export const getLogin = (data?: object) => {
+//   return http.request<UserResult>("post", "/login", { data });
+// };
+
+// /** 刷新`token` */
+// export const refreshTokenApi = (data?: object) => {
+//   return http.request<RefreshTokenResult>("post", "/refresh-token", { data });
+// };
