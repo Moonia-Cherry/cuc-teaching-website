@@ -1,13 +1,19 @@
 <template>
   <div>
     <!-- 引入Docsify的index.html内容 -->
-    <iframe src="/docs/index.html" />
+    <iframe :src="`${publicPath}docs/index.html`" />
   </div>
 </template>
 
 <script>
 export default {
-  name: "DocsView"
+  name: "DocsView",
+  data() {
+    console.log(import.meta.env.VITE_PUBLIC_PATH);
+    return {
+      publicPath: import.meta.env.VITE_PUBLIC_PATH // 读取环境变量
+    };
+  }
 };
 </script>
 

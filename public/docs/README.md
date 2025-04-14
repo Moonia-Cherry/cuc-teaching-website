@@ -1,562 +1,198 @@
-# 计算思维之问题求解
-
-## 内容简介
-
-人工智能时代，教育的重心从记忆和复述等低阶认知技能转向识别问题、逻辑推理等高阶认知能力。教育应着重于培养学生的自主学习能力、提出问题能力以及创新思维能力。计算思维是运用计算机科学的基础概念去求解问题、设计系统和理解人类的行为。计算思维代表着一种普通的认识和一类普适的技能，任何人在解决任何问题时都可以运用。
-
-本书面向文科专业大学生，旨在培养学生利用计算思维解决问题的能力。本书内容力求有趣、实用、且有发展潜力。让学生在引人入胜的案例中学习到对当前及未来都大有裨益的知识。
-
-每章围绕一个具体问题的求解展开，以目标为导向，通过具体案例的实现来讲解一类问题的解决思路及相关知识。每个案例都包含完整的求解思路和代码，即使对于初学者来说，也能够轻松复现。书中的各章既可以独立使用来解决相关问题，也可以自由组合以解决更为复杂的问题。
-
-为了便于学习，本书提供了高质量的PPT课件、完整的案例数据和代码，以及针对重点难点内容的视频讲解和重要理论的动画演示。
-
-本书适合已具备基本Python编程知识的高等院校文科类各专业学生使用，同时也可供相关从业人员学习和参考。
-
-本书主要内容如下：
-
-第1章 问题求解思维，介绍求解复杂问题的思路以及AI辅助问题求解方法。
-
-第2章
-欲善其事，必先利其器，介绍Python工作环境搭建以及如何利用AI工具辅助编程。
-
-第3章
-模拟科学实验，通过案例学习Python的基础语法，并了解如何用计算机模拟科学实验。
-
-第4章 图像处理，介绍图像的存储、处理原理以及利用pillow进行处理的方法。
-
-第5章
-水果卡路里计算器，通过水果卡路里计算器的实现，介绍利用tkinter进行GUI设计方法。
-
-第6章 数据获取，介绍常用的数据获取方式、爬虫原理及基本爬虫程序的实现。
-
-第7章
-自然语处理，介绍中文分词、去除停用词、关键词提取、词云生成、主题提取等基础自然语言处理方法。
-
-第8章
-广告数据分析，通过分析广告数据，介绍数据分析的基本流程，以及如何利用Pandas进行数据分析和matplotlib进行数据可视化。
-
-本书旨在帮助读者利用计算思维有效解决实际问题，为适应人工智能时代的发展打下坚实基础。
-
-[]{#第1章--问题求解思维 .anchor}目录
-
-# 问题求解思维
-
-## 学习目的
-
-1.  了解计算思维
-2.  了解人工智能思维
-
-人工智能时代，具备怎样的能力才能适应社会需求，在竞争中立于不败之地？人工智能时代，知识是开放的，随时随地可查找、可检索，低阶认知技能的重要性会下降，如记忆、复述、再现等初级信息加工任务将更多地被机器代替，而高阶认知能力的重要性会更加凸显，如识别问题、逻辑推理、意义建构、自我指导能力等。人工智能时代强调基于认知能力的信息加工、分析综合、逻辑推理等高阶思维的培养，这些也正是计算思维的核心内容，因此培养计算思维成为适应未来社会需求的关键。
-
-## 计算思维
-
-随着人工智能的快速发展，尤其是近两年生成式人工智能的快速发展，计算机技术已不是文科生解决问题的关键瓶颈，问题识别、分析推理才是关键。计算思维是运用计算机科学的基础概念去求解问题、设计系统和理解人类行为的一系列思维活动。简单来说，计算思维就是将一个问题清晰、抽象地描述出来，并将问题的解决方案表示为一个信息处理的流程。计算思维涵盖了一系列认知过程和思维策略，包括问题分解、模式识别、抽象思维以及算法设计，如图
-1‑1所示。
-
-![](./media/image1.png)
-
-图 1‑1 计算思维内涵
-
-计算思维不等同于编程，它是一种解决问题的思维方式。计算思维也不是高深复杂的事物，在我们的日常生活，随处都可以看见。下面以"规划一次旅行"为例介绍计算思维的核心内容。
-
-问题分解：问题分解是将复杂问题分解成更小、更易于处理的子问题。如将旅行计划分解为多个小任务，如：订机票、订酒店、行程安排等。
-
-模式识别：模式识别指弄清楚分解后各个子问题之间的异同，找到不同任务之间的共性，模式识别有助于规模化解决问题。例如，行程安排、活动预订和餐饮安排都需要时间的分配。可以使用一个统一的时间表来安排每天的活动。
-
-抽象思维：忽略不必要的细节，抓住问题的核心要素。如：旅行计划的基本要素有预算、时间、目的地等。
-
-算法设计：创建一系列明确定义的步骤或规则，用以解决特定问题或执行特定任务。算法是一组定义明确的指令，告诉计算机或执行者如何达到预期的结果。例如，设计一种算法，根据景点之间的距离、交通时间和个人兴趣等因素，生成最优的行程安排。
-
-## AI思维
-
-AI思维即人工智能思维（Artificial Intelligence
-Thinking），是利用人工智能技术和方法来解决问题的思维方式。AI思维结合了计算思维、数据科学和机器学习的概念，旨在通过自动化和智能化的手段来优化决策和操作过程。AI是一种无意识的智能，是由算法和程序驱动的。AI思维强调利用AI技术的优势来增强人类的认知能力，提高解决问题的效率，并创造新的价值。
-
-AI思维包括以下核心内容。
-
-数据驱动：AI思维强调使用大量数据来训练模型和做出决策。它依赖于数据分析和模式识别来发现数据中的规律和趋势。
-
-自动化和效率：AI思维注重自动化和效率，通过使用算法和机器学习模型来简化复杂任务和决策过程。
-
-抽象能力：AI思维将复杂的问题简化、模块化，并独立处理各个模块。
-
-算法能力：AI思维大量依赖算法，可以从大规模的数据中找到模式，并据此生成预测。
-
-持续学习和改进：AI思维强调不断学习和改进。通过不断更新和优化模型，AI可以更好地适应新的数据和情况。
-
-问题解决：AI思维注重使用算法和数据分析来解决问题，将问题分解为更小的部分，并使用AI技术来找到解决方案。
-
-AI将原来的不可能变成可能。未来已来，要适应未来，成为未来的一部分，每一个人，每一个企业都需要拥有AI思维。
-
-计算思维是AI思维的基础，AI思维是计算思维在人工智能领域的具体化和技术延伸。计算思维提供了处理和解决问题的基本方法，如分解问题、抽象建模、算法设计等。AI思维在计算思维的基础上，进一步融合了数据驱动和机器学习技术。例如，AI通过大数据训练模型实现模式识别，依赖计算思维中的抽象能力和算法设计。AI问题的解决过程天然需要计算思维技能（如逻辑推理和数据结构设计），而AI思维则扩展了这些技能的应用场景。计算思维和AI思维之间存在着相互依赖和促进的关系。一方面，计算思维为AI思维提供了基础和支持，使得人们能够利用计算机科学中的方法来构建和优化人工智能系统。另一方面，AI思维的发展也推动了计算思维的进步和创新，使得人们能够不断探索新的算法和技术来解决更复杂的问题。学习计算思维是培养一种元能力。
-
-## AI辅助问题求解
-
-近年来，随着AI技术的发展，尤其是大模型技术的发展，各领域的AI工具也迅猛发展（<https://ai-bot.cn/>，罗列出很多AI工具），我们可以利用AI工具辅助写作、设计、绘画、生成视频、处理音频、编写代码等等。
-
-如：使用"腾讯元宝"大模型API，制作一个中国传媒大学迎接新生的H5页面。（注：同一提示词，不同大模型生成的代码会有所不同）
-
-提示词  
- 实现一个H5页面，主题为中国传媒大学迎接新生，内容包括学校介绍，学科介绍，教学设施等
-
-腾讯元宝
-
-```HTML
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>中国传媒大学迎新</title>
-    <style>
-        body {
-            font-family: "微软雅黑", sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f8f9fa;
-        }
-        .container {
-            max-width: 960px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-            color: #0056b3;
-        }
-        .section {
-            margin-bottom: 40px;
-        }
-        .section h2 {
-            color: #0056b3;
-            margin-bottom: 10px;
-        }
-        .section p {
-            text-indent: 2em;
-            line-height: 1.6;
-        }
-        img {
-            max-width: 100%;
-            height: auto;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>欢迎来到中国传媒大学！</h1>
-
-        <div class="section">
-            <h2>学校简介</h2>
-            <p>中国传媒大学（Communication University of China）是一所以信息传播领域为主，文、理、工、管等多学科协调发展的高校。学校创建于1954年，致力于为传媒行业培养优秀人才。多年来，学校凭借其独特的教学质量和科研实力，在国内外享有盛誉。</p>
-        </div>
-
-        <div class="section">
-            <h2>学科介绍</h2>
-            <p>中国传媒大学设有新闻传播学、广播电视编导、播音与主持艺术、广告学等多个专业。学校注重实践教学，与多家知名媒体合作，为学生提供丰富的实习和实践机会。</p>
-        </div>
-
-        <div class="section">
-            <h2>教学设施</h2>
-            <p>学校拥有先进的教学设施，包括数字媒体实验室、虚拟演播室、广播录音棚等。此外，学校还有一流的图书馆、体育馆和学生宿舍，为学生提供了良好的学习和生活环境。</p>
-            <img src="https://via.placeholder.com/600x400" alt="教学设施图片">
-        </div>
-    </div>
-</body>
-</html>
-```
-
-页面效果  
- ![](./media/image2.png)
-
-上述例子利用AI工具，通过提示词描述需求，生成基本网页代码。AI工具实际上是将提示词作为输入，经大语言模型处理，给出输出结果。好的输出结果除了依赖AI工具背后的大语言模型外，提示词的好坏对结果影响也很大。如何提问才能让AI工具更懂你？下面是提示词的一些小技巧：
-
-- 清晰直接的提示词
-
-  - 错误示例：请写一个H5页面。
-
-  - 正确示例：做一个H5页面，主题为中国传媒大学迎接新生，内容包括学校介绍，学科介绍，教学设施等。
-
-- 使用关键词：在提示词中使用关键词可以帮助AI更准确地理解用户意图。
-
-  - 错误示例：绘制五角星。
-
-  - 正确示例：用Python中的turtle绘制五角星。
-
-- 提供背景信息：给予AI足够的背景信息，帮助其更好地理解上下文。
-
-  - 示例：分析"5G技术"对"智慧城市建设"的影响。
-
-- 分步提问：将复杂问题分解成几个简单的步骤。
-
-  - 示例：首先，列举三个最新的环保技术；其次，分别说明这些技术的应用前景。
-
-## AI编码思考
-
-既然AI都能编程，还要学习编程吗？答案是还要学习，而且要把编程基础学得更扎实。看一个简单的例子：
-
-![](./media/image3.png)
-
-AI工具给出了相应代码，如何在本地运行这些代码？首先需要在自己计算机上有
-Python工作环境。然后新建文件，输入代码、运行代码。大多数人直接运行上述代码会出现"FileNotFoundError:
-\[Errno 2\] No such file or directory:
-\'hlm.txt\'"的错误。为什么？因为大模型在这里给出的只是示例代码，你需要正确书写hlm.txt的实际路径。可见要想真正运行代码、解决实际问题，还需要对编程有基本的理解。
-
-目前AI工具可以根据提示词或注释自动生成代码、进行代码调试，但AI工具生成的代码不能保证完全符合用户意图，是否符合用户需求，需要人类判断。大模型缺乏对复杂系统的理解，难以理解复杂业务意图，在整体框架设计与分析方面，存在短板。大系统设计，需要人类意识。因此，大模型更适合作为辅助编程方式存在，而不适合完全用其求解问题。
-
-在具备基本编程及程序评判能力基础上，再整合大模型辅助编程能力，可以达到更好的编程水平。
-
-需要注意，先学好基本编程、再用好大模型辅助的顺序不能乱，只有学好基础编程，才能克服大模型无法验证、不能建库的短板，才能更好利用大模型自动编程、快速编程、程序调试的能力。
-
-## 本章小结
-
-本章介绍了计算思维和AI思维，计算思维是一种思考问题的方式，适用于所有领域的人们，AI可以辅助问题求解，但不能完全依赖AI工具进行问题求解。
-
 # 工作环境搭建
 
-## 学习目的
+1. 搭建Python环境方案
 
-1.  了解程序设计语言
-2.  了解Python程序的编写和运行
-3.  学会搭建Python工作环境
-4.  了解AI辅助编程
+---
 
-利用计算思维可以形成问题求解方案，而问题最终求解需要编程实现。本章介绍编程语言的发展和编程环境的搭建。
-
-## 程序设计语言
-
-### 程序设计语言发展史
-
-程序设计语言也称为编程语言，它架起了人类思维与计算机执行之间的桥梁。计算机本身只能理解特定的二进制指令，编程语言为人类提供了一种与计算机进行有效沟通的方式，让我们能够清晰方便地向计算机传达想法和需求，指挥它执行各种任务。程序设计语言是一种用于定义计算机程序的指令、结构和规则的形式语言。程序设计语言有机器语言、汇编语言和高级语言。
-
-计算机诞生初期，程序员使用机器语言编写程序。机器语言是一种二进制编码语言，使用二进制代码表达指令，由计算机硬件直接识别并执行。例如，实现2+3，在16位计算机上的指令为：1101001000110111，不同体系结构的计算机使用的机器指令可能不同，程序移植性差。二进制程序难以阅读，编写烦冗。
-
-随着计算机硬件的发展，为了提高编程效率和可读性，汇编语言应运而生。汇编语言用助记符代替二进制指令。不同的计算机体系结构会有不同的汇编语言指令集，例如，x86、ARM、MIPS
-等架构都有各自的汇编语言。以 x86汇编语言实现2+3如下：add 2,3,result。
-
-机器语言与汇编语言都与计算机硬件相关，因此也称这两种语言为"低级语言"。低级语言有一个显著的缺陷，就是程序只能在特定处理器上运行，限制了程序的使用范围。
-
-为了让编程变得更加简单、高效，并且更易于理解和维护，有了更接近于自然语言的程序设计语言------高级程序设计语言。如常用的Python、Java、C++、C、C\#、JavaScript、PHP等都是高级语言。如用Python
-实现2+3如下：result=2+3
-
-### 程序"翻译"
-
-用高级语言编写的程序，称为"源程序"。计算机可以直接执行的只有二进制代码，源程序不能被计算机直接执行，需要经过"翻译"才能被执行。类似人类的翻译工作有"笔译"和"同声传译"两种方式，源程序的"翻译"过程有编译和解释两种。
-
-编译过程类似于笔译，编译器（Compiler)将源代码一次性转换成目标代码，如图
-2‑1所示。如：C、Java等编程语言都是编译语言。
-
-[]{#\_Ref188371114 .anchor}_图 2‑1 高级语言编译过程_
-
-解释是解释器（Interpreter)将源代码逐行转换为机器代码并立即执行的过程，如图
-2‑2所示。源代码与数据一起输入给解释器，然后输出运行结果。JavaScript、PHP语言等都是解释型语言。
-
-[]{#\_Ref170153729 .anchor}_图 2‑2 高级语言解释过程_
-
-编译与解释的区别在于编译是一次性转换，一旦源程序被编译，程序运行不再需要编译程序或源程序，直接运行目标程序即可；解释程序则是在每次程序运行时都需要源程序和解释程序。编译型语言和解释型语言各有其独特的优点，现代编程语言发展趋势之一就是结合编译与解释，以充分利用两者的优势。比如现在流行的Python语言，是一种高级动态解释型语言，虽然采用解释执行方式，但它的解释器也保留了编译器的部分功能，如图
-2‑3所示。当执行 Python 程序时，Python
-解释器首先会将源文件编译成字节码（.pyc
-文件），然后这个字节码被Python虚拟机（Python Virtual
-Machine，PVM）解释执行。
-
-![](./media/image6.emf)
-_图 2‑3 Python程序运行程_
-
-源程序编写需要编辑工具，"翻译"需要翻译工具，[]{#2.2\_.2_Python简介
-.anchor}在编写程序前需要安装这些工具，以编写Python程序为例，"翻译"工具就是Python解释器，编辑工具可以是简单的文本编辑器到功能强大的集成开发环境（Integrated
-Development
-Enviroment，IDE）。IDE工具除了代码编写功能，还提供了测试和调试代码所需的工具和功能。
-
-## Python简介
-
-Python是一种跨平台、开源、免费的高级动态解释型程序设计语言。Python语言的发展历史可以追溯到1989年，Guido
-van
-Rossum在阿姆斯特丹为了打发圣诞节的无趣时光，决定开发一个新的脚本解释程序，作为ABC语言的一种继承。Python这一名称来源于Guido喜欢的英国英国广播公司（BBC）的电视节目Monty
-Python\'s Flying Circus。Python自诞生到今天，经历了Python 1.x、Python
-2.x、Python 3.x 版本，现在最新版本是Python
-3.13。Python2.x的最后一个版本Python 2.7在2020年已停止官方支持，Python
-3.x版本与Python 2.x不兼容。
-
-Python支持多种编程范式，包括面向对象、命令式、函数式和过程式编程，并拥有庞大且广泛的标准库和第三方库，使得Python能够应用于各种不同的领域。
-
-**Web开发**：Python提供了诸如Django、Flask等优秀的Web框架，可以帮助开发者快速构建网站和Web应用。
-
-**数据科学与机器学习**：Python在数据科学和机器学习领域占据主导地位。NumPy、pandas用于数据处理和分析，Matplotlib用于数据可视化，
-Scikit-learn、TensorFlow和PyTorch等库则提供强大的机器学习和深度学习功能。
-
-**自动化与脚本编写**：Python适合编写自动化脚本，如自动化测试、批处理文件、网络爬虫等。
-
-**游戏开发**：通过Pygame等库，Python可以用于开发2D和3D游戏。
-
-**桌面应用开发**：虽然Python不是桌面应用开发的首选，但可以利用Tkinter、PyQt等库开发小型桌面应用。
-
-**网络编程**：Python提供了强大的网络编程库，如socket和requests，方便开发者进行网络应用的开发。
-
-Python语言之所以流行，与其自身特点分不开：
-
-**易于学习和使用**：Python语法简洁明了，易于上手，非常适合初学者。
-
-**跨平台兼容性**：Python可以在多种操作系统上运行，包括Windows、macOS、Linux等。
-
-**丰富的库和框架**：Python拥有大量的标准库和第三方库，覆盖了各种应用领域，提高了开发效率。
-
-**强大的社区支持**：Python有一个非常活跃的社区，为开发者提供了丰富的资源和支持。
-
-**可扩展性：**Python也被称为"胶水语言"，它可以很容易地与其他语言编写的程序和库集成，包括C、C++、Java、Perl等。
-
-**支持多种编程范式**：Python支持面向对象、过程式和函数式编程，使得开发者可以根据需求选择合适的编程方式。
-
-**免费和开源**：Python是一种开源语言，可以免费使用和修改，促进了技术的共享和传播。
-
-总之，Python是一种功能强大、易于上手、应用广泛的编程语言，特别适合于数据分析、机器学习、Web开发等领域的使用。[]{#2.3\_搭建Python环境
-.anchor}本书后续案例均采用Python语言编程实现。
-
-## 搭建Python环境
-
-编写Python程序需要编辑工具，运行Python程序需要解释器。Python解释器可以在Python官网（[[https://www.python.org/downloads/]{.underline}](https://www.python.org/downloads/)）下载安装。常用Python
-集成开发工具有：Python IDLE、PyCharm、Visual Studio Code (VS
-Code)、Jupyter
+编写Python程序需要编辑工具，运行Python程序需要解释器。Python解释器可以在Python官网（[[https://www.python.org/downloads/]](https://www.python.org/downloads/)）下载安装。常用Python
+集成开发工具有：Python IDLE、PyCharm、Visual Studio Code (VS Code)、Jupyter
 Notebook、Spyder等。这些开发工具除了代码编写功能，还提供了测试和调试代码所需的工具和功能。
 
 常用Python开发环境有3种方案：
 
 - 方案1 ：Python IDLE
 
-> Python
-> IDLE是Python自带的一个简单IDE，安装Python解释器后自动安装。功能有限，界面简单直观，适合初学者。
+> Python IDLE是Python自带的一个简单IDE，安装Python解释器后自动安装。功能有限，界面简单直观，适合初学者。
 
-- 方案2：VS Code/PyCharm/Jupyter notebook等IDE+ Python解释器
+- 方案2：VSCode/PyCharm/Jupyter notebook等IDE+ Python解释器
 
-> VS
-> Code、PyCharm等IDE功能强大，可以提供代码自动补全，程序调试，版本控制等功能，但这些IDE本身不包含Python解释器，需在IDE中配置已安装好的解释器。此类IDE工具各有特点，在使用时可以根据自己的需求，选择安装。本书后面介绍常用的PyCharm及VS
-> Code环境的搭建。
+> VSCode、PyCharm等IDE功能强大，可以提供代码自动补全，程序调试，版本控制等功能，但这些IDE本身不包含Python解释器，需在IDE中配置已安装好的解释器。此类IDE工具各有特点，在使用时可以根据自己的需求，选择安装。
 
 - 方案3：Anaconda集成开发环境
 
-> Anaconda 是一个开源的 Python 和 R
-> 语言的发行版，它旨在简化包管理和部署。Anaconda集成了Python解释器、Jupyter
-> Notebook、Spyder等常用工具，开箱即用。由于Anaconda预装了许多库和工具，导致其安装包体积较大，占用的磁盘空间较多[]{#2.3.1*安将Python*解释器
-> .anchor}。Anaconda中库的版本更新不一定及时，可能某些库和工具的版本较旧，无法满足某些项目的需求，也可能不同版本的库之间有依赖冲突，需要进行版本管理和依赖解决。
+> Anaconda 是一个开源的 Python 和 R语言的发行版，它旨在简化包管理和部署。Anaconda集成了Python解释器、Jupyter、Notebook、Spyder等常用工具，开箱即用。由于Anaconda预装了许多库和工具，导致其安装包体积较大，占用的磁盘空间较多。Anaconda中库的版本更新不一定及时，可能某些库和工具的版本较旧，无法满足某些项目的需求，也可能不同版本的库之间有依赖冲突，需要进行版本管理和依赖解决。
 
-### 安装Python 解释器
+## 2. 安装Python 解释器
 
-Python解释器可以在Python官网（[[https://www.python.org/downloads/]{.underline}](https://www.python.org/downloads/)）下载然后安装。
+Python解释器可以在Python官网（[[https://www.python.org/downloads/]](https://www.python.org/downloads/)）下载然后安装。
 以Window 10平台为例，Python下载安装过程如下：
 
-#### 下载Python安装文件
+### 下载Python安装文件
 
 在Python官网可以方便地下载Python的安装包，具体下载步骤如下：
 
-(1) 打开浏览器，输入Python官网地址<https://www.python.org/>，如图
-2‑4所示。
+(1) 打开浏览器，输入Python官网地址<https://www.python.org/>，如图1‑1所示。
 
 ![](./media/image7.png)
 
-[]{#\_Ref170203036 .anchor}_图 2‑4 Python官网首页_
+<p style="text-align: center;">图 1‑1 Python官网首页</p>
 
-(1) 如图
-2‑5所示，左侧列出可以选择的下载项，右侧列出支持本机操作系统的最新Python版本。[]{#\_Ref170203645
-.anchor}
+(2) 如图1‑2所示，左侧列出可以选择的下载项，右侧列出支持本机操作系统的最新Python版本。
 
 ![](./media/image8.png)
 
-_图 2‑5 Downloads选项_
+<p style="text-align: center;">*图 1‑2 Downloads选项*</p>
 
-(1) 点击图 2‑5 左侧的"Windows"打开如图 2‑6
-页面，在列出的内容中选择自己需要的版本进行下载。
+(3) 点击图 1‑2 左侧的"Windows"打开如图1‑3页面，在列出的内容中选择自己需要的版本进行下载。
 
 > ![](./media/image9.png)
 
-_图 2‑6 windows安装包选择_
+<p style="text-align: center;">*图 1‑3 windows安装包选择*</p>
 
-网站提供两种Python安装包选项Windows installer 和Windows embedding
-package。64-bit、32-bit、ARM64指不同的操作系统和硬件架构。用户可以通过检查自己电脑的硬件配置和操作系统类型，选择适合的Python包进行下载。
+网站提供两种Python安装包选项Windows installer 和Windows embedding package。64-bit、32-bit、ARM64指不同的操作系统和硬件架构。用户可以通过检查自己电脑的硬件配置和操作系统类型，选择适合的Python包进行下载。
 
-表示Python版本为3.12.4。
+![image-20250301111850327](README.assets/1.png)表示Python版本为3.12.4。
 
-Windows
-installer通过图形界面引导用户一步一步完成Python安装。安装过程中，可以自定义Python安装路径、选择要安装的功能（如Python解释器、IDLE集成开发环境等）以及设置环境变量。Windows
-Installer适用于大多数用户，尤其是那些不熟悉命令行操作的用户。
+![image-20250301111920316](README.assets/2.png)Windows installer通过图形界面引导用户一步一步完成Python安装。安装过程中，可以自定义Python安装路径、选择要安装的功能（如Python解释器、IDLE集成开发环境等)以及设置环境变量。Windows Installer适用于大多数用户，尤其是那些不熟悉命令行操作的用户。
 
-Windows embeddable
-package是一个轻量级的安装包，专为开发者设计，无需安装，解压后即可使用，适合定制化和便携式应用。Windows
-embeddable
-package包含了Python的核心功能，但省略了一些额外的工具和库，其目的是让开发者可以轻松地将Python集成到他们的应用程序中，而不需要安装完整的Python环境。
+![image-20250301112000211](README.assets/3.png)Windows embeddable package是一个轻量级的安装包，专为开发者设计，无需安装，解压后即可使用，适合定制化和便携式应用。Windows embeddable package包含了Python的核心功能，但省略了一些额外的工具和库，其目的是让开发者可以轻松地将Python集成到他们的应用程序中，而不需要安装完整的Python环境。
 
-+-----------------------------------------------------------------------+
-| **说明：**查看计算机系统及硬件结构 |
-| |
-| 以Windows |
-| 10系统为例，在桌面上找到"此电脑"图标，右键单击图标，在弹出的菜单中点击"属性"，如图 |
-| |
-| 2‑7 所示。弹出"系统"窗口，在该窗口中即可看到"系统类型"，如图 |
-| 2‑8所示。 |
-| |
-| ![](./media/image10.png){width="2.191666666666667in" |
-| height="2.533333333333333in"} |
-| |
-| 图 2‑7 "此电脑"右键菜单* |
-| |
-| ![](./media/image11.png){width="5.591666666666667in" |
-| height="2.716666666666667in"} |
-| |
-| *图 2‑8 属性信息\* |
-+-----------------------------------------------------------------------+
+> **说明：**
+>
+> 查看计算机系统及硬件结构以Windows10系统为例，在桌面上找到"此电脑"图标，右键单击图标，在弹出的菜单中点击"属性"，如图1‑4 所示。弹出"系统"窗口，在该窗口中即可看到"系统类型"，如图1‑5所示。
+> ![](./media/image10.png)
+>
+> ​ <p style="text-align: center;">_图 1‑4 "此电脑"右键菜单_ </p>
+>
+> ![](./media/image11.png)
 
-(1) 点击"Windows installer (64-bit)
-"，下载完成后会看到"python-3.12.4-amd64.exe"文件。
+<p style="text-align: center;">*图 1‑5 属性信息* </p>
 
-+-----------------------------------------------------------------------+
-| **说明：** |
-| |
-| 安装Python时，不一定要安装最新版本，Python版本过新，在使用某些第三方库时，可能会由于第三方库没有及时更新，出现不能运行的情况。 |
-+-----------------------------------------------------------------------+
+(4) 点击"Windows installer (64-bit)"，下载完成后会看到"python-3.12.4-amd64.exe"文件。
 
-#### 安装Python解释器
+> **说明:**
+> 安装Python时，不一定要安装最新版本，Python版本过新，在使用某些第三方库时，可能会由于第三方库没有及时更新，出现不能运行的情况。
+
+### 安装Python解释器
 
 以Windows 64位操作系统为例，说明Python解释器安装过程。
 
-1.  双击下载好的安装包文件，如："python-3.12.4-amd64.exe"，将显示安装向导对话框，如图
-    2‑9所示。在安装时强烈建议选中"Add Python.exe to
-    PATH"，否则在使用中会出现"XXX不是内容或外部命令"错误。
+(1) 双击下载好的安装包文件，如："python-3.12.4-amd64.exe"，将显示安装向导对话框，如图1-6所示。在安装时强烈建议选中"Add Python.exe to PATH"，否则在使用中会出现"XXX不是内容或外部命令"错误。
 
-> ![](./media/image12.png)
+![](./media/image12.png)
 
-图 2‑9 安装方式选择
+<p style="text-align: center;">图 1‑6 安装方式选择</p>
 
-1.  以自定义安装为例，选择"Customize
-    installation"打开安装选项对话框，如图 2‑10所示。
+（2） 以自定义安装为例，选择"Customize installation"打开安装选项对话框，如图 1-7所示。
 
 > ![](./media/image13.png)
 
-图 2‑10 安装选项
+<p style="text-align: center;">图 1‑7 安装选项</p>
 
-1.  单点Next按钮，打开"Advanced Options"对话框，如图
-    2‑11所示。在该对话框中，修改安装路径，然后点击"Install"开始安装Python。
+（3）单点Next按钮，打开"Advanced Options"对话框，如图1-8所示。在该对话框中，修改安装路径，然后点击"Install"开始安装Python。
 
 > ![](./media/image14.png)
 
-图 2‑11 安装目录选择
+<p style="text-align: center;">图 1‑8 安装目录选择</p>
 
-1.  安装完成后，出现如图 2‑12界面。点击"close"关闭安装界面。
+（4）安装完成后，出现如图 1-9界面。点击"close"关闭安装界面。
 
 > ![](./media/image15.png)
 
-图 2‑12 安装完成
+<p style="text-align: center;">图 1‑9 安装完成</p>
 
-上面安装过程完成后，将在系统中安装一批与
-Python开发和运行相关的程序，包括Python解释器python.exe，第三方库安装命令pip，一些常用函数等，还安装了轻量级Python语言开发环境Python
+上面安装过程完成后，将在系统中安装一批与Python开发和运行相关的程序，包括Python解释器python.exe，第三方库安装命令pip，一些常用函数等，还安装了轻量级Python语言开发环境Python
 IDLE。
 
-#### 检验安装是否成功
+### 检验安装是否成功
 
-Python安装完成后，正式使用前可以先测试一下环境是否正常，以免后续使用过程中出现找不到命令的问题。以Windows
-10操作系统为例，检验Python是否安装成功过程如下：
+Python安装完成后，正式使用前可以先测试一下环境是否正常，以免后续使用过程中出现找不到命令的问题。以Windows 10操作系统为例，检验Python是否安装成功过程如下：
 
-打开"命令提示符"窗口，在命令行输入python，如果出现python版本提示，则表示python安装成功。如图
-2‑13所示。
+打开"命令提示符"窗口，在命令行输入python，如果出现python版本提示，则表示python安装成功。如图 1-10所示。
 
 > ![](./media/image16.png)
 
-图 2‑13 命令提示符窗口运行Python
+<p style="text-align: center;">图 1‑10 命令提示符窗口运行Python</p>
 
 在"\>\>\>"后输入Ctrl+Z、quit()或者exit()可退出python环境。
 
-如果出现"'python'不是内部或外部命令，也不是可运行的程序或批处理文件。"时，说明当前路径中找不到
-python.exe可执行程序，可参考2.4.4小节进行Path环境变量配置。
+如果出现"'python'不是内部或外部命令，也不是可运行的程序或批处理文件。"时，说明当前路径中找不到 python.exe可执行程序，可参考2.4.4小节进行Path环境变量配置。
 
-为保障后续安装第三方库顺利，可以测试一下pip命令安装是否正常。在命令行中输入pip，出现如图
-2‑14所示信息，则表示pip安装成功。
+为保障后续安装第三方库顺利，可以测试一下pip命令安装是否正常。在命令行中输入pip，出现如图 1-11所示信息，则表示pip安装成功。
 
 ![](./media/image17.png)
 
-图 2‑14 查看pip命令
+<p style="text-align: center;">图 1‑11 查看pip命令</p>
 
-如果出现"'pip'不是内部或外部命令，也不是可运行的程序或批处理文件。"时，说明当前路径中找不到pip.exe可执行程序，可参考2.4.4小节进行Path环境变量配置。
+如果出现"'pip'不是内部或外部命令，也不是可运行的程序或批处理文件。"时，说明当前路径中找不到pip.exe可执行程序，可参考"配置环境变量"小节进行Path环境变量配置。
 
-#### 配置环境变量
+### 配置环境变量
 
 如果在"命令提示符"窗口，不能正常运行python或pip命令，则需要配置环境变量Path。下面以windows10为例介绍环境变量的设置方法。
 
-1.  首先找到python.exe及pip.exe所在的目录，并复制下来。如：C:\\python312及C:\\python312\\Scripts。
+(1) 首先找到python.exe及pip.exe所在的目录，并复制下来。如：C:\\python312及C:\\python312\\Scripts。
 
-2.  右键单击"此电脑"，然后在弹出的快捷菜单中选择"属性"，打开"系统"对话框，单击"高级系统设置"超链接，打开如图
-    2‑15 "系统"属性对话框，单击"环境变量"按钮。
+(2) 右键单击"此电脑"，然后在弹出的快捷菜单中选择"属性"，打开"系统"对话框，单击"高级系统设置"超链接，打开如图1‑12 "系统"属性对话框，单击"环境变量"按钮。
 
-![](./media/image18.png){width="3.437903543307087in"
-height="3.944096675415573in"}
+![](./media/image18.png)
 
-[]{#\_Ref170237882 .anchor}图 2‑15 系统属性对话框
+<p style="text-align: center;">图 1‑12 系统属性对话框</p>
 
-（3）点击"环境变量"按钮，打开如图 2‑16 "环境变量"对话框。
+（3）点击"环境变量"按钮，打开如图 1‑13"环境变量"对话框。
 
-![](./media/image19.png){width="5.283333333333333in"
-height="5.158333333333333in"}
+![](./media/image19.png)
 
-[]{#\_Ref188369968 .anchor}图 2‑16 环境变量对话框
+<p style="text-align: center;">图 1‑13 环境变量对话框</p>
 
 在环境变量中有"系统变量"和"用户变量"两种变量。"系统变量"对系统中所有用户都有效，无论是系统管理员还是普通用户。"用户变量"只对当前用户有效，不会影响其他用户的环境设置。如这里选择系统变量中的"Path"变量，然后单点"编辑"。
 
-（3）在弹出的"编辑环境变量"对话框中，单击"新建"按钮。并且在光标所在位置分别输入刚才保存的python.exe及pip.exe所在的目录。如图
-2‑17所示，单击"确定"完成环境变量的设置。
+（3）在弹出的"编辑环境变量"对话框中，单击"新建"按钮。并且在光标所在位置分别输入刚才保存的python.exe及pip.exe所在的目录。如图1-14所示，单击"确定"完成环境变量的设置。
 
-![](./media/image20.png){width="4.4253838582677165in"
-height="4.333708442694663in"}
+![](./media/image20.png)
 
-[]{#\_Ref181362930 .anchor}图 2‑17 设置Path环境变量
+<p style="text-align: center;">图 1‑14 设置Path环境变量</p>
 
 ### Python IDLE的使用
 
-Python解释器安装完成后，会自带一个Python IDLE IDE。Python IDLE
-提供交互式和文件式两种工作模式。
+Python解释器安装完成后，会自带一个Python IDLE IDE。Python IDLE 提供交互式和文件式两种工作模式。
 
-1.  交互模式
+1.  **交互模式**
 
 单击Windows 10的"开始"菜单，找到IDLE菜单，打开Python IDLE。
 
-> ![](./media/image21.png){width="2.7333333333333334in"
-> height="2.0166666666666666in"}
+> ## ![](./media/image21.png)
 
-图 2‑18 Python IDLE菜单
+<p style="text-align: center;">图 1‑15 Python IDLE菜单</p>
 
-> ![](./media/image22.png){width="6.6097222222222225in"
-> height="1.3798611111111112in"}
+> ![](./media/image22.png)
 
-图 2‑19 Python IDLE窗口
+<p style="text-align: center;">图 1‑16 Python IDLE窗口</p>
 
-在Python提示符"\>\>\>"每写完一条语句，按回车键后，就会执行该语句，如图
-2‑20所示。
+在Python提示符"\>\>\>"每写完一条语句，按回车键后，就会执行该语句，如图1-17所示。
 
-![](./media/image23.png){width="6.6097222222222225in"
-height="1.80625in"}
+![](./media/image23.png)
 
-[]{#\_Ref185885846 .anchor}图 2‑20 Python IDLE交互模式
+<p style="text-align: center;">图 1‑17 Python IDLE交互模式</p>
 
 交互模式适合单句运行、练习。在实际开发时，不可能只写一条语句，通常需要多条语句完成一个完整的逻辑，这时就需要用文件模式来完成。
 
-1.  文件模式
+**2. 文件模式**
 
-点击Python IDLE"File"菜单中的"New
-File"或者用快捷键"Ctrl+N"，即可新建一个Python文件。Python文件默认的扩展名为.py或.pyw。".py"文件用python.exe解释，运行时会出现控制台窗口，"\*.pyw"文件用pythonw.exe解释，运行时不会出现控制台窗口，主要用于一些要图形界面的程序。如新建一个python文件，输入如图
-2‑21所示代码：
+点击Python IDLE"File"菜单中的"New File"或者用快捷键"Ctrl+N"，即可新建一个Python文件。Python文件默认的扩展名为.py或.pyw。".py"文件用python.exe解释，运行时会出现控制台窗口，"\*.pyw"文件用pythonw.exe解释，运行时不会出现控制台窗口，主要用于一些要图形界面的程序。如新建一个python文件，输入如图 1-18所示代码：
 
-![](./media/image24.png){width="4.177083333333333in"
-height="1.1861111111111111in"}
+![](./media/image24.png)
 
-[]{#\_Ref181362998 .anchor}图 2‑21 示例代码
+<p style="text-align: center;">图 1‑18 示例代码</p>
 
-点击"File"/"Save"或"Save As"菜单可保存文件，点击"Run"/"Run
-Module"可运行该文件，运行结果如图 2‑22所示：
+点击"File"/"Save"或"Save As"菜单可保存文件，点击"Run"/"Run Module"可运行该文件，运行结果如图 1-19所示：
 
-![](./media/image25.png){width="2.4895833333333335in"
-height="0.7395833333333334in"}
+![](./media/image25.png)
 
-[]{#\_Ref181363093 .anchor}图 2‑22 运行结果
+<p style="text-align: center;">图 1‑19 运行结果</p>
 
-[]{#\_bookmark0 .anchor}在Python
-IDLE中除了利用菜单外，还可以利用快捷键进行程序编写、编辑和运行。常用快捷键如表
-2‑1所示。
+在Python IDLE中除了利用菜单外，还可以利用快捷键进行程序编写、编辑和运行。常用快捷键如表 1‑1所示。
 
-[]{#\_Ref170241604 .anchor}表 2‑1 Python IDLE常用快捷键
+<p style="text-align: center;">表 1‑1 Python IDLE常用快捷键</p>
 
 | 快捷键       | 功能                         |
 | ------------ | ---------------------------- |
@@ -571,117 +207,87 @@ IDLE中除了利用菜单外，还可以利用快捷键进行程序编写、编�
 | Ctrl+\]      | 缩进代码块                   |
 | Ctrl+\[      | 取消代码块缩进               |
 
-Python
-IDLE是轻量级的语言开发环境，所提供的功能有限，在实际开发项目时，可以选择Visual
-Studio Code或PyCharm等IDE工具+Python解释器搭建Python开发环境。
+Python IDLE是轻量级的语言开发环境，所提供的功能有限，在实际开发项目时，可以选择Visual Studio Code或PyCharm等IDE工具+Python解释器搭建Python开发环境。
 
-### 搭建VS Code开发环境
+## 2. 搭建VS Code开发环境
 
-VSCode是一款由微软开发的免费、开源的代码编辑器。它支持多种编程语言，拥有丰富的功能和扩展插件，便于用户快速高效地进行软件开发。VS
-Code具有强大的代码编辑功能、智能代码补全功能、调试工具、Git版本控制集成等特性。用户可能通过安装各种扩展定制VS
-Code满足足不同开发需求。在VS
-Code中安装Python插件，配置Python解释器后即可进行Python代码编写、运行。下面以Windows10操作系统中VS
-Code工作环境搭建为例进行说明。
+VSCode是一款由微软开发的免费、开源的代码编辑器。它支持多种编程语言，拥有丰富的功能和扩展插件，便于用户快速高效地进行软件开发。VSCode具有强大的代码编辑功能、智能代码补全功能、调试工具、Git版本控制集成等特性。用户可能通过安装各种扩展定制VSCode满足足不同开发需求。在VSCode中安装Python插件，配置Python解释器后即可进行Python代码编写、运行。下面以Windows10操作系统中VSCode工作环境搭建为例进行说明。
 
-#### VS Code安装
+### VS Code安装
 
-1.  在VS Code
-    官网（<https://code.visualstudio.com>）下载适合自己计算机的安装包并安装。首页会自动检测适合本机操作系统的版本，或者点单击"Download"菜单找到适合的版本下载。
+(1) 在VS Code官网（<https://code.visualstudio.com>）下载适合自己计算机的安装包并安装。首页会自动检测适合本机操作系统的版本，或者点单击"Download"菜单找到适合的版本下载。
 
-![](./media/image26.png){width="6.6097222222222225in"
-height="3.984027777777778in"}
+![](./media/image26.png)
 
-图 2‑23 VS Code下载界面
+<p style="text-align: center;">图 1‑20 VS Code下载界面</p>
 
-1.  单击下载完成的\*.exe可执行文件，按照向导点击"下一步"进行安装。安装过程中建议修改安装路径，如图
-    2‑24所示。
+(2) 单击下载完成的\*.exe可执行文件，按照向导点击"下一步"进行安装。安装过程中建议修改安装路径，如图1-21所示。
 
-> ![](./media/image27.png){width="4.641666666666667in" height="3.8in"}
+> ![](./media/image27.png)
 
-图 2‑24 VS Code安装路径选择
+<p style="text-align: center;">图 1‑21 VS Code安装路径选择</p>
 
 #### VS Code插件安装
 
-VS Code是一款通用的代码编辑器，为了满足开发者的特定需求，VS
-Code支持通过插件来扩展其功能。
+VS Code是一款通用的代码编辑器，为了满足开发者的特定需求，VSCode支持通过插件来扩展其功能。
 
-1.  **安装中文汉化包**
+**1. 安装中文汉化包**
 
-（1）如图 2‑25所示，打开安装好的VS
-Code，点击左侧边栏中的扩展图标（Extensions），或使用快捷键Ctrl+Shift+X（Windows/Linux）或Cmd+Shift+X（Mac）打开扩展商店。
+（1）如图 1-22所示，打开安装好的VS Code，点击左侧边栏中的扩展图标（Extensions），或使用快捷键Ctrl+Shift+X（Windows/Linux）或Cmd+Shift+X（Mac）打开扩展商店。
 
 （2）在搜索框中输入你想要安装的插件名称或关键词"Chinese"，然后按回车键进行搜索。
 
-（3）在搜索结果中找到你需要的插件"Chinese (Simplified) Language Pack for
-Visual Studio Code"，点击插件右侧的"Install"按钮。
+（3）在搜索结果中找到你需要的插件"Chinese (Simplified) Language Pack for Visual Studio Code"，点击插件右侧的"Install"按钮。
 
-![](./media/image28.png){width="3.660416666666667in"
-height="4.877777777777778in"}
+![](./media/image28.png)
 
-图 2‑25 VS Code插件安装
+<p style="text-align: center;">图 1‑22 VS Code插件安装</p>
 
-安装并重启之后，Visual Studio
-Code会变为中文菜单。如果重启后，菜单还不是中文，点击"管理/命令面板\..."或按"Ctrl
+安装并重启之后，Visual Studio Code会变为中文菜单。如果重启后，菜单还不是中文，点击"管理/命令面板\..."或按"Ctrl + Shift + P "键打开命令面板,输入"Configure Display Language"，然后选择"中文（简体）"，选择后根据提示重启即可。
 
-- Shift + P "键打开命令面板,输入"Configure Display
-  Language"，然后选择"中文（简体）"，选择后根据提示重启即可。
+![](./media/image29.png)
 
-![](./media/image29.png){width="6.6097222222222225in"
-height="1.7972222222222223in"}
+<p style="text-align: center;">图 1‑23 设置中文显示</p>
 
-图 2‑26 设置中文显示
+**2. 安装Python插件**
 
-1.  **安装Python插件**
+> 如图 1‑24所示，搜索"Python"插件进行安装。
 
-> 如图 2‑27所示，搜索"Python"插件进行安装。
+![](./media/image30.png)
 
-![](./media/image30.png){width="6.6097222222222225in"
-height="2.8868055555555556in"}
-
-图 2‑27 安装Python插件
+<p style="text-align: center;">图 1-24 安装Python插件</p>
 
 #### 配置Python解释器
 
-如图 2‑28所示，点击"管理\|命令面板\..."或按"Ctrl + Shift +P"
-键打开命令面板,输入 "Python:Select Interpreter "命令，配置默认的解释器。
+如图 1‑25所示，点击"管理\|命令面板\..."或按"Ctrl + Shift +P" 键打开命令面板,输入 "Python:Select Interpreter "命令，配置默认的解释器。
 
-![](./media/image31.jpeg){width="6.1625in" height="3.314583333333333in"}
+![](./media/image31.jpeg)
 
-图 2‑28 配置解释器
+<p style="text-align: center;">图 1‑25 配置解释器</p>
 
-选中要使用的解释器对应的"PythonXX.exe"，如图
-2‑29所示。可以从列出的内容选择也可以输入解释器路径选择。
+选中要使用的解释器对应的"PythonXX.exe"，如图 1‑26所示。可以从列出的内容选择也可以输入解释器路径选择。
 
-![](./media/image32.png){width="6.6097222222222225in"
-height="1.6652777777777779in"}
+![](./media/image32.png)
 
-图 2‑29 选择解释器
+<p style="text-align: center;">图 1‑26 选择解释器</p>
 
 ### 利用VS Code编辑运行Python程序
 
-VS Code 是以文件夹为基础来管理项目的。在 VS Code
-中，一个项目通常对应一个文件夹，这个文件夹被称为工作区
-(Workspace)。可以通过选择"打开文件夹"来打开一个项目，这样 VS Code
-就会将这个文件夹及其子文件夹中的所有文件视为一个项目。
+VSCode是以文件夹为基础来管理项目的。在 VSCode中，一个项目通常对应一个文件夹，这个文件夹被称为工作区(Workspace)。可以通过选择"打开文件夹"来打开一个项目，这样 VS Code就会将这个文件夹及其子文件夹中的所有文件视为一个项目。
 
 #### 新建Python程序
 
 创建一个名为"Pythonlx"的文件夹，然后在VS
-Code中选择"文件"\|"打开文件夹\..."打开"Pythonlx"文件夹作为项目的根目录。利用"文件"\|"新建文件"或点击"新建文件"按钮，新建一个名为"hello.py"的文件，如图
-2‑30所示。
+Code中选择"文件"\|"打开文件夹\..."打开"Pythonlx"文件夹作为项目的根目录。利用"文件"\|"新建文件"或点击"新建文件"按钮，新建一个名为"hello.py"的文件，如图1‑27所示。
 
-![](./media/image33.png){width="6.6097222222222225in"
-height="3.296527777777778in"}
+![](./media/image33.png)
 
-图 2‑30 VS Code 窗口介绍
+<p style="text-align: center;">图 1‑27 VS Code 窗口介绍</p>
 
-注意新建文件时，要输入包含扩展名的完整文件名，如："hello.py"，因为VS
-Code是通用编辑器，若新建文件不带扩展名，编辑器便不知道文件格式，只有标注了扩展名".py"，
-VS Code才会将其识别为Python文件。在新建的文件中输入下列代码：
+注意新建文件时，要输入包含扩展名的完整文件名，如："hello.py"，因为VSCode是通用编辑器，若新建文件不带扩展名，编辑器便不知道文件格式，只有标注了扩展名".py"，VS Code才会将其识别为Python文件。在新建的文件中输入下列代码：
 
 ```python
-msg = \'Hello World\'
-
+msg = 'Hello World'
 print(msg)  
 ```
 
@@ -689,28 +295,23 @@ print(msg)  
 
 还可以通过其他方式在 VS Code 中运行 Python 代码片段：
 
-选择一行或多行，然后按Shift+Enter或右键单击并选择在 "Python
-终端中运行选择/行"，如图 2‑31所示。此命令适用于仅测试文件的一部分。
+选择一行或多行，然后按Shift+Enter或右键单击并选择在 "Python终端中运行选择/行"，如图 1-28所示。此命令适用于仅测试文件的一部分。
 
-![](./media/image34.png){width="6.6097222222222225in"
-height="2.5319444444444446in"}
+![](./media/image34.png)
 
-图 2‑31 Python终端中运行选择内容
+<p style="text-align: center;">图 1‑28 Python终端中运行选择内容</p>
 
-或者从命令面板 ( Ctrl+Shift+P ) 中选择"Python: Start
-REPL"命令，为当前选定的 Python
-解释器打开终端。在终端中，您可以一次输入并运行一行代码。如图 2‑32所示。
+或者从命令面板 ( Ctrl+Shift+P ) 中选择"Python: StartREPL"命令，为当前选定的 Python解释器打开终端。在终端中，您可以一次输入并运行一行代码。如图 1-29所示。
 
-![](./media/image35.png){width="6.6097222222222225in"
-height="1.1569444444444446in"}
+![](./media/image35.png)
 
-图 2‑32 在终端运行代码
+<p style="text-align: center;">图 1‑29 在终端运行代码</p>
 
 #### VS Code使用中的一些快捷键
 
-使用VS Code 编辑程序时可以使用快捷键进行操作，常用快捷键如所示：
+使用VS Code 编辑程序时可以使用快捷键进行操作，常用快捷键如表1-2所示：
 
-表 2‑2 VS Code常用快捷键
+<p style="text-align: center;">表 1‑2 VS Code常用快捷键</p>
 
 | **快捷键**      | **作用**     |
 | --------------- | ------------ |
@@ -720,180 +321,153 @@ height="1.1569444444444446in"}
 | **Alt+Shift+F** | 代码格式化   |
 | **Ctrl+"/"**    | 切换注释     |
 
-### 搭建PyCharm开发环境
+## 3. 搭建PyCharm开发环境
 
 PyCharm是一种由JetBrains开发的IDE，它提供了丰富的功能，如智能代码编辑器、全行代码补全、远程开发、集成式数据库管理等。PyCharm还支持Django、Flask等Python框架，并提供了丰富的插件生态系统。PyCharm提供专业版和社区版两个版本：专业版收费，具备更高级的功能和服务，适合专业开发者和团队使用；社区版免费，基本功能都有，可以满足初学者的开发需求。
 
-#### PyCharm安装
+### PyCharm安装
 
 下面介绍在Windows 10操作系统中搭建PyCharm环境。
 
-1.  下载安装PyCharm
+（1） 下载安装PyCharm
 
-打开PyCharm官方（[[https://www.jetbrains.com/pycharm/]{.underline}](https://www.jetbrains.com/pycharm/)），点击页面中的"Dowload"按钮，进入到PyCharm的环境和版本选择页面。
+打开PyCharm官方（[[https://www.jetbrains.com/pycharm/]](https://www.jetbrains.com/pycharm/)），点击页面中的"Dowload"按钮，进入到PyCharm的环境和版本选择页面。
 
-1.  选择下载Windows平台的社区版（Community Edition），如图 2‑33所示。
+（2） 选择下载Windows平台的社区版（Community Edition），如图 1-30所示。
 
-> ![](./media/image36.png){width="6.6097222222222225in"
-> height="3.7729166666666667in"}
+> ![](./media/image36.png)
 
-图 2‑33 PyCharm版本选择
+<p style="text-align: center;">图 1‑30 PyCharm版本选择</p>
 
-1.  下载完成后，双击下载好的安装文件"pycharmXXX.exe"，在打开的界面中点击"下一步"进行下一步安装。
+（3）下载完成后，双击下载好的安装文件"pycharmXXX.exe"，在打开的界面中点击"下一步"进行下一步安装。
 
-2.  在软件安装路径的设置界面，设置合适的安装路径，建议不要安装在过深的目录中。
+（4） 在软件安装路径的设置界面，设置合适的安装路径，建议不要安装在过深的目录中。
 
-> ![](./media/image37.png){width="4.366666666666666in"
-> height="2.966666666666667in"}
+![](./media/image37.png)
 
-图 2‑34 PyCharm安装路径选择
+<p style="text-align: center;">图 1‑31 PyCharm安装路径选择</p>
 
-1.  选择路径后，点击"下一步"，出现如图 2‑35界面:
+（5） 选择路径后，点击"下一步"，出现如图1-32界面:
 
-![](./media/image38.png){width="4.358333333333333in"
-height="2.9583333333333335in"}
+![](./media/image38.png)
 
-图 2‑35 PyCharm安装选项
+<p style="text-align: center;">图 1‑32 PyCharm安装选项</p>
 
 四个安装选项的含义分别是：
 
-勾选后，在桌面上创建PyCharm的快捷方式，方便快速启动。
+![1](README.assets/1.png)勾选后，在桌面上创建PyCharm的快捷方式，方便快速启动。
 
-勾选后，右键点击文件夹时，会出现"Open Folder as PyCharm
-Project"选项，可以选择使用PyCharm直接打开该文件夹作为一个项目。这样可以更快捷的方式来管理和编辑项目文件，无需先打开PyCharm再手动选择项目文件夹。
+勾选后，右键点击文件夹时，会出现"Open Folder as PyCharm Project"选项，可以选择使用PyCharm直接打开该文件夹作为一个项目。这样可以更快捷的方式来管理和编辑项目文件，无需先打开PyCharm再手动选择项目文件夹。
 
-勾选后，.py文件可以与PyCharm关联，双击.py文件即可在PyCharm中打开。
+![2](README.assets/2.png)勾选后，.py文件可以与PyCharm关联，双击.py文件即可在PyCharm中打开。
 
-勾选后，电脑重启后会更新环境变量，使得可以直接在命令行或终端输入pycharm便可启动PyCharm。
+![3](README.assets/3.png)勾选后，电脑重启后会更新环境变量，使得可以直接在命令行或终端输入pycharm便可启动PyCharm。
 
-根据自己需求去选择就好了，一般选择、就行。
+根据自己需求去选择就好了，一般选择就行。
 
-1.  勾上自己需要的配置选项，点击"下一步"，进入到如图
-    2‑36所示界面，直接点击"安装"就行，然后正式进入到安装过程。
+（6） 勾上自己需要的配置选项，点击"下一步"，进入到如图1‑33所示界面，直接点击"安装"就行，然后正式进入到安装过程。
 
-![](./media/image39.png){width="4.416666666666667in"
-height="2.9916666666666667in"}
+![](./media/image39.png)
 
-图 2‑36 PyCharm安装界面
+<p style="text-align: center;">图 1‑33 PyCharm安装界面</p>
 
 （7）安装完成后，选择是否重启，然后点击"完成"即可完成安装。
 
-![](./media/image40.png){width="4.358333333333333in"
-height="2.9833333333333334in"}
+![](./media/image40.png)
 
-图 2‑37 PyCharm安装完成界面
+<p style="text-align: center;">图 1‑34 PyCharm安装完成界面</p>
 
-#### PyCharm配置
+### PyCharm配置
 
-##### Pycharm汉化
+#### Pycharm汉化
 
-1.  打开PyCharm，点击左上角的"File"菜单，然后选择"Settings"。
+（1）打开PyCharm，点击左上角的"File"菜单，然后选择"Settings"。
 
-2.  在设置界面中，找到并点击"Plugins"。
+（2）在设置界面中，找到并点击"Plugins"。
 
-3.  在插件市场中，搜索"Chinese"，选择中文语言包，点击右边的"Install"按钮进行安装。
+（3）在插件市场中，搜索"Chinese"，选择中文语言包，点击右边的"Install"按钮进行安装。
 
-4.  安装完成后，重启PyCharm即可看到中文界面。
+（4）安装完成后，重启PyCharm即可看到中文界面。
 
 ![](./media/image41.png)
 
-图 2‑38 PyCharm 汉化配置界面
+<p style="text-align: center;">图 1‑35 PyCharm 汉化配置界面</p>
 
-##### 配置Python解释器
+#### 配置Python解释器
 
-1.  打开PyCharm，选择新建项目或打开已有的项目。
+（1）打开PyCharm，选择新建项目或打开已有的项目。
 
-2.  点击菜单"文件"\|"设置"，打开如图
-    2‑39所示对话框。选择"项目\*\*\*"\|"Python解释器"
+（2）点击菜单"文件"\|"设置"，打开如图1‑36所示对话框。选择"项目\*\*\*"\|"Python解释器"
 
 > ![](./media/image42.png)
 
-图 2‑39 Python解释器设置
+<p style="text-align: center;">图 1‑36 Python解释器设置</p>
 
-1.  点击"添加解释器"进入解释器添加界面。
+（3）点击"添加解释器"进入解释器添加界面。
 
-> ![](./media/image43.png){width="6.6097222222222225in"
-> height="4.655555555555556in"}
+> ![](./media/image43.png)
 
-图 2‑40 添加Python解释器
+<p style="text-align: center;">图 1‑37 添加Python解释器</p>
 
-- Virtualenv
-  环境：创建一个新的虚拟环境。选择一个基础解释器，然后设置文件夹存放虚拟环境。确认后，PyCharm
-  会自动创建并配置虚拟环境。
+- Virtualenv环境：创建一个新的虚拟环境。选择一个基础解释器，然后设置文件夹存放虚拟环境。确认后，PyCharm会自动创建并配置虚拟环境。
 
-- Conda 环境：如果计算机系统中已经安装了
-  Anaconda，可以使用此选项创建一个新的 Conda 环境。选择一个 Python
-  版本，设置环境名称和位置，然后确认，PyCharm 将自动配置 Conda 环境。
+- Conda 环境：如果计算机系统中已经安装了Anaconda，可以使用此选项创建一个新的 Conda 环境。选择一个 Python版本，设置环境名称和位置，然后确认，PyCharm 将自动配置 Conda 环境。
 
-- 系统解释器：从计算机系统中选择已安装的 Python 版本。（例如，在
-  Windows 上为 python.exe，在 macOS 或 Linux 上为 python 或 python3）
+- 系统解释器：从计算机系统中选择已安装的 Python 版本。（例如，在Windows 上为 python.exe，在 macOS 或 Linux 上为 python 或 python3）
 
 Virtualenv虚拟环境是独立的Python环境，与系统中的其他解释器隔离，这有助于管理不同的项目依赖项，并防止冲突。每个虚拟环境中可以安装不同的包，从而避免不同项目之间的依赖冲突。系统解释器是Python安装附带的解释器，可以直接使用系统中已安装的Python版本来执行代码。如果你需要管理多个项目的依赖并避免版本冲突，建议配置虚拟环境解释器。如果你希望简化配置过程并节省时间，可以选择系统解释器。
 
 ### 编辑运行Python文件
 
-（1）利用"文件"\|"新建"\|"Python文件"或者右键单击新建好的项目，在弹出的菜单中选择"新建"\|"Python
-文件"新建Python文件。
+（1）利用"文件"\|"新建"\|"Python文件"或者右键单击新建好的项目，在弹出的菜单中选择"新建"\|"Python文件"新建Python文件。
 
-![](./media/image44.png){width="6.6097222222222225in"
-height="3.908333333333333in"}
+![](./media/image44.png)
 
-图 2‑41 PyCharm新建文件
+<p style="text-align: center;">图 1‑38 PyCharm新建文件</p>
 
-1.  输入文件名"hello"，新建hello.py文件，在代码编辑区输入相应代码，点击"运行"按钮，即可运行代码。如图
-    2‑42所示。
+（2） 输入文件名"hello"，新建hello.py文件，在代码编辑区输入相应代码，点击"运行"按钮，即可运行代码。如图1‑39所示。
 
-> ![](./media/image45.png){width="6.6097222222222225in"
-> height="4.228472222222222in"}
+> ![](./media/image45.png)
 
-图 2‑42 PyCharm窗口
+<p style="text-align: center;">图 1‑39 PyCharm窗口</p>
 
 > PyCharm中除了可以利用"运行"按钮运行文件，也可以选中代码，单击右键打开快捷菜单，选择运行文件或选中代码。
 
-### 搭建Anaconda集成开发环境
+## 4. 搭建Anaconda集成开发环境
 
-Anaconda
-是一个Python的集成环境，它自带Python解释器并集成众多常见的第三库，如Numpy、Pandas
-等数据处理科学计算软件包。同时，它还提供了包管理工具 pip 与conda，以及
-Jupyter
-Notebook、Spider代码编辑工具。如果经常使用Python进行数据分析或科学计算，可以直接安装Anaconda，这样可以省去安装众多数据分析包的麻烦。
+Anaconda是一个Python的集成环境，它自带Python解释器并集成众多常见的第三库，如Numpy、Pandas等数据处理科学计算软件包。同时，它还提供了包管理工具 pip 与conda，以及Jupyter Notebook、Spider代码编辑工具。如果经常使用Python进行数据分析或科学计算，可以直接安装Anaconda，这样可以省去安装众多数据分析包的麻烦。
 
-#### Anaconda 安装
+### Anaconda 安装
 
-1\. 安装Anaconda
+**1\. 安装Anaconda**
 
 （1）在官网（https://www.anaconda.com/products/individual）或国内镜像（如：https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/）下载个人免费版本。
 
-![](./media/image46.png){width="6.6097222222222225in"
-height="4.1722222222222225in"}
+![](./media/image46.png)
 
-图 2‑43 Anaconda下载界面
+<p style="text-align: center;">图 1‑40 Anaconda下载界面</p>
 
-![](./media/image47.png){width="6.6097222222222225in"
-height="4.151388888888889in"}
+![](./media/image47.png)
 
-图 2‑44 Anaconda国内镜像
+<p style="text-align: center;">图 1‑41 Anaconda国内镜像</p>
 
-1.  下载完成后，双击下载的"AnacondaXXX.exe"文件，单击"Next"进行安装，在"Lincense
-    Agreement"对话框选择"I Agree"，选择安装类型，如图 2‑45所示。
+（2） 下载完成后，双击下载的"AnacondaXXX.exe"文件，单击"Next"进行安装，在"Lincense Agreement"对话框选择"I Agree"，选择安装类型，如图 1‑42所示。
 
-![](./media/image48.png){width="4.158333333333333in"
-height="3.2333333333333334in"}
+![](./media/image48.png)
 
-图 2‑45 Anaconda安装类型选择
+<p style="text-align: center;">图 1‑42 Anaconda安装类型选择</p>
 
 （3）选择安装路径，点击"Next"。
 
-![](./media/image49.png){width="4.158333333333333in"
-height="3.2333333333333334in"}
+![](./media/image49.png)
 
-图 2‑46 Anaconda安装路径选择
+<p style="text-align: center;">图 1‑43 Anaconda安装路径选择</p>
 
-> （4）如图 2‑47所示，选择高级安装选项，然后点击"Install"开始安装。
+（4）如图 1‑44所示，选择高级安装选项，然后点击"Install"开始安装。
 
-![](./media/image50.png){width="6.6097222222222225in" height="3.8in"}
+![](./media/image50.png)
 
-图 2‑47 Anaconda安装选项选择
+<p style="text-align: center;">图 1‑44 Anaconda安装选项选择</p>
 
 （5）等待安装过程结束后，点击"Finish"完成安装。
 
@@ -903,123 +477,97 @@ height="3.2333333333333334in"}
 
 ### 使用Jupyter新建交互脚本
 
-Jupyter Notebook是一个开源的Web应用程序，它支持交互式编程，可以在
-Jupyter Notebook 中直接编写代码并执行，实时查看结果。Jupyter
-Notebook支持富文本格式，既可以在Jupyter
-单元格中书写程序代码，也可以用Markdown语言，添加格式化文本、链接、图片、视频等。Anaconda安装好后会自动安装Jupyter
-Notebook，也可以通过pip 安装Jupyter 包。。
+Jupyter Notebook是一个开源的Web应用程序，它支持交互式编程，可以在Jupyter Notebook 中直接编写代码并执行，实时查看结果。Jupyter Notebook支持富文本格式，既可以在Jupyter单元格中书写程序代码，也可以用Markdown语言，添加格式化文本、链接、图片、视频等。Anaconda安装好后会自动安装Jupyter
+Notebook，也可以通过pip 安装Jupyter 包。
 
-1. 启动Jupyter Notebook
+（1）启动Jupyter Notebook
 
-点击"开始"菜单中的"Jupyter
-notebook"或者在"开始"菜单的搜索框中输入Jupyter notebook，即可启动Jupyter
-Notebook。
+点击"开始"菜单中的"Jupyter notebook"或者在"开始"菜单的搜索框中输入Jupyter notebook，即可启动Jupyter Notebook。
 
-2.  创建新的Notebook
+（2） 创建新的Notebook
 
-在Jupyter
-Notebook界面中，点击右上角的"New"按钮，可以选择新建的内容，如图
-2‑48所示。选择"Notebook"可新建Notebook文件，第一次新建文件，需要选择"Kernel"，如图
-2‑49所示。在创建新的Notebook时，可以选择不同的内核。
+在Jupyter Notebook界面中，点击右上角的"New"按钮，可以选择新建的内容，如图1‑45所示。选择"Notebook"可新建Notebook文件，第一次新建文件，需要选择"Kernel"，如图1‑46所示。在创建新的Notebook时，可以选择不同的内核。
 
-![](./media/image51.png){width="6.6097222222222225in"
-height="3.609722222222222in"}
+![](./media/image51.png)
 
-图 2‑48 Jupyter Notebook新建文件
+<p style="text-align: center;">图 1‑45 Jupyter Notebook新建文件</p>
 
-![](./media/image52.png){width="4.325in" height="1.9083333333333334in"}
+![](./media/image52.png)
 
-图 2‑49 选择Jupyter Notebook内核
+<p style="text-align: center;">图 1‑46 选择Jupyter Notebook内核</p>
 
-3.  运行代码
+（3） 运行代码
 
 在Notebook中，将光标放在要执行的代码单元格中。按下"Shift+Enter"键或通过"Run"菜单或"运行"按钮运行所选单元格的代码。
 
-4.  保存Notebook
+（4） 保存Notebook
 
-在Notebook中，通过"File"菜单的相关选项可将Notebook保存为.ipynb文件，也可以用"Save
-and Export Notebook As..."把Notebook导出为不同的文件格式。
+在Notebook中，通过"File"菜单的相关选项可将Notebook保存为.ipynb文件，也可以用"Save and Export Notebook As..."把Notebook导出为不同的文件格式。
 
-## AI辅助编码
+1. AI辅助编码
+
+---
 
 ### 大模型API辅助编程
 
 大模型是指利用海量数据、通过先进的算法和技术，训练得到的具有强大预测和决策能力的人工智能模型。可以利用大模型API，通过提示词轻松生成代码。如：
-打开文心一言（https://yiyan.baidu.com/），输入提示词"请用Python编程计算1-100之间所有奇数和"，然后会自动生成如图
-2‑50所示代码，并给出相应解释。
+打开文心一言（https://yiyan.baidu.com/），输入提示词"请用Python编程计算1-100之间所有奇数和"，然后会自动生成如图1‑47所示代码，并给出相应解释。
 
-![](./media/image53.png){width="6.6097222222222225in"
-height="5.054166666666666in"}
+![](./media/image53.png)
 
-图 2‑50 文心一言生成代码
+<p style="text-align: center;">图 1‑47 文心一言生成代码</p>
 
-点"复制代码"，将复制的代码粘贴到Python IDE中，如粘贴到VS
-Code新建的Python文件中，运行即可看到程序结果。
+点"复制代码"，将复制的代码粘贴到Python IDE中，如粘贴到VSCode新建的Python文件中，运行即可看到程序结果。
 
 ### AI编程插件
 
 AI编程插件是一种利用人工智能技术辅助编程的工具，这些工具提供自动代码生成、智能化代码补全、错误检测、代码优化等功能，降低学习门槛，帮助程序员更快地编写高质量的代码。目前使用较多的AI编程插件有：
 
-GitHub
-Copilot：是由GitHub与OpenAI合作开发的一款智能代码生成和补全工具，广泛应用于多种编程语言中。
+**GitHub Copilot：**是由GitHub与OpenAI合作开发的一款智能代码生成和补全工具，广泛应用于多种编程语言中。
 
-CodeGeeX：是由清华大学和智谱AI联合打造的多语言代码生成工具，支持超过300+种编程语言，适配多种主流IDE平台，包括Visual
+**CodeGeeX：**是由清华大学和智谱AI联合打造的多语言代码生成工具，支持超过300+种编程语言，适配多种主流IDE平台，包括Visual
 Studio Code、JetBrains IDEs、Visual
 Studio、HBuilderX、DeepIn-IDE等。CodeGeeX能够实现自动生成代码与补全、翻译代码、重构代码、编写文档以及回答编程问题等。
 
 **通义灵码**：是阿里推出的基于通义大模型的AI编码助手，提供代码智能生成、研发智能问答等功能。
 
-下面以在VS
-Code中安装、使用CodeGeex为例，说明如何利用AI编程插件辅助编程。
+……
+
+下面以在VSCode中安装、使用CodeGeex为例，说明如何利用AI编程插件辅助编程。
 
 #### CodeGeeX安装
 
-如图 2‑51所示，打开VS Code点击左侧Extensions（扩展）按钮,
-在搜索框中输入"codegeex"并搜索, 在搜索结果中点击安装。
+如图 1‑48所示，打开VS Code点击左侧Extensions（扩展）按钮,在搜索框中输入"codegeex"并搜索, 在搜索结果中点击安装。
 
-![](./media/image54.png){width="2.8835826771653545in"
-height="2.2001902887139106in"}
+![](./media/image54.png)
 
-图 2‑51 安装CodeGeex插件
+<p style="text-align: center;">图 1‑48 安装CodeGeex插件</p>
 
 #### CodeGeeX使用
 
-1.  根据提示词生成代码
+（1） 根据提示词生成代码
 
 在提示词框中输入提示词回车，即可自动生成代码，可以复制、插入代码到文件。
 
-![](./media/image55.png){width="4.633333333333334in"
-height="4.738205380577428in"}
+![](./media/image55.png)
 
-图 2‑52 CodeGeex提示词框
+<p style="text-align: center;">图 1‑49 CodeGeex提示词框</p>
 
-1.  自动补全代码
+（2）自动补全代码
 
 当打开一个代码文件后，开始编码。在编码过程中稍等一下，即可看到CodeGeeX根据上下文代码内容，推理出来的可能代码。如果认为推理出的代码合理，使用快捷键Tab对生成的代码进行采纳。如果认为内容不合适，任意键取消推荐的内容，继续手动编码。另外编写注释后回车，也可看到推理出来的可能代码。
 
-2.  其他功能
+（3）其他功能
 
-如图
-2‑53所示，选中代码单击右键，可以进行代码解释、生成注释、代码审查等。更多CodeGeeX功能可以查看CodeGeeX官网使用手册。
+如图1‑50所示，选中代码单击右键，可以进行代码解释、生成注释、代码审查等。更多CodeGeeX功能可以查看CodeGeeX官网使用手册。
 
-![](./media/image56.png){width="4.630206692913386in"
-height="1.9583333333333333in"}
+![](./media/image56.png)
 
-图 2‑53 CodeGeex右键菜单
+<p style="text-align: center;">图 1‑50 CodeGeex右键菜单</p>
 
 #### AI辅助编程思考
 
 既然AI工具可以编程，还需要学习编程吗？答案是需要，而且还要学得更扎实。在编程方面,AI工具可以实现自动编码和智能代码补全，也可以根据提示词进行代码调试，这在很大程度上提高了代码编写效率，降低了初学者门槛。但生成的代码是否符合用户意图还需要人工判断，对于复杂业务的处理，还需要人类意识。读者应该先学好Python基础知识，在具备基本编程和程序评判能力的基础上，借助AI能力，达到更好的编程能力和更快的编程速度。
-
-本书侧重基本理论和思路的讲解，案例实现代码仅做参考，读者可以在理解基本逻辑的基础上利用AI工具辅助代码编写。
-
-## 本章小结
-
-本章介绍了Python语言以及常用的Python
-IDE环境的搭建，还探讨了如何利用AI工具辅助代码开发。
-
-![](./media/image57.png){width="5.768055555555556in"
-height="3.7251771653543306in"}
 
 ## 思考与练习
 
@@ -1027,26 +575,28 @@ height="3.7251771653543306in"}
 
 2.  利用AI编程工具辅助编写Python程序绘制一颗红心。
 
-> ![](./media/image58.png){width="2.575in" height="2.125in"}
+![](./media/image58.png)
 
 # 模拟科学实验------标记重捕法
 
+<div style="background-color:green">
 科学实验是科学研究的基础，通过实验可以验证科学理论、发现新现象和探索未知领域。随着计算机技术的不断发展，利用计算机模拟科学实验已成为一种重要的研究方法。Python作为一种通用的编程语言，具有丰富的科学计算和数据分析库，这为模拟科学实验提供了有力的支持。本章使用Python模拟估计生物种群大小的"标记重捕法"。通过案例学习，体会计算思维在模拟科学实验领域的应用。了解模拟科学实验的基本思路，学习Python编程基础知识。
 
 ## 需求分析
 
 计算思维的本质就是抽象和自动化。使用计算思维不仅可以解决生活问题，也可以用于科学探究。在科学研究中常常需要借助程序进行辅助计算、模拟、预测等。
 
-标记重捕法（Mark-Recapture
-Method）是一种生态学方法，用于估计一个种群的大小。标记重捕法基于这样一个假设：在第一次捕捉并标记一部分个体后，第二次捕捉时捕获的标记个体与未标记个体的比例是恒定的。利用这个比例可以估计整个种群的大小。
+标记重捕法（Mark-Recapture Method）是一种生态学方法，用于估计一个种群的大小。标记重捕法基于这样一个假设：在第一次捕捉并标记一部分个体后，第二次捕捉时捕获的标记个体与未标记个体的比例是恒定的。利用这个比例可以估计整个种群的大小。
 
 本章引入生物学科的科学问题，通过模拟真实的研究过程，统计模拟结果，验证"标记重捕法"公式的准确性。
+
+</div>
 
 ## 学习目的
 
 ### 熟悉Python基础知识
 
-作为本书的第一个案例，本章首先会对python编程基础知识进行回顾。包括：列表的使用、程序基本结构、库的使用、Matplotlib库进行数据可视化、函数定义等Python基础知识。
+本案例首先会对python编程基础知识进行回顾。包括：列表的使用、程序基本结构、库的使用、Matplotlib库进行数据可视化、函数定义等Python基础知识。
 
 ### 掌握科学研究方法
 
@@ -1071,32 +621,32 @@ Matplotlib库
 Python列表是包含0个或多个元素的**有序序列**，列表中的元素类型不限，可以是数值型、字符型、逻辑型等。同一个列表中的元素类型可以不同。列表中的元素也可以是另一个列表、元组，形成这些结构的嵌套。如：
 
 ```python
-student1=\[\"张三\",18,\[99,98,100\]\] 
+student1=["张三",18,[99,98,100]] 
 ```
 
-student1列表中包含了字符型数据"张三"，数值型数据18以及列表\[99,98,100\]。
+student1列表中包含了字符型数据"张三"，数值型数据18以及列表[99,98,100\]。
 
-列表的长度和内容都是可变的，可对列表中的元素进行增加、删除或修改。如表
-3‑1所示，列举了列表常用的方法。
+列表的长度和内容都是可变的，可对列表中的元素进行增加、删除或修改。如表 2‑1所示，列举了列表常用的方法。
 
-表 3‑1列表常用方法
-| 操作 | 描述 | 示例 |
+<p style="text-align: center;">表 2‑1列表常用方法</p>
+
+| 操作         | 描述                                                     | 示例                                                      |
 | ------------ | -------------------------------------------------------- | --------------------------------------------------------- |
-| `append()` | 在列表末尾添加一个元素 | `my_list.append("black")` |
-| `extend()` | 将另一个列表（或任何可迭代对象）的元素添加到当前列表末尾 | `my_list.extend(["yellow","purple"])` |
-| `insert()` | 在列表的指定位置插入元素 | `my_list.insert(1,"pink")`（在索引1的位置插入元素"pink"） |
-| `remove()` | 移除列表中第一个出现的指定元素 | `my_list.remove('pink')` |
-| `pop(index)` | 移除列表中指定位置的元素，并返回该元素的值 | `my_list.pop(0)`（移除索引为0的元素） |
-| `index()` | 返回列表中指定元素第一个匹配项的索引 | `my_list.index("green")` |
-| `count()` | 返回列表中指定元素出现的次数 | `my_list.count("blue")` |
-| `reverse()` | 反转列表中元素的顺序 | `my_list.reverse()` |
-| `sort()` | 对列表中的元素进行排序 | `my_list.sort()` |
-| `sorted()` | 返回列表的一个已排序的副本，原列表不变 | `sorted_list = sorted(my_list)` |
-| `len()` | 返回列表的长度 | `length = len(my_list)` |
-| `in` | 判断一个元素是否存在于列表中 | `"black" in my_list` |
-| `not in` | 判断一个元素是否不存在于列表中 | `"black" not in my_list` |
+| `append()`   | 在列表末尾添加一个元素                                   | `my_list.append("black")`                                 |
+| `extend()`   | 将另一个列表（或任何可迭代对象）的元素添加到当前列表末尾 | `my_list.extend(["yellow","purple"])`                     |
+| `insert()`   | 在列表的指定位置插入元素                                 | `my_list.insert(1,"pink")`（在索引1的位置插入元素"pink"） |
+| `remove()`   | 移除列表中第一个出现的指定元素                           | `my_list.remove('pink')`                                  |
+| `pop(index)` | 移除列表中指定位置的元素，并返回该元素的值               | `my_list.pop(0)`（移除索引为0的元素）                     |
+| `index()`    | 返回列表中指定元素第一个匹配项的索引                     | `my_list.index("green")`                                  |
+| `count()`    | 返回列表中指定元素出现的次数                             | `my_list.count("blue")`                                   |
+| `reverse()`  | 反转列表中元素的顺序                                     | `my_list.reverse()`                                       |
+| `sort()`     | 对列表中的元素进行排序                                   | `my_list.sort()`                                          |
+| `sorted()`   | 返回列表的一个已排序的副本，原列表不变                   | `sorted_list = sorted(my_list)`                           |
+| `len()`      | 返回列表的长度                                           | `length = len(my_list)`                                   |
+| `in`         | 判断一个元素是否存在于列表中                             | `"black" in my_list`                                      |
+| `not in`     | 判断一个元素是否不存在于列表中                           | `"black" not in my_list`                                  |
 
-例：列表操作（eg3_1列表操作.py）
+例：列表操作
 
 ```python
 my_list=["red","green","blue","white"]# 创建列表
@@ -1125,10 +675,12 @@ IDE中运行上述代码，输出每一次操作后的my_list，体会列表的�
 
 #### 顺序结构
 
-顺序结构是最基本的控制结构，也是大多数程序的基础。顺序结构程序中的代码按照从上到下的顺序依次执行。顺序结构流程图如图
-3‑1所示。
+顺序结构是最基本的控制结构，也是大多数程序的基础。顺序结构程序中的代码按照从上到下的顺序依次执行。顺序结构流程图如图 2‑1所示。
 
-例：求矩形的面积和周长。（eg3_2顺序结构.py）
+![](./media/image59.png)
+
+<p style="text-align: center;">图 2-1 顺序结构流程图</p>
+例：求矩形的面积和周长。
 
 ```python
 # 从键盘接收用户输入的长和宽
@@ -1157,31 +709,30 @@ print(f"矩形的周长是: {perimeter}") 
 
 （1）单分支结构
 
-单分支结构流程图如图
-3‑2所示。单分支结构中如果条件为真，则执行代码块中的代码；如果条件为假，则不执行代码块中的代码，直接跳过代码块继续执行后续的代码。
+单分支结构流程图如图 2‑2所示。单分支结构中如果条件为真，则执行代码块中的代码；如果条件为假，则不执行代码块中的代码，直接跳过代码块继续执行后续的代码。
 
-[[]{#\_Ref182485935 .anchor}]{#\_Ref185889050 .anchor}图 3‑2
-单分支结构流程图
+![](./media/image60.png)
+
+ <p style="text-align: center;">图 2‑2单分支结构流程图</p>
 
 （2）双分支结构
 
-双分支结构如图 3‑3所示，条件表达式为真时，执行语句块1，否则执行语句块2。
+双分支结构如图 2‑3所示，条件表达式为真时，执行语句块1，否则执行语句块2。
 
-[]{#\_Ref182482673 .anchor}图 3‑3 双分支结构流程图
+![](./media/image61.png)
+
+<p style="text-align: center;">图 2‑3 双分支结构流程图</p>
 
 双分支语法结构如下：
 
 ```python
 if 条件表达式:
-
-语句序列1
-
+    语句序列1
 else:
-
-语句序列2 
+    语句序列2  
 ```
 
-例：根据输入的学生成绩，输出"及格"或"不及格"。(eg3_3双分支结构.py)
+例：根据输入的学生成绩，输出"及格"或"不及格"。
 
 ```python
 score = eval(input("输入学生成绩："))
@@ -1199,34 +750,27 @@ else:
 
 多分支结构
 
-多分支结构流程图如图
-3‑4所示。多分支结构使用if-elif-else语句来实现。如果表达式1为真，则执行语句块1，否则判断条件表达式2是否为真，如果为真则执行语句块2，......，如果所有条件都为假，则执行语句块n+1中的代码。
+多分支结构流程图如图 2‑4所示。多分支结构使用if-elif-else语句来实现。如果表达式1为真，则执行语句块1，否则判断条件表达式2是否为真，如果为真则执行语句块2，......，如果所有条件都为假，则执行语句块n+1中的代码。
 
-[]{#\_Ref182483379 .anchor}图 3‑4 多分支结构流程图
+![](./media/image62.png)
+
+<p style="text-align: center;">图2-4 多分支结构流程图</p>
 
 语法结构如下：
 
 ```
 if 条件表达式1:
-
-语句序列1
-
+    语句序列1
 elif 条件表达式2:
-
-语句序列2
-
-......
-
+    语句序列2
+……
 elif 条件表达式 n:
-
-语句序列n
-
+    语句序列n
 else:
-
-语句序列n+1
+    语句序列n+1
 ```
 
-如：利用多分支结构，根据输入的百分制学生成绩，打印出"优秀、良好、中等、及格、不及格"等级。（eg3_4多分支结构.py）
+如：利用多分支结构，根据输入的百分制学生成绩，打印出"优秀、良好、中等、及格、不及格"等级。
 
 ```python
 # 从键盘接收用户输入的分数
@@ -1259,12 +803,13 @@ print(f"该分数的成绩等级是: {grade}")  
 
 根据循环执行的次数是否确定，循环可以分为确定次数循环和非确定次数循环。确定次数的循环在Python中采用"for....... in......"结构的"遍历循环"实现，其中，循环次数由遍历结构中的元素个数确定。非确定次数的循环用while结构的条件循环实现，通过循环条件判断是否继续执行循环体。
 
-1.  遍历循环
+(1) 遍历循环
 
-遍历循环流程图如图
-3‑5所示。每遍历一个元素执行一次循环体，直到迭代结构中的元素被全部遍历。
+遍历循环流程图如图 2‑5所示。每遍历一个元素执行一次循环体，直到迭代结构中的元素被全部遍历。
 
-[]{#\_Ref182483756 .anchor}图 3‑5 遍历循环流程图
+![](./media/image63.png)
+
+<p style="text-align: center;">图 2‑5 遍历循环流程图</p>
 
 遍历循环的语法结构如下：
 
@@ -1274,7 +819,7 @@ for \<循环变量\> in \<遍历结构\>:
 循环体语句块
 ```
 
-例：输出购书清单中每一本书的名称和价格。（eg3_5遍历循环.py）
+例：输出购书清单中每一本书的名称和价格。
 
 ```python
 # 定义购书清单列表
@@ -1301,8 +846,7 @@ for book in book_list:
 书名: 人工智能, 价格: 69.0元
 ```
 
-遍历结构可以是任何可迭代的元素，除了上述的列表结构，也常用range()函数形成的数字序列。range(start,stop\[,step\])函数返回从start到stop（不包含stop）步长为step的整数序列。其中start为开始的数值，默认从0开始
-；stop为结束的数值，生成的序列不包括该值；step为步长，默认为1。
+遍历结构可以是任何可迭代的元素，除了上述的列表结构，也常用range()函数形成的数字序列。range(start,stop[,step\])函数返回从start到stop（不包含stop）步长为step的整数序列。其中start为开始的数值，默认从0开始；stop为结束的数值，生成的序列不包括该值；step为步长，默认为1。
 
 如：求100以内的奇数和。
 
@@ -1399,9 +943,9 @@ pip install matplotlib -i https://pypi.tuna.tsinghua.edu.cn/simple 
 
 - 方式1：**import \<库名\>**
 
-> 使用：**\<库名\>.\<函数名\>(\<函数参数\>)**
->
-> 特点：这种方式引入了整个库，包括其中的变量和函数。不会出现函数重名问题，但由于每个函数都要写库名，程序代码会比较繁琐。
+使用：**\<库名\>.\<函数名\>(\<函数参数\>)**
+
+特点：这种方式引入了整个库，包括其中的变量和函数。不会出现函数重名问题，但由于每个函数都要写库名，程序代码会比较繁琐。
 
 如：
 
@@ -1414,8 +958,7 @@ print(math.ceil(2.8)) #向上取整，值为3 
 
 调用：**\<函数名\>(\<函数参数\>)**
 
-特点：这种方式引入了库中指定的函数。调用时不需要带库名，直接写函数名即可，代码比较简单。但在引用多个库的情况下可能会存在函数重名问题。如果需要引用模块中所有函数，可以用**from
-\<模块名\> import \***的形式。
+特点：这种方式引入了库中指定的函数。调用时不需要带库名，直接写函数名即可，代码比较简单。但在引用多个库的情况下可能会存在函数重名问题。如果需要引用模块中所有函数，可以用**from\<模块名\> import**的形式。
 
 如：
 
@@ -1443,10 +986,9 @@ plt.show() 
 ### random库
 
 随机数在模拟实验、数据采样、密码学等领域中都有重要的应用。random库是Python中用于生成随机数的标准库。random库提供了多种方法来生成不同类型的随机数，包括生成随机整数、随机浮点数以及从序列中随机选择元素等。random库常用方法如表
-3‑2所示。
+2‑2所示。
 
-表 3‑2
-random常用方法
+<p style="text-align: center;">表 2‑2 random常用方法</p>
 
 | 函数                         | 描述                                                                                       |
 | ---------------------------- | ------------------------------------------------------------------------------------------ |
@@ -1484,10 +1026,9 @@ import matplotlib.pyplot as plt 
 
 3.  绘制图形
 
-使用绘图方法（如：plt.plot()、 plt.scatter()、 plt.bar()......）绘制折线图、散点图、条形图等，常用绘图方法如表
-3‑3所示。
+使用绘图方法（如：plt.plot()、 plt.scatter()、 plt.bar()......）绘制折线图、散点图、条形图等，常用绘图方法如表2‑3所示。
 
-表3‑3 matplot.pyplot常用绘图方法
+ <p style="text-align: center;">表2‑3 matplot.pyplot常用绘图方法</p>
 
 | 方法      | 描述                 | 示例代码                   |
 | --------- | -------------------- | -------------------------- |
@@ -1500,12 +1041,11 @@ import matplotlib.pyplot as plt 
 | subplot() | 创建一个子图布局     | plt.subplot(2, 2, 1)       |
 | figure()  | 创建一个新的图形对象 | plt.figure(figsize=(8, 6)) |
 
-4.  添加图表元素
+1.  添加图表元素
 
-添加图表元素包括：设置图表标题、坐标轴标签、图例等（plt.title，plt.xlable，plt.legend......），添加图表元素常用方法如表
-3‑4所示。
+添加图表元素包括：设置图表标题、坐标轴标签、图例等（plt.title，plt.xlable，plt.legend......），添加图表元素常用方法如表2‑4所示。
 
-表 3‑4图表元素常用方法
+<p style="text-align: center;">表 2‑4图表元素常用方法</p>
 
 | 方法      | 描述           | 示例代码                    |
 | --------- | -------------- | --------------------------- |
@@ -1519,7 +1059,7 @@ import matplotlib.pyplot as plt 
 | show()    | 显示绘制的图形 | plt.show()                  |
 | savefig() | 保存图形到文件 | plt.savefig(\'plot.png\')   |
 
-5.  保存/显示图表
+1.  保存/显示图表
 
 ```python
 plt.savefig()/plt.show()
@@ -1527,7 +1067,7 @@ plt.savefig()/plt.show()
 
 > 如果需要保存并显示图形，保存图形一定放在显示图形前面，否则所保存的图形为空白。
 
-例:绘制不同部门销售折线图（eg3_5绘制折线图.py）
+例: 绘制不同部门销售折线图
 
 ```python
 import matplotlib.pyplot as plt
@@ -1551,11 +1091,11 @@ plt.savefig("销售图.jpg")          # 保存绘制的图形
 plt.show()          # 显示图形 
 ```
 
-效果如图 3‑6所示。
+效果如图 2‑6所示。
 
 #### ![](./media/image64.png){width="3.728620953630796in" height="2.8734536307961505in"}
 
-图 3‑6 各部门每季度产品销量图
+<p style="text-align: center;">图 2‑6 各部门每季度产品销量图</p>
 
 - 绘制折线图
 
@@ -1569,10 +1109,9 @@ plt.plot(x,y, format\_string,\*\*kwargs) 
 
 - x, y： x轴，y轴数据
 
-- format_string：控制折线格式的字符串，包括颜色、线条样式和标记样式。format_string常用的属性如下表
-  3‑5所示：
+- format_string：控制折线格式的字符串，包括颜色、线条样式和标记样式。format_string常用的属性如下表2‑5所示：
 
-[]{#\_Ref182996693 .anchor}表 3‑5 折线图常用属性
+<p style="text-align: center;">表 2‑5 折线图常用属性</p>
 
 | **参数**        | **说明**                         |
 | --------------- | -------------------------------- |
@@ -1588,9 +1127,9 @@ plt.plot(x,y, format\_string,\*\*kwargs) 
 
 - 设置图表元素
 
-图表元素包括：图表标题、坐标轴标签、图例等，添加图表元素常用方法如表
-3‑6所示。
-表 3‑6 图表元素常用方法
+图表元素包括：图表标题、坐标轴标签、图例等，添加图表元素常用方法如表2‑6所示。
+
+<p style="text-align: center;">表2‑6 图表元素常用方法</p>
 
 | 方法      | 描述           | 示例代码                    |
 | --------- | -------------- | --------------------------- |
@@ -1606,20 +1145,16 @@ plt.plot(x,y, format\_string,\*\*kwargs) 
 
 - 设置中文字体
 
-例子中plt.rcParams\[\"font.family\"\]=\"SimHei\"是为了解决中文显示的问题。Matplotlib
-默认不支持中文，设置
-plt.rcParmas\[\'font.fmaily\'\]为系统中任意一个中文字体名称即可在图表中正常显示中文。如：plt.rcParams\[\'font.family\'\]
+例子中plt.rcParams[\"font.family\"\]=\"SimHei\"是为了解决中文显示的问题。Matplotlib
+默认不支持中文，设置plt.rcParmas[\'font.fmaily\'\]为系统中任意一个中文字体名称即可在图表中正常显示中文。如：plt.rcParams[\'font.family\'\]
 = \'SimHei\'
 
 不同操作系统支持的中文字体名称不一样。如：
-
 Windows系统常用SimHei、SimSun等。MacOS常用Heiti
-TC等。也可以用同时设置多个字体。如：plt.rcParams\[\'font.family\'\] =
-\[\'SimHei\',\'SimSun\'\]，表示首先选用第一个字体，若第一个字体不能显示，则选用第二个字体，依次类推。Winodws系统中
-常用中文字体名称中英文对照表如表 3‑7所示。
+TC等。也可以用同时设置多个字体。如：plt.rcParams[\'font.family\'\] =
+[\'SimHei\',\'SimSun\'\]，表示首先选用第一个字体，若第一个字体不能显示，则选用第二个字体，依次类推。Winodws系统中常用中文字体名称中英文对照表如表 2‑7所示。
 
-表
-3‑7中英文字体名称对照表
+<p style="text-align: center;">表2‑7中英文字体名称对照表</p>
 
 | **字体** | **字体英文表示** | **字体** | **字体英文表示** |
 | -------- | ---------------- | -------- | ---------------- |
@@ -1649,7 +1184,7 @@ edgecolor=\'k\') 
 
 - facecolor和edgecolor：指定图表的背景颜色和边缘颜色。
 
-例：绘制包含两个子图的图表，左侧柱状图显示"一季度不同类别图书的销量"分布；右侧饼图显示"四个季度购书总量"在总体中的占比。（eg3_7柱状图与饼图.py）
+例：绘制包含两个子图的图表，左侧柱状图显示"一季度不同类别图书的销量"分布；右侧饼图显示"四个季度购书总量"在总体中的占比。
 
 ```python
 import matplotlib.pyplot as plt
@@ -1677,12 +1212,11 @@ plt.tight_layout()
 plt.show() 
 ```
 
-效果如图 3‑7所示。
+效果如图 2‑7所示。
 
-![](./media/image65.png){width="5.488888888888889in"
-height="2.9545909886264217in"}
+![](./media/image65.png)
 
-图 3‑7创建子图分布
+<p style="text-align: center;">图 2‑7创建子图分布</p>
 
 ### 自定义函数
 
@@ -1722,6 +1256,8 @@ print(result) 
 
 ### 标记重捕法（Mark-Recapture Method）
 
+<div style="background-color:grey">
+
 标记重捕法是一种用于估算活动能力强、活动范围较大的动物种群密度的生物统计方法。
 
 #### 种群
@@ -1746,14 +1282,15 @@ $$N = \frac{X*Y}{Z}$$
 
 使用Python模拟标记重捕法过程，验证是否可以用N=X$*$Y/Z估计一个生物种群的规模。即：验证由该公式计算得出的生物种群数量是否与假设的种群数量相近。
 
+</div>
+
 ## 案例实现
 
-标记重捕法思路如图 3‑8所示。
+标记重捕法思路如图 2‑8所示。
 
-![](./media/image66.png){width="3.6638888888888888in"
-height="2.1453587051618546in"}
+![](./media/image66.png)
 
-图 3‑8 "标记重捕法"求解思路
+<p style="text-align: center;">图 2‑8 "标记重捕法"求解思路</p>
 
 ### 模拟种群环境
 
@@ -1761,7 +1298,7 @@ height="2.1453587051618546in"}
 
 下面模拟N=1000只蝴蝶的位置，用xList保存所有横坐标，yList保存所有纵坐标。使用循环生成N只蝴蝶的坐标。
 
-程序代码：（eg3_8模拟种群环境.py）
+参考代码：
 
 ```python
 import random
@@ -1783,26 +1320,24 @@ plt.plot(xList,yList,'bo')
 plt.show() 
 ```
 
-> 模拟的分布结果如图 3‑9所示。
+> 模拟的分布结果如图 2‑9所示。
 
-![](./media/image67.png){width="4.015213254593176in"
-height="2.9468744531933506in"}
+![](./media/image67.png)
 
-图 3‑9生物种群分布模拟图示
+<p style="text-align: center;">图 2‑9生物种群分布模拟图示</p>
 
 ### 第一次捕捉个体并做标记
 
 假设每个个体有20%
 的概率被捕捉到。如何模拟某个个体是否被捕捉到？random.uniform(0,1)生成0-1之间均匀分布的随机小数，因而产生小于等于0.2的数的概率是20%，因此对于每个个体可以用random.uniform(0,1)产生的数是否小于等于0.2模拟是否被捕捉。根据个体是否被捕捉到，分别存储，将第一次捕捉到的个体横、纵坐标的值分别存储至xList1、yList1列表中；没有被捕捉到的个体横、纵坐标的值分别存储至xList2、yList2列表中。
 
-第一次捕捉模拟流程如图 3‑10所示。
+第一次捕捉模拟流程如图 2‑10所示。
 
-![](./media/image68.png){width="4.369542869641295in"
-height="4.41951990376203in"}
+![](./media/image68.png)
 
-图 3‑10第一次捕捉模拟流程图
+<p style="text-align: center;">图 2‑10第一次捕捉模拟流程图</p>
 
-参考实现(eg3_9第一次捕捉结果.py)：
+参考实现：
 
 ```python
 import random
@@ -1838,21 +1373,21 @@ plt.title("第一次捕捉的结果") 
 ```
 
 第一次捕捉后，将捕捉到的个体以红色标记，没有被捕捉到的个体用蓝色表示，可视化模拟结果如图
-3‑11示。
+2‑11示。
 
-![](./media/image69.png){width="4.534601924759405in"
-height="3.4274300087489062in"}
+![](./media/image69.png)
 
-图 3‑11第一次捕捉结果示意图
+<p style="text-align: center;">图 2‑11第一次捕捉结果示意图</p>
 
 ### 有放回地重新捕捉
 
-第一次捕捉并标记后，将捕捉的个体放回其生态环境，隔一段时间后进行重新捕捉。假设每个个体有20%的概率被捕捉到。经过第二次重捕之后，所有个体被分为四类，分别是：第1次被捕捉且第2次被捕捉，第1次被捕捉但第2次未被捕捉，第1次未被捕捉但第2次被捕捉，第1次未被捕捉且第2次未被捕捉，考虑到标记重捕法的计算，将第2次未被捕捉的作为一类考虑，最终将这些数据分类3类，如图
-3‑12所示。
+第一次捕捉并标记后，将捕捉的个体放回其生态环境，隔一段时间后进行重新捕捉。假设每个个体有20%的概率被捕捉到。经过第二次重捕之后，所有个体被分为四类，分别是：第1次被捕捉且第2次被捕捉，第1次被捕捉但第2次未被捕捉，第1次未被捕捉但第2次被捕捉，第1次未被捕捉且第2次未被捕捉，考虑到标记重捕法的计算，将第2次未被捕捉的作为一类考虑，最终将这些数据分类3类，如图2‑12所示。
 
-[]{#\_Ref181538542 .anchor}图 3‑12标记重捕法示意
+![](./media/image70.png)
 
-程序代码段：（eg3_10有放回地第二次捕捉.py）
+<p style="text-align: center;">图 2‑12标记重捕法示意</p>
+
+程序代码段：
 
 ```python
 import random
@@ -1919,11 +1454,11 @@ plt.title("第二次捕捉的结果")
 plt.show() 
 ```
 
-第二次捕捉后生物种群分布情况如图 3‑13所示。
+第二次捕捉后生物种群分布情况如图 2‑13所示。
 
-![](./media/image71.png){width="5.768055555555556in" height="4.375in"}
+![](./media/image71.png)
 
-图 3‑13第二次捕捉结果示意图
+<p style="text-align: center;">图 2‑13第二次捕捉结果示意图</p>
 
 ### 计算种群个数
 
@@ -1969,14 +1504,13 @@ print(average) 
 ```
 
 如：输入要模拟的次数:1000，运行结果是1021.4280287753212。实验结果如图
-3‑14所示。可见大部分数据是集中在1000左右，说明标记重捕法科学可用。
+2‑14所示。可见大部分数据是集中在1000左右，说明标记重捕法科学可用。
 
-![](./media/image72.png){width="3.478713910761155in"
-height="2.44548665791776in"}
+![](./media/image72.png)
 
-[]{#\_Ref182999156 .anchor}图 3‑14多次模拟实验结果
+<p style="text-align: center;">图 2‑14多次模拟实验结果</p>
 
-### 案例完整代码（eg3_11标记重捕法完整代码.py）
+### 案例完整代码
 
 ```python
 import random
@@ -2060,7 +1594,7 @@ plt.show() 
 
 ## 举一反三
 
-### 模拟掷硬币实验（参考代码：举一反三1.py）
+### 模拟掷硬币实验
 
 利用Python程序模拟掷硬币实验，探索概率和统计的奥秘。假设要模拟一枚硬币连续抛掷1000次的结果。请完成模拟实验，并将实验结果进行可视化表示。
 
@@ -2076,19 +1610,20 @@ plt.show() 
 
 5.  分析结果：比较正面和反面的出现次数，分析掷硬币的公平性。
 
-如图 3‑15所示，展示了在1000次掷硬币的过程中，正面和反面出现的次数。
+如图 2‑15所示，展示了在1000次掷硬币的过程中，正面和反面出现的次数。
 
-![](./media/image73.png){width="3.4121675415573054in"
-height="2.727352362204724in"}
+![](./media/image73.png)
 
-图 3‑15模拟抛硬币概率
+<p style="text-align: center;">图 2‑15模拟抛硬币概率</p>
 
 从图中可以看到每次得到正面或反面的概率相当，这个实验也印证了伯努利实验"每次试验只有两种结果且概率固定、各次试验相互独立"的特点。
 
-### 生日悖论（参考代码：举一反三2.py）
+### 生日悖论
 
-根据直觉，班级中两个人生日相同的概率应该是很小的，如图
-3‑16所示。但是实际上，如果某个班级里一共有23名学生，不考虑闰年，出现共享生日（生日相同）情况的概率超过了50%。并且，随着班级人数的增多，这个概率不断提高，当人数达到50人时，这个概率达到了97%。这种现象被称为"生日悖论"。
+根据直觉，班级中两个人生日相同的概率应该是很小的，如图3‑16所示。但是实际上，如果某个班级里一共有23名学生，不考虑闰年，出现共享生日（生日相同）情况的概率超过了50%。并且，随着班级人数的增多，这个概率不断提高，当人数达到50人时，这个概率达到了97%。这种现象被称为"生日悖论"。
+![](./media/image74.png)
+
+<p style="text-align: center;">图2-16 生日卡片</p>
 
 生日悖论是一个关于概率的经典问题，它提出了一个看似违反直觉的结论：在一个相对较小的群体中，两个人拥有相同生日的概率远高于人们的直觉预期。
 
@@ -2097,26 +1632,24 @@ height="2.727352362204724in"}
 
 实验步骤提示：
 
-1.  使用Python的random模块模拟随机生日，并使用列表来存储和比较这些生日是否相同。
+（1） 使用Python的random模块模拟随机生日，并使用列表来存储和比较这些生日是否相同。
 
-2.  在每次模拟中，生成指定数量的随机生日，并检查是否有重复的生日，记录在每次模拟中是否找到相同生日的情况。通过循环结构模拟多次实验。
+（2）在每次模拟中，生成指定数量的随机生日，并检查是否有重复的生日，记录在每次模拟中是否找到相同生日的情况。通过循环结构模拟多次实验。
 
-3.  计算在所有模拟中找到相同生日的频率。使用这个频率来估计在给定群体大小下，至少有两个人生日相同的概率。
+（3）计算在所有模拟中找到相同生日的频率。使用这个频率来估计在给定群体大小下，至少有两个人生日相同的概率。
 
-4.  数据结果可视化，使用图表来直观地展示概率是如何随着群体大小的改变而变化的。实验效果如图
-    3‑17所示。
+（4）数据结果可视化，使用图表来直观地展示概率是如何随着群体大小的改变而变化的。实验效果如图
+2‑17所示。
 
-![](./media/image75.png){width="5.322956036745407in"
-height="2.364600831146107in"}
+![](./media/image75.png)
 
-图 3‑17生日悖论模拟
+<p style="text-align: center;">图 2‑17生日悖论模拟</p>
 
-由图
-3‑17可见，当实验人数是23人时，本次实验存在共享生日的情况占总实验次数的大约50%；当实验人数是50人时，共享生日的占比高达97.2%。
+由图2‑17可见，当实验人数是23人时，本次实验存在共享生日的情况占总实验次数的大约50%；当实验人数是50人时，共享生日的占比高达97.2%。
 
 生日悖论揭示了概率分布的有趣特性，即在相对较小的样本中，某些事件发生的概率可能比我们预期的要高。这种现象不仅在生日问题中出现，在其他领域也有类似的应用，例如密码学中的碰撞概率等。通过生日悖论的验证，我们可以更好地理解概率和统计在实际生活中的应用和重要性。
 
-### 蒙特卡罗法求花格透光率（参考代码：举一反三3.py）
+### 蒙特卡罗法求花格透光率
 
 "蒙特卡罗法"是一种统计模拟方法，是基于"随机数"的计算方法。例如，可以用蒙特卡罗法求圆的面积，可以想象，地面有一个正方形，内部有一个内切圆，拿了一袋豆子倒在正方形内，豆子的总数量为M，落入圆内的豆子数量为N，将正方形的面积记为Y，圆的面积记为X，可以得到如下公式：
 X=N/M\*Y
@@ -2125,41 +1658,39 @@ X=N/M\*Y
 
 实验步骤提示：
 
-1.  定义模拟参数：确定圆形镂空部分的半径和模拟中使用的随机点的总数。
+（1）定义模拟参数：确定圆形镂空部分的半径和模拟中使用的随机点的总数。
 
-2.  生成随机点：在花格的总面积范围内生成大量随机点，每个点代表一个豆子的随机出现位置。
+（2）生成随机点：在花格的总面积范围内生成大量随机点，每个点代表一个豆子的随机出现位置。
 
-3.  判断点是否落在镂空部分：对于每个随机点，判断其是否落在圆形镂空圆内。（可以通过判断点到原点的距离是否小于或等于圆的半径来实现。）
+（3）判断点是否落在镂空部分：对于每个随机点，判断其是否落在圆形镂空圆内。（可以通过判断点到原点的距离是否小于或等于圆的半径来实现。）
 
-4.  统计落在镂空部分的点数：统计所有落在圆镂空部分内的随机点的数量。
+（4）统计落在镂空部分的点数：统计所有落在圆镂空部分内的随机点的数量。
 
-5.  计算透光率：将落在镂空部分的点数除以总点数，得到的结果就是花格的透光率。
+（5）计算透光率：将落在镂空部分的点数除以总点数，得到的结果就是花格的透光率。
 
-6.  可视化模拟过程：创建一个图形，展示随机点在花格上的分布情况。
+（6）可视化模拟过程：创建一个图形，展示随机点在花格上的分布情况。
 
-7.  显示结果：在执行模拟和可视化的同时，打印出估算的透光率。
+（7）显示结果：在执行模拟和可视化的同时，打印出估算的透光率。
 
-如图
-3‑18所示，镂空部分用黑色圆形表示，落在圆形内的点用蓝色表示，而落在圆形外的点用红色表示。通过这种方法，可以直观地看到随机点的分布。
+如图2‑18所示，镂空部分用黑色圆形表示，落在圆形内的点用蓝色表示，而落在圆形外的点用红色表示。通过这种方法，可以直观地看到随机点的分布。
 
-![](./media/image76.png){width="3.211956474190726in"
-height="3.1270581802274715in"}
+![](./media/image76.png)
 
-[]{#\_Ref183000491 .anchor}图 3‑18蒙特卡罗模拟实验结果
+<p style="text-align: center;">图 2‑18蒙特卡罗模拟实验结果</p>
 
 根据蒙特卡罗方法的模拟结果，对于这个假设的花格模型（其中包含一个半径为1的圆形镂空部分），估算的透光率大约为79.60%。这个结果是基于10000个随机点的模拟得出的，因此它是一个近似值。通过增加模拟点的数量，可以得到更精确的透光率估计。
 
 # 图像处理实例
 
-图像处理是指利用计算机对图像进行分析和处理以达到所需要求，图像处理广泛应用于工业自动化、医疗诊断、安全监控等生产生活各个领域。Python中用于图像处理的库有：OpenCV、Pillow（PIL）、SimpleCV等。Pillow是Python
-Imaging
-Library（PIL)库的一个分支，是一个支持广泛图像文件格式、具有强大图像处理能力的第三方库。本章介绍利用Pillow库进行图像文件读写、图像裁剪、旋转、缩放等基本操作以及图像合成、图像特效等常用图像处理。
+<div style="background-color:grey">
+图像处理是指利用计算机对图像进行分析和处理以达到所需要求，图像处理广泛应用于工业自动化、医疗诊断、安全监控等生产生活各个领域。Python中用于图像处理的库有：OpenCV、Pillow（PIL）、SimpleCV等。Pillow是Python Imaging Library（PIL)库的一个分支，是一个支持广泛图像文件格式、具有强大图像处理能力的第三方库。本章介绍利用Pillow库进行图像文件读写、图像裁剪、旋转、缩放等基本操作以及图像合成、图像特效等常用图像处理。
 
 ## 需求分析
 
 - 我们常常会从各种各样的渠道收集照片，或者自己拍摄一些照片，这些照片的尺寸大小各不相同。那么，怎样才能对它们进行批量处理，从而满足特定的展示需求呢？
 
 - 读入图像文件，如何让系统自动对图像展开一系列的处理呢？比如进行颜色调整、图像增强以及添加滤镜等操作。
+</div>
 
 ## 学习目的
 
@@ -2189,9 +1720,7 @@ pip install pillow 
 
 #### 图像色彩模式
 
-图像作为视觉媒体，离不开光色原理，需要利用某种方式将颜色描述出来。在计算机中要记录和处理色彩就需要通过有效的方法将颜色数字化描述出来。色彩模型就是按一定规则来描述（排列）颜色的方法。不同的色彩模式有不同的应用场景和特点。常用的色彩模式有：RGB
-(红绿蓝)、CMYK (青色、品红色、黄色、黑色)、HSV
-(色相、饱和度、亮度)、Lab模式等。
+图像作为视觉媒体，离不开光色原理，需要利用某种方式将颜色描述出来。在计算机中要记录和处理色彩就需要通过有效的方法将颜色数字化描述出来。色彩模型就是按一定规则来描述（排列）颜色的方法。不同的色彩模式有不同的应用场景和特点。常用的色彩模式有：RGB(红绿蓝)、CMYK (青色、品红色、黄色、黑色)、HSV(色相、饱和度、亮度)、Lab模式等。
 
 1.  RGB色彩模式
 
@@ -2202,72 +1731,59 @@ RGB色彩模式基于色度学中最基本的三基色原理。色光的基色�
 若两种色光相混合而形成白光，这两种色光互为补色。因此红色与青色、绿色与洋红色、蓝色与黄色互为补色。在RGB颜色空间中，任意色光F都可以用R、G、B三色不同分量的相加混合而成：F=r[R]+g[G]+b[B]。RGB色彩空间还可以用一个三维的立方体来描述。当三基色分量都为0（最弱）时混合为黑色光；当三基色都为k（最大，值由存储空间决定）时混合为白色光，如图
 4‑1所示。
 
-![](./media/image77.png){width="5.636805555555555in"
-height="1.7854166666666667in"}
-图 4‑1 RGB色彩模型
+![](./media/image77.png)
 
-RGB
-色彩模型是工业界的颜色标准，是目前屏幕显示使用的最广泛的模型，主要适用于显示器、投影仪、扫描仪、数码照相机等。
+<p style="text-align: center;">图 4‑1 RGB色彩模型</p>
 
-2.  CMYK色彩模式
+RGB色彩模型是工业界的颜色标准，是目前屏幕显示使用的最广泛的模型，主要适用于显示器、投影仪、扫描仪、数码照相机等。
 
-CMYK色彩模式是由光线的反射原理来设定的，青（Cyan）、洋红（Magenta）、黄（Yellow）被称为减法三原色。CMYK
-色彩模型是针对印刷业设定的颜色标准，印刷品基本是由这四种油墨相互组合而成，因为颜料本身不发光，因而印刷机或彩色打印机只能使用那些能够吸收特定光波而反射其他光波的油墨或颜料。CMYK
-是从白光中吸收某些色光而反射其他色光，也称为减色法原理。
+1.  CMYK色彩模式
+
+CMYK色彩模式是由光线的反射原理来设定的，青（Cyan）、洋红（Magenta）、黄（Yellow）被称为减法三原色。CMYK色彩模型是针对印刷业设定的颜色标准，印刷品基本是由这四种油墨相互组合而成，因为颜料本身不发光，因而印刷机或彩色打印机只能使用那些能够吸收特定光波而反射其他光波的油墨或颜料。CMYK是从白光中吸收某些色光而反射其他色光，也称为减色法原理。
 
 油墨或颜料的三原色是青、洋红和黄。理论上说，任何一种由颜料表现的色彩都可以用这三种原色按不同的比例混合而成，但在实际使用时，青色、洋红和黄色很难叠加出真正的黑色，因此引入了K，代表黑色，用于强化暗调，加深暗部色彩。彩色打印机和彩色印刷系统采用
 CMYK色彩空间，以浓度 0%\~100% 表示油墨的混合比例，如图 4‑2所示。
 
-![](./media/image78.png){width="1.8958333333333333in"
-height="1.8909722222222223in"}
+![](./media/image78.png)
 
-图 4‑2 CMYK色彩模式
+<p style="text-align: center;">图 4‑2 CMYK色彩模式</p>
 
-3.  HSV色彩模式
+1.  HSV色彩模式
 
 HSV 是一种将 RGB 色彩空间中的点在倒圆锥体中的表示方法，如所示。HSV
-即色相（Hue）、饱和度（Saturation）、明度（Value），又称 HSB（B
-即Brightness）。色相是色彩的基本属性，就是颜色的名称，如红色、黄色等。饱和度是指色彩的纯度，饱和度的值越高色彩越纯，值越低则逐渐变灰，取
-0%\~100% 的数值。明度取 0\~max（计算机中 HSB
-取值范围和存储的长度有关）。HSV
-颜色空间可以用一个圆锥空间模型来描述。圆锥的顶点处，V=0，H 和 S
+即色相（Hue）、饱和度（Saturation）、明度（Value），又称 HSB（B即Brightness）。色相是色彩的基本属性，就是颜色的名称，如红色、黄色等。饱和度是指色彩的纯度，饱和度的值越高色彩越纯，值越低则逐渐变灰，取0%\~100% 的数值。明度取 0\~max（计算机中 HSB取值范围和存储的长度有关）。HSV颜色空间可以用一个圆锥空间模型来描述。圆锥的顶点处，V=0，H 和 S
 无定义，代表黑色。圆锥的顶面中心处 V=max，S=0，H 无定义，代表白色，如图
 4‑3所示。
 
-![](./media/image79.png){width="4.125694444444444in"
-height="2.2291666666666665in"}
+![](./media/image79.png)
 
-图 4‑3 HSV色彩模式
+<p style="text-align: center;">图 4‑3 HSV色彩模式</p>
 
 人的视觉系统经常采用HSV色彩模式，它比RGB色彩模式更符合人的视觉特性。
 
-4.  Lab色彩模式
+1.  Lab色彩模式
 
-Lab颜色模型是由CIE(国际照明委员会)制定的一种色彩模式。与YUV色彩模式类似，也是用亮度和色差来描述色彩分量，其中L为亮度、a和b分别为各色差分量。如图
-4‑4所示。
+Lab颜色模型是由CIE(国际照明委员会)制定的一种色彩模式。与YUV色彩模式类似，也是用亮度和色差来描述色彩分量，其中L为亮度、a和b分别为各色差分量。如图4‑4所示。
 
 Lab色彩模式弥补了RGB和CMYK两种色彩模式的不足，它所定义的色彩最多，以数字化方式来描述人的视觉感应，与设备无关。处理速度和RGB色彩模式一样快，可以在图像编辑时使用。
 
-![](./media/image80.png){width="1.8958333333333333in"
-height="1.9784722222222222in"}
+![](./media/image80.png)
 
-图 4‑4 Lab色彩模式
+<p style="text-align: center;">图 4‑4 Lab色彩模式</p>
 
 色彩模式是数字图像中表示颜色和色彩信息的方法。不同的色彩模式适用于不同的应用场景，它们决定了图像中可以使用的颜色数量和类型。图像处理中有时需要将图像从一种色彩模式转换为另一种模式，以满足特定的需求。如图
 4‑5所示，分别以HSB、RGB、Lab和CMYK表示颜色信息。
 
-![](./media/image81.png){width="4.098611111111111in"
-height="3.0805555555555557in"}
+![](./media/image81.png)
 
-图 4‑5 多种色彩模式
+<p style="text-align: center;">图 4‑5 多种色彩模式</p>
 
 #### Image库
 
 Image是 Pillow
-库中最为重要的模块，在Pillow中，任何一个图像文件都可以用Image对象表示,调用该对象的一系列属性和方法可以对图像进行处理。Image库中常用的方法如表
-4‑1所示：
+库中最为重要的模块，在Pillow中，任何一个图像文件都可以用Image对象表示,调用该对象的一系列属性和方法可以对图像进行处理。Image库中常用的方法如表4‑1所示：
 
-表 4‑1 Image库常用方法
+<p style="text-align: center;">表 4‑1 Image库常用方法</p>
 
 | 方法        | 描述                                       | 示例                                             |
 | ----------- | ------------------------------------------ | ------------------------------------------------ |
@@ -2293,7 +1809,7 @@ Image是 Pillow
 
 - mode：图像的模式。常用图像模式如表 4‑2所示。
 
-表 4‑2 图像色彩模式
+<p style="text-align: center;">表 4‑2 图像色彩模式</p>
 
 | 图像颜色模式 | 说明                                                      |
 | ------------ | --------------------------------------------------------- |
@@ -2309,7 +1825,7 @@ Image是 Pillow
 
 - color：图像背景颜色；其默认值为0，即黑色。
 
-例：打开图像文件，查看图像的基本信息。（eg4_1\_查看图像属性.py）
+例：打开图像文件，查看图像的基本信息。
 
 ```python
 #导入库
@@ -2328,19 +1844,17 @@ print(f"获取(100,100)处的像素值：{img.getpixel((100,100))}") 
 
 结果图像如4-6所示：
 
-![](./media/image82.png){width="2.96875in" height="1.975in"}
+![](./media/image82.png)
 
-图 4‑6显示的图像内容
+<p style="text-align: center;">图 4‑6显示的图像内容</p>
 
 图像属性如图4-7所示。
 
-![](./media/image83.png){width="3.90625in"
-height="0.8854166666666666in"}
+![](./media/image83.png)
 
-图 4‑7图像属性
+<p style="text-align: center;">图 4‑7图像属性</p>
 
-例：将图像转换为四种不同的图像模式，并将结果显示在新建图像文件中。（eg
-4_2\_图像模式转换.py）
+例：将图像转换为四种不同的图像模式，并将结果显示在新建图像文件中。（eg 4_2\_图像模式转换.py）
 
 操作步骤：
 
@@ -2355,7 +1869,7 @@ image = Image.open("images/街景.jpg")
 w,h=image.size 
 ```
 
-2.  新建图像对象。
+1.  新建图像对象。
 
 创建一个新的图像对象，使用RGB模式，图像的尺寸(w \* 2+10, h \*
 2+10)，背景颜色使用默认黑色。
@@ -2392,17 +1906,15 @@ new_image.show() 
 
 新建图像的最终效果如图4-8所示。
 
-![](./media/image84.png){width="3.282638888888889in"
-height="2.5569444444444445in"}
+![](./media/image84.png)
 
-图 4‑8不同图像模式效果
+<p style="text-align: center;">图 4‑8不同图像模式效果</p>
 
 #### OS模块
 
-OS模块提供了与操作系统交互的一些功能，常用于操作文件和目录、获取系统信息、执行操作系统命令等。以下列出了OS模块中与文件和目录操作相关的一些常用方法及其功能描述,如表
-4‑3所示。
+OS模块提供了与操作系统交互的一些功能，常用于操作文件和目录、获取系统信息、执行操作系统命令等。以下列出了OS模块中与文件和目录操作相关的一些常用方法及其功能描述,如表4‑3所示。
 
-表 4‑3 OS模块常用方法
+<p style="text-align: center;">表 4‑3 OS模块常用方法</p>
 
 | 方法                       | 描述                           |
 | -------------------------- | ------------------------------ |
@@ -2513,10 +2025,9 @@ for i in range(3):
 
 在每次循环中，使用im.crop()函数根据当前的坐标和计算出的尺寸,裁剪出一个小图像。使用crop.save()函数将裁剪好的小图像保存到名为imgs的文件夹中。文件名由变量z和前缀\"aa\"组成，确保每个图像的名称都是唯一的。每次循环后，将左上角坐标的x轴向右移动裁剪尺寸的宽度，确保每次循环都能裁剪出新的图像区域。每次循环结束后，将计数器z增加1，以便为下一个裁剪的图像命名。程序运行后，imgs文件夹中的内容如图4-9所示。
 
-![](./media/image85.png){width="5.723611111111111in"
-height="2.7180555555555554in"}
+![](./media/image85.png)
 
-图 4‑9 图像分割结果
+<p style="text-align: center;">图 4‑9 图像分割结果</p>
 
 #### 拼合图像
 
@@ -2527,7 +2038,7 @@ height="2.7180555555555554in"}
 创建一个新的空白图像im_out，其尺寸比原始图像大20像素，背景色为白色。
 
 ```python
-im\_out=Image.new(\"RGB\",(im.width+20,im.height+20),\"white\") 
+im_out=Image.new("RGB",(im.width+20,im.height+20),"white") 
 ```
 
 2.  初始化坐标
@@ -2536,7 +2047,6 @@ im\_out=Image.new(\"RGB\",(im.width+20,im.height+20),\"white\") 
 
 ```python
 x = 0
-
 y = 0 
 ```
 
@@ -2581,9 +2091,9 @@ im\_out.show() 
 
 图像效果如图4-10所示。
 
-![](./media/image86.png){width="4.9875in" height="2.9694444444444446in"}
+![](./media/image86.png)
 
-图 4‑10 九宫格效果
+<p style="text-align: center;">图 4‑10 九宫格效果</p>
 
 ### 案例总结及思考
 
@@ -2594,7 +2104,7 @@ im\_out.show() 
 用Photoshop或其他图像处理软件打开一张RGB彩色图像，然后以不同的模式查看图像，总结在不同图像模式下，图像的颜色深度是多少位？所包含的通道数是多少？试将同一张图像转换为不同的图像模式保存，比较其文件大小，根据实验结果填写表
 4‑4的内容。尝试用Python程序实现图像模式转换，并查看不同模式下图像的属性。
 
-[]{#\_Ref183097625 .anchor}表 4‑4图像模式
+<p style="text-align: center;">表 4‑4图像模式</p>
 
 | 图像模式 | 颜色描述 | 通道数 | 文件大小 |
 | -------- | -------- | ------ | -------- |
@@ -2628,32 +2138,30 @@ g.show()
 b.show() 
 ```
 
-![](./media/image87.png){width="3.3958333333333335in"
-height="2.5104166666666665in"}
+![](./media/image87.png)
 
-图 4‑11原始RGB图像以及分离的三通道灰度图
+<p style="text-align: center;">图 4‑11原始RGB图像以及分离的三通道灰度图</p>
 
-2.  通道合并
+1.  通道合并
 
 指定通道合并后图像对象的模式，以及每个通道要使用的灰度图像对象内容（可以用变量、元组或列表表示），就可以完成通道的合并。
 
 ```python
-img1 = Image.merge(\"RGB\", \[b, g, r\])
+img1 = Image.merge("RGB", [b, g, r])
 img1.show() 
 ```
 
 这里用分离出来的蓝通道、绿通道、红通道的灰度图指定为合成图像红通道、绿通道和蓝通道的值,合成效果如图4-12所示。
 
-![](./media/image88.jpeg){width="3.19375in" height="2.3375in"}
+![](./media/image88.jpeg)
 
-图 4‑12 通道合成效果
+<p style="text-align: center;">图 4‑12 通道合成效果</p>
 
 通道所用灰度图不同，经过通道合并后会呈现不同的图像效果，如图4-13所示。
 
-![](./media/image89.png){width="3.035416666666667in"
-height="2.6493055555555554in"}
+![](./media/image89.png)
 
-图 4‑13 指定不同通道内容合并效果
+<p style="text-align: center;">图 4‑13 指定不同通道内容合并效果</p>
 
 ### 举一反三
 
@@ -2661,13 +2169,11 @@ height="2.6493055555555554in"}
 
 其实，只要是灰度图像大小相同，就可以进行通道合并。下面将三张灰度图像利用通道合并，将其合并成一张RGB模式的彩色图像。
 
-例：将"[]{#OLE_LINK1
-.anchor}茶壶.jpg"、"茶杯.jpg"、"菊花.jpg"进行通道合并，合并效果如图4-14所示。(eg4_4茶壶通道合并.py)
+例：将"茶壶.jpg"、"茶杯.jpg"、"菊花.jpg"进行通道合并，合并效果如图4-14所示。(eg4_4茶壶通道合并.py)
 
-![](./media/image90.png){width="3.3979166666666667in"
-height="3.2708333333333335in"}
+![](./media/image90.png)
 
-图 4‑14 通道合并效果
+<p style="text-align: center;">图 4‑14 通道合并效果</p>
 
 实现过程：
 
@@ -2697,16 +2203,15 @@ img.show() 
 
 思考：如何完成两张图像的自然融合？原始图像"blend1.jpg"、"blend2.jpg"、合成效果图如图4-15所示。
 
-![](./media/image91.png){width="5.768055555555556in" height="1.59375in"}
+![](./media/image91.png)
 
-图 4‑15 图像的自然融合
+<p style="text-align: center;">图 4‑15 图像的自然融合</p>
 
 提示：可以使用素材文件夹中的"遮罩1.png"文件，其内容如图4-16所示。（eg4_5\_图像渐变混合.py）
 
-![](./media/image92.png){width="1.788888888888889in"
-height="1.4381944444444446in"}
+![](./media/image92.png)
 
-图 4‑16遮罩图像
+<p style="text-align: center;">图 4‑16遮罩图像</p>
 
 参考代码：
 
@@ -2756,10 +2261,9 @@ im4.show() 
 例: 使用"screen"混合模式将
 "夜色.jpg"和"烟花.jpg"进行图像合成，合成效果如图4-17中"合成效果"所示。(eg4_6\_图像合成.py)
 
-![](./media/image93.png){width="5.768055555555556in"
-height="1.9152777777777779in"}
+![](./media/image93.png)
 
-图 4‑17 "screen"模式图像合成
+<p style="text-align: center;">图 4‑17 "screen"模式图像合成</p>
 
 参考代码：
 
@@ -2789,10 +2293,9 @@ print(f"合成图像在坐标(100,100)处的像素值：{img3.getpixel((100,100)
 
 运行结果如图4-18所示：
 
-![](./media/image94.png){width="4.90625in"
-height="0.6770833333333334in"}
+![](./media/image94.png)
 
-图 4‑18 图像合成前后的像素值
+<p style="text-align: center;">图 4‑18 图像合成前后的像素值</p>
 
 "screen"模式的混合的结果为out=MAX-((MAX-image1)\*(MAX-image2)/MAX)，所以合成图像在（100，100）处的RGB值为：
 
@@ -2806,9 +2309,12 @@ B=255-(255-45)\*(255-216)/255=223。
 
 ### 案例目标
 
+<div style="background-color:grey">
 图像混合是一种常见的图像处理技术，它可以将两张或多张图像按照一定的比例和规则合成为一张新的图像。
 
 本案例学习常用的图像混合方法，如：通过设置图像的不透明度进行图像混合；使用Pillow库中ImageChops模块的各种混合模式（相加、相减、变暗、变亮、正片叠底、滤色、偏移图像等）实现图像的混合；通过添加遮罩文件实现图像的混合。
+
+</div>
 
 ### 案例实现
 
@@ -2821,10 +2327,9 @@ Image.blend(im1,im2,alpha)方法根据指定的不透明度alpha将两个图像i
 例： 将图像A和图像B合成图像C的效果。如图4-19所示。
 （eg4_7\_图像混合blend.py）
 
-![](./media/image95.png){width="5.768055555555556in"
-height="1.88125in"}
+![](./media/image95.png)
 
-图 4‑19 blend图像合成效果
+<p style="text-align: center;">图 4‑19 blend图像合成效果</p>
 
 参考实现：
 
@@ -2850,7 +2355,7 @@ blended_img.show()  
 
 两个图像的混合模式决定了两个图像的像素如何进行混合，使最终像素点的R、G、B值发生变化，从而产生不同的颜色视觉。Pillow库的ImageChops模块中包含了多个实现图像混合的混合模式，可以创建多种图像叠加效果。
 
-例：定义函数，实现不同混合模式的图像混合。（eg4_8\_图像合成混合模式.py）
+例：定义函数，实现不同混合模式的图像混合。
 
 1.  导入库，定义图像混合的函数，按照用户需求进行图像混合。
 
@@ -2885,12 +2390,11 @@ if image1.size != image2.size:
 
 原始图像如图4-20所示：
 
-![](./media/image96.png){width="3.9166666666666665in"
-height="1.6534722222222222in"}
+![](./media/image96.png)
 
-图 4‑20"天坛"和"天空"图像
+<p style="text-align: center;">图 4‑20"天坛"和"天空"图像</p>
 
-3.  调用不同的混合模式函数，并将返回的图像混合结果保存。
+1.  调用不同的混合模式函数，并将返回的图像混合结果保存。
 
 ```python
 blended_image = blend_images(image1, image2,mode='normal')
@@ -2905,11 +2409,11 @@ blended_image.save('blended_image_invert.png') 
 
 使用不同混合模式的图像效果，如图4-21所示。
 
-![](./media/image97.png){width="5.7875in" height="1.6611111111111112in"}
+![](./media/image97.png)
 
 （a）正常模式 （b）变暗模式 （c）变亮模式 （d）反相模式
 
-图 4‑21不同混合模式效果
+<p style="text-align: center;">图 4‑21不同混合模式效果</p>
 
 #### 使用遮罩进行图像的混合
 
@@ -2919,19 +2423,17 @@ ImageChops模块中的composite(im1,im2,mask)
 的哪些部分会显示在合成图像中。如果未提供mask，则默认使用全白图像（即所有像素值为255）。变量mask的模式可以为"1"，"L"或者"RGBA"。composite()函数中的3个图像文件大小必须一致。
 
 例：以"小鹿.png"为遮罩文件，将"风光.jpg"
-"草地.jpg"进行图像混合。原始图像效果如图4-22所示。（eg4_9\_遮罩合成图像.py）
+"草地.jpg"进行图像混合。原始图像效果如图4-22所示。
 
-![](./media/image98.png){width="5.636805555555555in"
-height="1.7833333333333334in"}
+![](./media/image98.png)
 
-图 4‑22 原始图像
+<p style="text-align: center;">图 4‑22 原始图像</p>
 
 合成效果如图4-23所示：
 
-![](./media/image99.png){width="2.202777777777778in"
-height="2.2284722222222224in"}
+![](./media/image99.png)
 
-图 4‑23 合成效果
+<p style="text-align: center;">图 4‑23 合成效果</p>
 
 参考实现：
 
@@ -2978,10 +2480,9 @@ im4.show() 
 
 将图像"叶子.jpg"和"鸭子.jpg"进行图像混合，实现如图4-24所示合成效果。
 
-![](./media/image100.png){width="5.811111111111111in"
-height="2.046527777777778in"}
+![](./media/image100.png)
 
-图 4‑24 "multiply"模式图像混合
+<p style="text-align: center;">图 4‑24 "multiply"模式图像混合</p>
 
 要求：
 
@@ -2992,10 +2493,9 @@ height="2.046527777777778in"}
 > 提示：使用"multiply（）"正片叠底将图像"叶子.jpg"和"鸭子.jpg"进行图像混合。
 > 程序中获取了两个原始图像在（100，100）处像素点的RGB值如图4-25所示：
 
-![](./media/image101.png){width="1.5493055555555555in"
-height="0.7916666666666666in"}
+![](./media/image101.png)
 
-图 4‑25 像素点RGB值
+<p style="text-align: center;">图 4‑25 像素点RGB值</p>
 
 两张图像相混合的结果为out=image1\*image2/MAX，其中MAX=255，所以合成图像在（100，100）处的RGB值为：R=62\*170/255=41；G=79\*185/255=57；B=27\*161/255=17。可见，在"multiply"模式下会直接将白色屏蔽掉。"正片叠底"模式混合两个图像对应的像素点A和B，使之变得较暗，是一种"减色"运算。
 
@@ -3005,10 +2505,9 @@ height="0.7916666666666666in"}
 
 给定图像"树叶.jpg"、"螺旋.png"、"美景1.jpg"，进行图像合成。原始图像如4-26所示。
 
-![](./media/image102.png){width="5.7659722222222225in"
-height="1.6145833333333333in"}
+![](./media/image102.png)
 
-图 4‑26 原始图像素材
+<p style="text-align: center;">图 4‑26 原始图像素材</p>
 
 提示：
 
@@ -3018,10 +2517,9 @@ height="1.6145833333333333in"}
 
 混合效果如图4-27所示。
 
-![](./media/image103.png){width="2.28125in"
-height="1.8131944444444446in"}
+![](./media/image103.png)
 
-[]{#\_Ref183112663 .anchor}图 4‑27 遮罩合成效果
+<p style="text-align: center;">图 4‑27 遮罩合成效果</p>
 
 ## 图像处理3------图像的批处理
 
@@ -3032,7 +2530,7 @@ height="1.8131944444444446in"}
 Pillow库的ImageEnhance模块包含了多个用于增强图像效果的方法，主要用来调整图像的色彩、对比度、清晰度和亮度等。常用方法如表
 4‑5所示。
 
-表 4‑5 ImageEnhance模块常用方法
+<p style="text-align: center;">表 4‑5 ImageEnhance模块常用方法</p>
 
 | 方法               | 描述                                                                                                                                        |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -3044,10 +2542,9 @@ Pillow库的ImageEnhance模块包含了多个用于增强图像效果的方法�
 
 使用方法：首先创建对应的增强调整器；然后调用enhance()方法，根据指定的增强系数（小于1表示减弱，大于1表示增强，等于1表示原图不变）进行调整；最后输出调整后的图像。
 
-例：打开\"校园.jpg\"，分别对图像进行"亮度增强"、"对比度增强"、"颜色增强"、"清晰度增强"，最终效果如图4-28所示。(eg4_10\_图像增强.py)
+例：打开\"校园.jpg\"，分别对图像进行"亮度增强"、"对比度增强"、"颜色增强"、"清晰度增强"，最终效果如图4-28所示。
 
-![](./media/image104.png){width="5.622222222222222in"
-height="4.179861111111111in"}
+![](./media/image104.png)
 
 参考代码：
 
@@ -3073,13 +2570,11 @@ img_sharpness=img4.enhance(1.8)
 img_sharpness.show()
 ```
 
- 
-
 #### 图像滤镜------ImageFilter模块
 
 Pillow中的ImageFilter模块提供了多种滤镜可以实现不同艺术效果。ImageFilter模块常用滤镜如表4‑6所示。
 
-表 4‑6 ImageFilter模块常用滤镜
+<p style="text-align: center;">表 4‑6 ImageFilter模块常用滤镜</p>
 
 | 滤镜名称                       | 滤镜作用           |
 | ------------------------------ | ------------------ |
@@ -3099,12 +2594,11 @@ Pillow中的ImageFilter模块提供了多种滤镜可以实现不同艺术效果
 
 image.filter(ImageFilter.滤镜)
 
-例：为图像添加轮廓滤镜、浮雕滤镜、查找边缘滤镜以及锐化滤镜，添加各个滤镜后的效果如图4-29所示。（eg4_11\_图像滤镜效果.py）
+例：为图像添加轮廓滤镜、浮雕滤镜、查找边缘滤镜以及锐化滤镜，添加各个滤镜后的效果如图4-29所示。
 
-![](./media/image105.png){width="4.586805555555555in"
-height="4.016666666666667in"}
+![](./media/image105.png)
 
-图 4‑29 滤镜效果
+<p style="text-align: center;">图 4‑29 滤镜效果</p>
 
 参考代码：
 
@@ -3129,35 +2623,34 @@ im_out4.show() 
 
 在Pillow库中，ImageDraw模块提供了一系列的绘图方法。通过该模块可以创建一个新的图形，或者在现有的图像上再绘制一个图形，从而起到对原图注释和修饰的作用。ImageFont模块用于加载不同格式的字体文件，以便在图像上使用ImageDraw模块绘制文本。
 
-例：在图像上添加文字水印，效果如图4-30所示。（eg4_11\_添加文字.py）
+例：在图像上添加文字水印，效果如图4-30所示。
 
-![](./media/image106.png){width="2.30625in"
-height="1.3381944444444445in"}
+![](./media/image106.png)
 
-图 4‑30 **图像上添加文字**
+<p style="text-align: center;">图 4‑30 图像上添加文字</p>
 
 实现步骤：
 
-1.  导入库
+(1) 导入库
 
 ```python
 from PIL import Image, ImageFont, ImageDraw 
 ```
 
-2.  打开或创建一个新的图像
+(2) 打开或创建一个新的图像
 
 ```python
 image=Image.open('images/校园一角.jpg')
 #或者使用Image.new('RGB',(width,height),color='white') 
 ```
 
-3.  创建一个可以在image上绘图的对象
+(3) 创建一个可以在image上绘图的对象
 
 ```python
 draw=ImageDraw.Draw(image) 
 ```
 
-4.  加载字体，指定文字大小，创建字体对象
+(4) 加载字体，指定文字大小，创建字体对象
 
 ```python
 font_path=r'C:\Windows\Fonts\STXINGKA.TTF'#替换为自己的字体文件路径
@@ -3165,7 +2658,7 @@ font_size=80
 font=ImageFont.truetype(font_path,font_size)  
 ```
 
-5.  使用text方法添加文字到图像上
+(5) 使用text方法添加文字到图像上
 
 ```python
 text="@中国传媒大学"
@@ -3174,18 +2667,18 @@ text_color='red'
 draw.text(text_position,text,fill=text_color,font=font) 
 ```
 
-6.  保存、显示图像
+(6) 保存、显示图像
 
 ```python
 image.save('output_image.jpg')
 image.show() 
 ```
 
-例：制作文字印刷错位和阴影文字效果，如图4-31所示。（eg4_12\_多种文字效果.py）
+例：制作文字印刷错位和阴影文字效果，如图4-31所示。
 
-![](./media/image107.png){width="3.0in" height="1.9895833333333333in"}
+![](./media/image107.png)
 
-图 4‑31 文字多种效果
+<p style="text-align: center;">图 4‑31 文字多种效果</p>
 
 通过在不同位置添加不同颜色的文字实现文字印刷错位效果和带阴影效果的文字。
 
@@ -3211,19 +2704,22 @@ im.show() 
 
 ### 案例目标
 
+<div style="background-color:grey">
 图像批处理是指对一组图像执行相同的或一系列预定义的操作。本案例将对原始图像文件夹中的图像进行统一的图像增强和滤镜效果的批处理，并将结果自动保存至指定的目标文件夹中。
+</div>
 
 ### 案例实现
 
 首先导入必要的第三方库，然后定义一个批处理函数：内容包括图像增强处理和应用滤镜效果等。通过调用函数完成对指定文件夹中的所有文件的批处理。
 
 批处理函数是整个求解问题的核心，该函数的程序流程图如图4-32所示。
+![](./media/image108.png)
 
-图 4‑32 批处理函数流程图
+<p style="text-align: center;">图 4‑32 批处理函数流程图</p>
 
 本案例要完成的主要步骤如下：
 
-1. 导入案例所需类库
+(1) 导入案例所需类库
 
 ```python
 from PIL import Image, ImageEnhance,
@@ -3232,7 +2728,7 @@ ImageDraw, ImageFilter,ImageFont
 import os,logging 
 ```
 
-2. 指定批处理的源文件夹和处理完存储的目标文件夹
+(2) 指定批处理的源文件夹和处理完存储的目标文件夹
 
 ```python
 # 源文件夹和目标文件夹的路径
@@ -3240,7 +2736,7 @@ input_folder = 'source_image'
 output_folder = 'dest_image'  
 ```
 
-3. 定义批处理函数
+(3) 定义批处理函数
 
 ```python
 def batch_process_images(input_folder, output_folder): 
@@ -3250,10 +2746,10 @@ def batch_process_images(input_folder, output_folder): 
 
 **在函数中完成：**
 
-1.  读取图像文件，根据需求选择图像增强方法或所需滤镜
+(1) 读取图像文件，根据需求选择图像增强方法或所需滤镜
 
 ```python
-Image.open(input\_path) 
+Image.open(input\path) 
 ```
 
 应用增强（例如，增强对比度）
@@ -3261,16 +2757,16 @@ Image.open(input\_path) 
 ```python
 enhancer = ImageEnhance.Contrast(img)
 
-enhanced\_img = enhancer.enhance(2.0) 
+enhanced\img = enhancer.enhance(2.0) 
 ```
 
 应用滤镜（例如，加强清晰度滤镜）
 
 ```python
-enhanced\_img = enhanced\_img.filter(ImageFilter.SHARPEN) 
+enhanced\img = enhanced\img.filter(ImageFilter.SHARPEN) 
 ```
 
-2.  将图像名称写入批处理后的目标图像上，并保存图像
+(2) 将图像名称写入批处理后的目标图像上，并保存图像
 
 使用Pillow的"ImageDraw"模块在图像上添加文字（即图像名称）
 
@@ -3287,7 +2783,7 @@ draw.text((50, 80), text=file_name, fill='#ff0', font=font)
 enhanced_img.save(output_path) 
 ```
 
-3.  遍历文件夹中的所有图像
+(3) 遍历文件夹中的所有图像
 
 依次遍历源文件夹中的所有图像文件，对每张图像进行图像增强、滤镜效果、文字添加等操作。
 
@@ -3308,7 +2804,7 @@ if filename.lower().endswith(('.png', '.jpg', '.gif', '.jpeg')):
 # 将图像名称写入图像并保存，上面的第（2）部分内容
 ```
 
-  4. 记录日志
+(4) 记录日志
 
 Python的logging库是一个用于记录日志的标准库，可以用来记录错误信息、警告信息、调试信息等，对于跟踪软件运行状态和诊断问题非常有用。生成一个日志文件，用来记录批处理过程，这样可以更好的了解批处理的状态，并在出现问题时快速定位异常的位置。
 
@@ -3325,7 +2821,7 @@ logging.error('This is an error message')
 logging.critical('This is a critical message') 
 ```
 
-5.  异常处理
+(5) 异常处理
 
 异常处理是程序设计中的一个重要方面，它可以使程序更加健壮。在批处理过程中，可能会遇到各种异常，如文件不存在、文件不是图像格式等，需要编写代码来处理这些异常情况。
 
@@ -3343,7 +2839,7 @@ except Exception as e:
 
 下面的代码段中原始图像文件夹是"source_image"，目标文件夹是"dest_image"。
 
-该案例的完整代码：（eg4_13\_批处理图像.py）
+该案例的完整代码：
 
 ```python
 from PIL import Image, ImageEnhance, ImageDraw, ImageFilter,ImageFont
@@ -3372,23 +2868,21 @@ def batch_process_images(input_folder, output_folder):
 
 源文件夹中的部分图像效果，如图4-33所示。
 
-![](./media/image109.png){width="5.197916666666667in"
-height="2.0965277777777778in"}
+![](./media/image109.png)
 
-图 4‑33 源文件夹中部分图像内容
+<p style="text-align: center;">图 4‑33 源文件夹中部分图像内容</p>
 
 批处理后目标文件夹中部分图像效果，如图4-34所示。
 
-![](./media/image110.png){width="5.5in" height="2.104861111111111in"}
+![](./media/image110.png)
 
-图 4‑34 批处理后图像文件夹中的部分图像效果
+<p style="text-align: center;">图 4‑34 批处理后图像文件夹中的部分图像效果</p>
 
 批处理的日志文件，部分内容如图4-35所示。
 
-![](./media/image111.png){width="3.2604166666666665in"
-height="1.5833333333333333in"}
+![](./media/image111.png)
 
-图 4‑35日志文件内容
+<p style="text-align: center;">图 4‑35日志文件内容</p>
 
 ### 案例总结及思考
 
@@ -3426,10 +2920,9 @@ height="1.5833333333333333in"}
 
 为每张图像添加文字，文字内容为该图像所使用的效果。示例效果如图4-36所示。
 
-![](./media/image112.png){width="5.5625in"
-height="2.0520833333333335in"}
+![](./media/image112.png)
 
-图 4‑36原图以及最终图像效果
+<p style="text-align: center;">图 4‑36原图以及最终图像效果</p>
 
 #### 将指定文件夹中的图像文件批处理成指定尺寸照片
 
@@ -3438,10 +2931,9 @@ height="2.0520833333333335in"}
 在调整图像尺寸时，会用到image.resize方法，其格式：
 
 image.resize(size, resample=Image.XXXX,
-\*\*kwargs)，其中image是要调整的图像对象；size是指定的新的尺寸；resample:是可选参数，用于指定图像缩放时使用的滤波器。常用滤波器如表
-4‑7所示。
+\*\*kwargs)，其中image是要调整的图像对象；size是指定的新的尺寸；resample:是可选参数，用于指定图像缩放时使用的滤波器。常用滤波器如表4‑7所示。
 
-表 4‑7常用滤波器
+<p style="text-align: center;">表 4‑7常用滤波器</p>
 
 | 滤波器       | 描述                                                                           |
 | ------------ | ------------------------------------------------------------------------------ |
@@ -3457,13 +2949,13 @@ image.resize(size, resample=Image.XXXX,
 | LANCZOS2     | Lanczos2插值，使用更少的像素值来计算新的像素值，但可以提供更平滑的图像质量。   |
 | LANCZOS3     | Lanczos3插值，使用更少的像素值来计算新的像素值，但可以提供更平滑的图像质量     |
 
-2.  操作步骤提示：
+1.  操作步骤提示：
 
-1)  导入Image库和os库
+(1) 导入Image库和os库
 
-2)  初始化数据：定义证件照的照片的尺寸、指定源文件夹位置、创建或者指定目标文件夹位置
+(2) 初始化数据：定义证件照的照片的尺寸、指定源文件夹位置、创建或者指定目标文件夹位置
 
-3)  遍历源文件夹中的文件：
+(3) 遍历源文件夹中的文件：
 
 - 检查图像文件格式
 
@@ -3477,31 +2969,30 @@ image.resize(size, resample=Image.XXXX,
 
 如图4-37所示为原始图像文件夹和批处理后的目标文件夹。
 
-![](./media/image113.png){width="2.7402777777777776in"
-height="2.1625in"}
+![](./media/image113.png)
 
-图 4‑37批处理文件夹
+<p style="text-align: center;">图 4‑37批处理文件夹</p>
 
 如图4-38所示，是一张原始图像和处理后的带白色边框的一寸照片。
 
-![](./media/image114.png){width="2.827777777777778in"
-height="1.6444444444444444in"}
+![](./media/image114.png)
 
-图 4‑38 照片处理效果
+<p style="text-align: center;">图 4‑38 照片处理效果</p>
 
 # GUI图形化界面设计------水果卡路里计算器
 
 ## 需求分析
 
+<div style="background-color:grey">
 现在人们越来越关注自己的身心健康。饮食健康是健康生活的重要组成部分。以正常成年人，60公斤标准体重的人为参照，每天需要的热量在1500\~2500千卡之间。我们每天吃的食物有多少热量，是否满足我们的需求？本案例以水果热量计算为例，利用python的GUI标准库tkinter来制作水果卡路里计算器。案例包含两个界面，如图
 5‑1所示。第一个界面为水果卡路里计算的界面，用户可以浏览各种水果每100g的热量，输入对应的水果名称和重量，单击"计算"按钮就可以得到相应水果的热量。第二个界面是食谱推荐，展示的是一些健康食谱，可以通过相应按钮在食谱间切换。
 
-![](./media/image115.png){width="3.6900667104111986in"
-height="2.601616360454943in"}
+![](./media/image115.png)
 
-图 5‑1 水果卡路里计算界面
-
-## 学习目的
+<p style="text-align: center;">图 5‑1 水果卡路里计算界面</p>
+</div>
+学习目的
+--------
 
 1.  理解图形化界面GUI的基本框架和各种组件。
 
@@ -3513,28 +3004,25 @@ VS Code+TONGYI Lingma、tkinter库、pillow库、os库、csv库
 
 ## 相关知识
 
-1.  GUI简介
-    1.  什么是GUI？
+1. GUI简介
+
+   (1) 什么是GUI？
 
 我们是通过各种应用程序来使用计算机的。当我们打开一个应用程序时，就会出现这个程序提供给我们的一个图形化的窗口，例如：
 
-![](./media/image116.png){width="5.03791447944007in"
-height="2.4215583989501313in"}
+![](./media/image116.png)
 
-图 5‑2 图形化窗口示意
+<p style="text-align: center;">图 5‑2 图形化窗口示意</p>
 
-在这些窗口中我们会看到可以输入信息的输入框，可以提交信息的按钮，可以选择的菜单等。我们通过这些窗口元素来与程序交互信息，其中窗口元素就被称为GUI（Graphical
-User Interface）。
+在这些窗口中我们会看到可以输入信息的输入框，可以提交信息的按钮，可以选择的菜单等。我们通过这些窗口元素来与程序交互信息，其中窗口元素就被称为GUI（Graphical User Interface）。
 
 GUI开发就是在窗口界面中有效地安排标签、按钮、菜单等这些组件，最终通过这些组件来完成相应的功能。
 
-2. Python中的GUI库
+(2) Python中的GUI库
 
 怎样设计程序的图形化界面呢？这需要GUI库的支持。在Python中有很多优秀的GUI库，例如tkinter、wxPython、PyQt、PyGtk、Kivy等。
 
-tkinter（tk interface） 是 Python 标准 GUI 库。tkinter
-拥有良好的跨平台性，支持 Windows、Linux、Mac
-平台。tkinter提供了丰富的组件和功能，包括窗口、菜单、按钮、标签、文本框、列表框、滚动条等，使用比较简单，适合初学者和小型桌面应用。在本案例中使用tkinter进行图形化界面的开发。
+tkinter（tk interface） 是 Python 标准 GUI 库。tkinter拥有良好的跨平台性，支持 Windows、Linux、Mac平台。tkinter提供了丰富的组件和功能，包括窗口、菜单、按钮、标签、文本框、列表框、滚动条等，使用比较简单，适合初学者和小型桌面应用。在本案例中使用tkinter进行图形化界面的开发。
 
 wxPython是wxWidgets库的Python封装，提供了一套强大的、跨平台的GUI工具，可用于开发复杂的图形化界面。
 
@@ -3545,42 +3033,44 @@ PyGtk是一套用Python和C编写的GTK+GUI库的包装器。它是GNOME（主�
 Kivy也是一个开源的 Python
 GUI库，专为快速开发多点触控应用程序而设计。它具有丰富的小部件和工具，适用于创建适应移动设备和桌面的用户界面。
 
-2.  tkinter中的组件Widget
+1.  tkinter中的组件Widget
 
 组件是构成用户界面的任何元素,如：标签、按钮、画布、框架等。控件是用户可以直接与之交互的组件，它们是用户界面中可操作的部分，如：按钮（Button）、文本框（TextBox）、滑动条（Slider）等。
 
 tkinter中包含丰富的组件如图 5‑3所示：
 
-![](./media/image117.png){width="4.253284120734908in"
-height="2.7841447944007in"}
+![](./media/image117.png)
 
-图 5‑3 tkinter中的组件
+<p style="text-align: center;">图 5‑3 tkinter中的组件</p>
 
-除此之外，tkinter还提供了对话框子模块。消息框messagebox由tkinter.messagebox模块提供，文件选择对话框filedialog由tkinter.
-filedialog模块提供，颜色对话框colorchooser由tkinter.
-colorchooser模块提供，简单对话框由simpledialog由tkinter.
-simpledialog模块提供。
+除此之外，tkinter还提供了对话框子模块。消息框messagebox由tkinter.messagebox模块提供，文件选择对话框filedialog由tkinter.filedialog模块提供，颜色对话框colorchooser由tkinter.colorchooser模块提供，简单对话框由simpledialog由tkinter.simpledialog模块提供。
 
-ttk子模块是在tkinter8.5中引入的新特性，它提供了更现代化和美观的外观设计，并分离控制代码和样式代码。ttk模块中包含了tkinter中的12种组件，分别是Button、Checkbutton、
-Entry、Frame、Label、LabelFrame、 Menubutton、 PanedWindow、
-Radiobutton、 Scale、 Scrollbar 以及
-Spinbox。ttk模块中还有6个新的组件，如图 5‑4所示。
+ttk子模块是在tkinter8.5中引入的新特性，它提供了更现代化和美观的外观设计，并分离控制代码和样式代码。ttk模块中包含了tkinter中的12种组件，分别是Button、Checkbutton、Entry、Frame、Label、LabelFrame、 Menubutton、PanedWindow、Radiobutton、 Scale、 Scrollbar 以及Spinbox。ttk模块中还有6个新的组件，如图 5‑4所示。
 
 ![](./media/image118.png)
 
-图 5‑4 ttk子模块新增组件
+<p style="text-align: center;">图 5‑4 ttk子模块新增组件</p>
 
 tkinter和ttk中的部分组件默认样式有所不同，如图
 5‑5所示。ttk中的组件相对tkinter的组件更加的美观，并且控制代码和样式代码的分离更有利于程序的复用和修改。
 
-![](./media/image119.png){width="2.9668941382327207in"
-height="2.619695975503062in"}
+![](./media/image119.png)
 
-图 5‑5 Tkinter与ttk组件对比
+<p style="text-align: center;">图 5‑5 Tkinter与ttk组件对比</p>
 
-3.  图形化界面编程的基本流程
+1.  图形化界面编程的基本流程
 
 使用Tkinter创建图形化界面的基本流程如下：
+
+(1) 导入 tkinter 模块
+
+(2) 创建主窗口——root 窗口（即根窗口）
+
+(3) 添加人机交互控件，同时编写相应的事件函数
+
+(4) 窗口布局，设置各控件在窗口中的位置
+
+(5) 通过主循环（mainloop）来显示主窗口
 
 4.  事件处理
 
@@ -3588,7 +3078,7 @@ height="2.619695975503062in"}
 
 tkinter中常见的事件类型如表5-1所示：
 
-表 5‑1 Tkinter中的常见事件
+<p style="text-align: center;">表 5‑1 Tkinter中的常见事件</p>
 
 | 事件               | 描述                                                                               |
 | ------------------ | ---------------------------------------------------------------------------------- |
@@ -3613,14 +3103,15 @@ widget.bind (event，func) 
 
 widget代表对应的组件对象，event是指事件类型（表5-1中所示），func代表的是相应的事件处理函数。
 
-5.  布局管理
+1.  布局管理
 
 布局管理就是指定如何将各个组件放在窗口的指定位置。组件创建之后，必须对组件进行有效合理的布局，组件才能在窗口中显示出来。在tkinter中提供了三种布局方式，分别为pack布局、grid布局、place布局。后续案例中会进行详细讲解。
 
 ## 案例实现
 
-1.  创建主窗口和选项卡
-    1.  主窗口
+1. 创建主窗口和选项卡
+
+   (1) 主窗口
 
 每一个GUI程序首先都需要有个主窗口，然后在主窗口中添加组件。导入tkinter库，使用Tk()方法构建主窗口。创建主窗口后，通过mainloop()启动窗口主循环，启动后窗口会一直显示，直到窗口被关闭。如：
 
@@ -3632,15 +3123,14 @@ root_window.mainloop() 
 
 可以创建一个默认的空窗口，如图 5‑6所示。
 
-![](./media/image120.png){width="2.100181539807524in"
-height="2.4168766404199475in"}
+![](./media/image120.png)
 
-图 5‑6 tk窗口
+<p style="text-align: center;">图 5‑6 tk窗口</p>
 
 创建窗口时，可以为窗口设置标题、图标、背景等属性。常用窗口设置如表
 5‑2所示：
 
-表 5‑2常用窗口设置
+<p style="text-align: center;">表 5‑2常用窗口设置</p>
 
 | 函数                                    | 说明                                                                                                                                                                                                                                    |
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -3651,16 +3141,13 @@ height="2.4168766404199475in"}
 | root_window.config(background=\*\*\*\*) | 设置窗口的背景颜色，可以是颜色名称也可以是16 进制的颜色值。                                                                                                                                                                             |
 | root_window.attributes("-alpha",0.5)    | 设置窗口的一些属性，比如：透明度（-alpha）、是否置顶（-topmost）即将主屏置于其他图标之上、是否全屏（-fullscreen）全屏显示等。                                                                                                           |
 
-2.  选项卡
+(2) 选项卡
 
-对于一个稍微复杂的软件，为了方便界面中组件的管理，通常会采用分级管理的模式，在界面上划分多个功能区，每个功能区内部又可以有一些子功能区。因此在tkinter中提供了一些作为容器的控件。在tkinter中，作为Widget组件容器的有Frame和LabelFrame。Frame顾名思义，就是页面上分多个"块"，每个块相互可以区分。如图
-5‑7 A所示，通过Frame组件将窗口分为三个区域，每个Frame中可以放入标签、按钮等组件。LabelFrame就是在Frame上添加了文本标签，如图
-5‑7 B所示。
+对于一个稍微复杂的软件，为了方便界面中组件的管理，通常会采用分级管理的模式，在界面上划分多个功能区，每个功能区内部又可以有一些子功能区。因此在tkinter中提供了一些作为容器的控件。在tkinter中，作为Widget组件容器的有Frame和LabelFrame。Frame顾名思义，就是页面上分多个"块"，每个块相互可以区分。如图5‑7 A所示，通过Frame组件将窗口分为三个区域，每个Frame中可以放入标签、按钮等组件。LabelFrame就是在Frame上添加了文本标签，如图5‑7 B所示。
 
-![](./media/image121.jpeg){width="5.394051837270341in"
-height="1.2540223097112861in"}
+![](./media/image121.jpeg)
 
-图 5‑7 Frame组件
+<p style="text-align: center;">图 5‑7 Frame组件</p>
 
 ttk模块中的Notebook组件类似于一个多页的Frame，一个选项卡对应一个Frame，通过单击顶部标签选项卡可以选择不同的Frame容器。
 
@@ -3668,7 +3155,7 @@ ttk模块中的Notebook组件类似于一个多页的Frame，一个选项卡对�
 和
 frame2，最后通过Notebook的add方法将其加入到Notebook中，在添加时可以通过text属性设定选项卡的名称。
 
-3.  参考代码
+(3) 参考代码
 
 ```python
 import tkinter as tk
@@ -3695,15 +3182,14 @@ root_window.mainloop() 
 
 运行结果如下：
 
-![](./media/image122.png){width="2.3126760717410324in" height="1.629119641294838in"}
+![](./media/image122.png)
 
-图 5‑8 水果卡路里计算窗口及选项卡
+<p style="text-align: center;">图 5‑8 水果卡路里计算窗口及选项卡</p>
 
-2.  制作"卡路里计算"选项卡界面
+1.  制作"卡路里计算"选项卡界面
     (1) 添加标题文本
 
-Label组件用于在屏幕上显示文本或图像。Label
-组件显示的文本是单一字体，但文本可以跨越多行。使用tkinter中的Label()方法可以创建一个Label对象。其构造方法如下：
+Label组件用于在屏幕上显示文本或图像。Label组件显示的文本是单一字体，但文本可以跨越多行。使用tkinter中的Label()方法可以创建一个Label对象。其构造方法如下：
 
 ```python
 tk.Label(master,options) 
@@ -3711,7 +3197,7 @@ tk.Label(master,options) 
 
 master为其所在的容器，options为可选参数，常用的参数如表 5‑3所示。
 
-表 5‑3 master方法option参数说明
+<p style="text-align: center;">表 5‑3 master方法option参数说明</p>
 
 | 参数           | 说明                                                                                                                                         |
 | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -3764,12 +3250,11 @@ label1.pack() 
 
 运行效果如图 5‑9所示：
 
-![](./media/image123.png){width="3.0625in"
-height="1.3948272090988627in"}
+![](./media/image123.png)
 
-图 5‑9 添加标题文本
+<p style="text-align: center;">图 5‑9 添加标题文本</p>
 
-2.  添加水果热量数据表格
+（2） 添加水果热量数据表格
 
 TreeView组件是ttk模块提供的组件之一，既可以作为树结构使用，也可以作为表格展示数据。本案例中，使用TreeView构建表格展示各种水果每100g的热量值。
 
@@ -3781,7 +3266,7 @@ ttk.TreeView(master，options) 
 
 TreeView组件的参数及其含义,如表 5‑4所示。
 
-表 5‑4TreeView方法参数说明
+<p style="text-align: center;">表 5‑4TreeView方法参数说明</p>
 
 | 参数           | 说明                                                                                                     |
 | -------------- | -------------------------------------------------------------------------------------------------------- |
@@ -3812,13 +3297,11 @@ fruit_tree.heading("cal", text="卡/100g")  
 fruit_tree.pack()  
 ```
 
-组件当前的状态如图 5‑10A所示，如果将show的值设置为"tree heading"则如图
-5‑10 B所示，会在最前面显示出一个图标列。
+组件当前的状态如图 5‑10A所示，如果将show的值设置为"tree heading"则如图5‑10 B所示，会在最前面显示出一个图标列。
 
-![](./media/image124.jpeg){width="4.683333333333334in"
-height="1.8164555993000875in"}
+![](./media/image124.jpeg)
 
-图 5‑10 水果热量数据表格
+<p style="text-align: center;">图 5‑10 水果热量数据表格</p>
 
 接下来，我们需要往表格中添加具体的数据。添加表格数据是通过组件对象的insert()方法来做的。其语法格式如下：
 
@@ -3832,7 +3315,7 @@ index指定插入位置，如果设为'END'表示从表格最后插入，设为"
 
 option是可选参数，一共有5个，具体参数及说明如表 5‑5所示。
 
-表 5‑5 insert方法option参数说明
+<p style="text-align: center;">表 5‑5 insert方法option参数说明</p>
 
 | 参数   | 说明                             |
 | ------ | -------------------------------- |
@@ -3846,13 +3329,12 @@ option是可选参数，一共有5个，具体参数及说明如表 5‑5所示�
 5‑11所示。
 
 ```python
-fruit\_tree.insert(\"\", \"end\", values=(\"苹果\", \"52\")) 
+fruit_tree.insert("", "end", values=("苹果", "52")) 
 ```
 
-![](./media/image125.png){width="2.3150470253718285in"
-height="1.9295778652668416in"}
+![](./media/image125.png)
 
-图 5‑11 表格中插入记录
+<p style="text-align: center;">图 5‑11 表格中插入记录</p>
 
 在案例中，各种水果每100g的热量数据保存在data文件夹中的"水果卡路里.csv"文件中，需要从文件中读取数据，然后将其显示在表格中。定义一个函数get_fruitsdata()完成从csv文件中逐行读取数据并显示到表格中。
 
@@ -3873,17 +3355,16 @@ def get_fruitsdata():
 在主程序中调用这个函数：
 
 ```python
-fruitsdata = get\_fruitsdata() 
+fruitsdata = get_fruitsdata() 
 ```
 
 运行效果如图 5‑12所示：
 
-![](./media/image126.png){width="2.281878827646544in"
-height="1.988196631671041in"}
+![](./media/image126.png)
 
-图 5‑12 显示水果卡路里数据
+<p style="text-align: center;">图 5‑12 显示水果卡路里数据</p>
 
-3.  添加水果名称输入组合框
+(3) 添加水果名称输入组合框
 
 在案例中，我们要计算摄入水果的热量，需要通过用户输入相应的水果名称和重量来计算。对于水果名称的输入，除了直接输入，也可以让用户在以上列表中的水果名称当中选择。要实现这样的效果，可以选取ttk中的Combobox组件来实现，它是文本输入框和下拉菜单的组合。其构造方法如下：
 
@@ -3893,8 +3374,7 @@ ttk.Combobox(master,options) 
 
 master为组件所在容器，options为可选参数，具体说明如表 5‑6所示：
 
-表 5‑6 Combobox方法
-options参数
+<p style="text-align: center;">表 5‑6 Combobox方法options参数</p>
 
 | 参数         | 说明                                           |
 | ------------ | ---------------------------------------------- |
@@ -3910,12 +3390,9 @@ info_text1 = ttk.Label(tab1, text="请选择水果种类：", font=("微软雅�
 fruit_list = ttk.Combobox(tab1, values=list(fruitsdata.keys())) 
 ```
 
-4.  添加水果重量输入框
+(4) 添加水果重量输入框
 
-继续添加重量的输入框，可以使用Entry组件来实现单行文本输入框。Entry
-控件是 Tkinter GUI
-编程中的基础控件之一，它的作用就是允许用户输入内容，从而实现 GUI
-程序与用户的交互，比如当用户登录软件时，输入用户名和密码。其构造方法如下：
+继续添加重量的输入框，可以使用Entry组件来实现单行文本输入框。Entry控件是 Tkinter GUI编程中的基础控件之一，它的作用就是允许用户输入内容，从而实现 GUI程序与用户的交互，比如当用户登录软件时，输入用户名和密码。其构造方法如下：
 
 ```python
 tk.Entry(master,options) 
@@ -3923,8 +3400,7 @@ tk.Entry(master,options) 
 
 Entry组件的常用参数设置如表 5‑7所示：
 
-表 5‑7
-Entry组件常用参数
+<p style="text-align: center;">表 5‑7 Entry组件常用参数</p>
 
 | 参数           | 说明                                                                                   |
 | -------------- | -------------------------------------------------------------------------------------- |
@@ -3945,7 +3421,7 @@ info_text2 = ttk.Label(tab1, text="请输入重量（g）：", font=("微软雅�
 weight_entry = ttk.Entry(tab1, width=23) 
 ```
 
-5.  添加计算按钮
+(5) 添加计算按钮
 
 当用户输入了水果名称和重量，我们该怎么提交这些输入的数据给后台的程序计算呢？这时候我们就需要Button按钮控件了。
 
@@ -3971,15 +3447,15 @@ Button控件常用属性如表 5‑8所示：
 | state   | 设置按钮的可用状态，可选参数有NORMAL/ACTIVE/DISABLED，默认为 NORMAL。 |
 | height  | 按钮的高度。                                                          |
 
-[]{#\_Ref188795454 .anchor}表 5‑8 Button控件常用属性
+<p style="text-align: center;">表 5‑8 Button控件常用属性</p>
 
 在tab1中添加"计算"按钮，并通过Button的"command"属性定义了回调函数"calculate"，当按钮被单击时，将会调用calculate函数。
 
 ```python
-calculate\_button = ttk.Button(tab1, text=\"计算\", command=calculate) 
+calculate_button = ttk.Button(tab1, text="计算", command=calculate) 
 ```
 
-6.  添加结果控件
+(6) 添加结果控件
 
 在案例中，计算的结果我们也需要在界面中显示出来。我们添加了个Label标签对象result_label来显示计算结果，初始是空的。当有计算结果时，就更新它的值。
 
@@ -3988,13 +3464,13 @@ calculate\_button = ttk.Button(tab1, text=\"计算\", command=calculate) 
 result_label = ttk.Label(tab1, text="", foreground="blue", font=("微软雅黑", 12, "bold")) 
 ```
 
-7.  calculate事件处理函数
+(7) calculate事件处理函数
 
 当单击"计算"按钮时，将会调用calculate函数来完成水果热量的计算。怎么来获取到用户输入的数据呢？像Combobox和Entry这些交互式组件都会给我们提供相应的方法来获取用户输入的数值。
 
 Combobox提供的常用方法有：
 
-表 5‑9 Combobox组件常用方法
+<p style="text-align: center;">表 5‑9 Combobox组件常用方法</p>
 
 | 方法       | 说明                     |
 | ---------- | ------------------------ |
@@ -4003,7 +3479,7 @@ Combobox提供的常用方法有：
 
 Entry提供的常用方法有：
 
-表 5‑10 Entry组件常用方法
+<p style="text-align: center;">表 5‑10 Entry组件常用方法</p>
 
 | 方法         | 说明               |
 | ------------ | ------------------ |
@@ -4030,10 +3506,9 @@ def calculate():
 在这里进行了异常处理，当用户输入错误时，比如输入的重量不是数字，将给出错误提示。如图
 5‑13所示：
 
-![](./media/image127.png){width="1.5943175853018372in"
-height="1.216246719160105in"}
+![](./media/image127.png)
 
-图 5‑13 错误提示框
+<p style="text-align: center;">图 5‑13 错误提示框</p>
 
 这样的消息提示，可以使用tkinter提供的消息对话框messagebox来实现。消息对话框是一种程序向用户显示信息很方便的方式。消息对话框主要起到信息提示、警告、说明、询问等作用，通常配合事件函数一起使用。通过使用消息对话框，可以提升用户的交互体验。要使用消息对话框，首先需要将messagebox模块导入：
 
@@ -4041,10 +3516,9 @@ height="1.216246719160105in"}
 from tkinter import messagebox 
 ```
 
-messagebox提供的常用消息框如图 5‑14所示，常用方法如表
-5‑11所示。在这些方法中常用的参数中，title表示对话框的标题，message表示显示的消息文本。
+messagebox提供的常用消息框如图 5‑14所示，常用方法如表5‑11所示。在这些方法中常用的参数中，title表示对话框的标题，message表示显示的消息文本。
 
-表 5‑11 messagebox常用方法
+<p style="text-align: center;">表 5‑11 messagebox常用方法</p>
 
 | 方法                           | 说明              |
 | ------------------------------ | ----------------- |
@@ -4056,14 +3530,13 @@ messagebox提供的常用消息框如图 5‑14所示，常用方法如表
 
 ![](./media/image128.png)
 
-图 5‑14 messagebox 的消息框
+<p style="text-align: center;">图 5‑14 messagebox 的消息框</p>
 
-1.  组件布局
+(8) 组件布局
 
-在窗口中添加的所有组件，都必须进行布局才能在窗口中显示。tkinter库提供了三种布局方式，具体如表
-5‑12所示。
+在窗口中添加的所有组件，都必须进行布局才能在窗口中显示。tkinter库提供了三种布局方式，具体如表5‑12所示。
 
-表 5‑12 tkinter布局方法
+<p style="text-align: center;">表 5‑12 tkinter布局方法</p>
 
 | 布局    | 说明                                                                     |
 | ------- | ------------------------------------------------------------------------ |
@@ -4074,7 +3547,8 @@ messagebox提供的常用消息框如图 5‑14所示，常用方法如表
 - pack布局
 
 pack布局使用起来非常简单，一般用于组件较少的简单界面。pack布局的常用参数如表 5‑13所示：
-表 5‑13 pack()方法布局参数
+
+<p style="text-align: center;">表 5‑13 pack()方法布局参数</p>
 
 | 参数   | 说明                                                                                         |
 | ------ | -------------------------------------------------------------------------------------------- |
@@ -4085,9 +3559,9 @@ pack布局使用起来非常简单，一般用于组件较少的简单界面。p
 
 如图 5‑15所示为按照顶端对齐的pack布局效果：
 
-![](./media/image129.jpeg){width="2.500533683289589in"
-height="2.9295308398950133in"}
-图 5‑15 pack布局效果
+![](./media/image129.jpeg)
+
+<p style="text-align: center;">图 5‑15 pack布局效果</p>
 
 参考代码如下：
 
@@ -4106,7 +3580,7 @@ result_label.pack(side=tk.TOP) 
 
 grid布局为网格布局，将窗口看成是划分了若干行和若干列的表格，根据需要将组件放到相应的单元格中。可以使用row和column参数指定组件所在的行和列，使用rowspan和columnspan参数指定组件跨越的行和列数量。grid布局常用参数如表5‑14所示。
 
-表 5‑14 grid()布局参数
+<p style="text-align: center;">表 5‑14 grid()布局参数</p>
 
 | 参数       | 说明                                                                                     |
 | ---------- | ---------------------------------------------------------------------------------------- |
@@ -4120,13 +3594,11 @@ grid布局为网格布局，将窗口看成是划分了若干行和若干列的�
 | pady       | 设置控件对象上下外边距。                                                                 |
 | sticky     | 设置控件位于单元格那个方位上，参数值和 anchor 相同，若不设置该参数则控件在单元格内居中。 |
 
-利用grid布局，我们将窗口划分为6行2列的表格，其中标题和TreeView表格横跨两列。效果如图
-5‑16所示：
+利用grid布局，我们将窗口划分为6行2列的表格，其中标题和TreeView表格横跨两列。效果如图5‑16所示：
 
-![](./media/image130.jpeg){width="2.189390857392826in"
-height="2.868665791776028in"}
+![](./media/image130.jpeg)
 
-图 5‑16 grid布局效果
+<p style="text-align: center;">图 5‑16 grid布局效果</p>
 
 参考代码：
 
@@ -4143,10 +3615,9 @@ result_label.grid(row=5,column=0,columnspan=2,padx=10, pady=5) 
 
 - place布局
 
-place布局通过指定组件在容器中的坐标值来进行精确的布局控制。place布局的常用参数如表
-5‑15所示。
+place布局通过指定组件在容器中的坐标值来进行精确的布局控制。place布局的常用参数如表5‑15所示。
 
-表 5‑15 place()布局参数
+<p style="text-align: center;">表 5‑15 place()布局参数</p>
 
 | 参数   | 说明                |
 | ------ | ------------------- |
@@ -4157,10 +3628,9 @@ place布局通过指定组件在容器中的坐标值来进行精确的布局控
 
 用place进行布局的效果如图 5‑17所示。
 
-![](./media/image131.jpeg){width="2.1324945319335082in"
-height="2.9712346894138233in"}
+![](./media/image131.jpeg)
 
-图 5‑17 place布局效果
+<p style="text-align: center;">图 5‑17 place布局效果</p>
 
 参考代码：
 
@@ -4214,16 +3684,14 @@ root.mainloop() 
 
 在窗口中显示图像的一般方法是，首先通过pillow库的Image.open()打开图像文件得到PIL图像对象，然后通过ImageTK.PhotoImage()转换为tkinter可用图像格式，最后通过Label标签的image属性的设置显示图像。我们只要将"path_to_your_image.jpg"改为自己想展示的图像文件名"校园.jpg"，就可以完成在窗口中展示图像。
 
-![](./media/image132.png){width="2.1039621609798775in"
-height="1.5261373578302713in"}
+![](./media/image132.png)
 
-图 5‑18 在窗口中显示图像
+<p style="text-align: center;">图 5‑18 在窗口中显示图像</p>
 
 如果想要在显示图像的同时配合一些文本，可以在上述代码的label标签中添加text属性。那文本和图像是一个什么样的位置关系呢，是图片在下面作为背景，还是将文字放在图像的旁边作为图片简介呢，这就要通过label标签的compound
-属性设置。compound
-属性决定了文本和图像在标签内的相对位置。compound属性值如表 5‑16所示。
+属性设置。compound属性决定了文本和图像在标签内的相对位置。compound属性值如表 5‑16所示。
 
-表 5‑16 compound属性值
+<p style="text-align: center;">表 5‑16 compound属性值</p>
 
 | 属性值    | 说明                                   |
 | --------- | -------------------------------------- |
@@ -4235,10 +3703,9 @@ height="1.5261373578302713in"}
 
 下面分别展示了compound 属性设置为CENTER和BOTTOM的效果。
 
-![](./media/image133.png){width="5.022222222222222in"
-height="2.5743055555555556in"}
+![](./media/image133.png)
 
-图 5‑19 不同compound属性值效果
+<p style="text-align: center;">图 5‑19 不同compound属性值效果</p>
 
 在案例中，推荐的食谱是放在"recipe"文件夹中的图像文件。首选需要将全部图像文件打开，转换成tkinter可用的图像格式。我们定义一个函数get_imgs()来完成recipe文件夹所有食谱文件的读取，得到一个转换后的图像列表。
 
@@ -4271,12 +3738,11 @@ cur_img_number = 0
 img_label = ttk.Label(tab2, image=imgs[cur_img_number]) 
 ```
 
-将标题标签title_label和图像标签img_label布局之后可以看到现在窗口中已经显示出第一张照片了，如图
-5‑21所示。
+将标题标签title_label和图像标签img_label布局之后可以看到现在窗口中已经显示出第一张照片了，如图5‑21所示。
 
-![](./media/image134.png){width="1.503513779527559in"
-height="2.1178794838145234in"}
-图 5‑21 第一张食谱的显示
+![](./media/image134.png)
+
+<p style="text-align: center;">图 5-21 第一张食谱的显示</p>
 
 (3) 添加切换按钮
 
@@ -4347,7 +3813,7 @@ next_img_button.grid(row=3, column=0, sticky=tk.E, padx=10, pady=5)
 previous_img_button.grid(row=3, column=1, sticky=tk.W, padx=10, pady=5) 
 ```
 
-4.  程序打包
+1.  程序打包
 
 当我们完成了图形化工具的开发，是不是非常想发给其他的同学朋友们看看试用一下？可是其他的朋友可能没有Python环境，无法运行Python的源文件，该怎么办呢？
 
@@ -4363,10 +3829,9 @@ previous_img_button.grid(row=3, column=1, sticky=tk.W, padx=10, pady=5) 
 pip install pyinstaller 
 ```
 
-![](./media/image135.png){width="4.929166666666666in"
-height="0.7128237095363079in"}
+![](./media/image135.png)
 
-图 5‑22 pyinstaller 安装命令
+<p style="text-align: center;">图 5‑22 pyinstaller 安装命令</p>
 
 (2) 更新程序中的资源文件路径
 
@@ -4385,7 +3850,6 @@ with open(os.path.join(filedir,'.\\data\\水果卡路里.csv'),encoding='utf-8')
  
 ```
 
- 
 用同样的方法将图标文件和食谱图像文件的路径修改为生成路径。
 
 (3) 执行打包命令
@@ -4398,7 +3862,7 @@ pyinstaller options myscript.py 
 
 options为可选参数，常用的参数如表 5‑17所示。
 
-表 5‑17 pyinstaller命令参数
+<p style="text-align: center;">表 5‑17 pyinstaller命令参数</p>
 
 | 参数                                 | 说明                                                                      |
 | ------------------------------------ | ------------------------------------------------------------------------- |
@@ -4417,17 +3881,16 @@ pyinstaller -F -i .\icon\food.ico --add-data recipe:recipe –-add-data icon:ico
 执行打包命令，当看到最后一行"Building EXE ...... completed
 successfully."就成功的完成了打包工作。如图 5‑23所示。
 
-![](./media/image136.png){width="4.8375in"
-height="2.5480446194225723in"}
+![](./media/image136.png)
 
-图 5‑23 程序打包过程
+<p style="text-align: center;">图 5‑23 程序打包过程</p>
 
 这时候你会发现当前的文件夹里多了名为build和dist的两个文件夹和一个"卡路里计算器.spec"文件。
 build文件夹中生成一些日志文件以及工作文件，而在dist文件夹中的是已经打包好的文件，如图 5‑24所示。spec文件中存储着打包时所用的命令以及要打包的相关文件，它的作用就是告诉pyinstaller如何来进行处理。我们只要分享dist文件夹里的可执行文件就可以了。
 
 ![](./media/image137.png)
 
-图 5‑24 程序打包过程
+<p style="text-align: center;">图 5‑24 程序打包过程</p>
 
 ## 案例总结与反思
 
@@ -4442,17 +3905,21 @@ build文件夹中生成一些日志文件以及工作文件，而在dist文件�
 
 ![](./media/image138.png)
 
-图 5‑25 BMI计算器
+<p style="text-align: center;">图 5‑25 BMI计算器</p>
 
 ![](./media/image139.png)
 
-图 5‑26 银行利息计算器
+<p style="text-align: center;">图 5‑26 银行利息计算器</p>
 
 # 数据采集------新闻数据获取
 
-## 需求分析
+<div style="background-color:grey">
+需求分析
+--------
 
 AI时代大家经常会有这样的感觉------数据秒杀算法，因为如果有足够多的高质量数据，即便算法稍微差一点，得出来的结果也是不错的。数据与算法就如同工业时代的煤炭与蒸汽机的关系一样，数据是人工智能时代的新能源。如何获取待分析数据？本章将介绍常用的数据获取方式。
+
+</div>
 
 ## 学习目的
 
@@ -4472,16 +3939,14 @@ requests、beautiful Soup
 
 常用的数据获取方式有以下几种：
 
-![](./media/image140.png){width="6.0in" height="2.9569444444444444in"}
+![](./media/image140.png)
 
-图 6‑1 常用数据获取方式
+<p style="text-align: center;">图 6‑1 常用数据获取方式</p>
 
-待分析数据可以由提出分析需求的客户提供，也可以根据研究需求从网络上的公开数据源获取。公开数据源有很多，如：国家数据网（<https://data.stats.gov.cn/>）提供大量的中国宏观经济数据，包括国家统计局的月度、季度和年度数据等。和鲸社区（[https://www.heywhale.com/home](https://www.heywhale.com/home/dataset)）提供了数据集、项目案例、比赛及活动资源，是一个专注于数据科学领域的实践社区。Kaggle（
-<https://www.kaggle.com/datasets>）作为一个全球性的数据科学竞赛和社区平台，Kaggle上有大量的公开数据集供用户下载和学习。阿里天池
+待分析数据可以由提出分析需求的客户提供，也可以根据研究需求从网络上的公开数据源获取。公开数据源有很多，如：国家数据网（<https://data.stats.gov.cn/>）提供大量的中国宏观经济数据，包括国家统计局的月度、季度和年度数据等。和鲸社区（[https://www.heywhale.com/home](https://www.heywhale.com/home/dataset)）提供了数据集、项目案例、比赛及活动资源，是一个专注于数据科学领域的实践社区。Kaggle（<https://www.kaggle.com/datasets>）作为一个全球性的数据科学竞赛和社区平台，Kaggle上有大量的公开数据集供用户下载和学习。阿里天池
 （<https://tianchi.aliyun.com/>）是阿里巴巴集团旗下的一个大数据竞赛平台，它提供了丰富的数据集资源，包括官方数据集、打榜数据集、聚合数据集和公共数据集，涵盖了多个行业和AI技术领域。
 
-要获取待分析数据，还可以利用八爪鱼、易采集等爬虫工具。如果现有工具和公开数据集，不能满足分析需求时，可以自己编写爬虫程序，获取需要的数据。[]{#X0837e8707f3c47ced56f4a72fd320b75137aaa3
-.anchor}有关爬虫工具及其使用，大家可以到相关工具的官方网站进行学习，本书不做介绍。本书主要介绍爬虫基本原理及爬虫程序的编写。
+要获取待分析数据，还可以利用八爪鱼、易采集等爬虫工具。如果现有工具和公开数据集，不能满足分析需求时，可以自己编写爬虫程序，获取需要的数据。有关爬虫工具及其使用，大家可以到相关工具的官方网站进行学习，本书不做介绍。本书主要介绍爬虫基本原理及爬虫程序的编写。
 
 ### 利用CSV库读写CSV文件
 
@@ -4513,11 +3978,9 @@ mode: 指定打开文件后的处理方式，默认为"rt"。mode取值及含义
 
 buffering:指定读写文件的缓存模式。0表示不缓存，1表示行缓存（只对文本模式有效），\>1则表示缓冲区的大小(以字节为单位)。默认值是缓存模式。
 
-encoding:
-指定文件的编码方式，只适用于文本模式，常用的有"utf-8","gbk"，"gb2312"，"utf-8-sig"等。
+encoding:指定文件的编码方式，只适用于文本模式，常用的有"utf-8","gbk"，"gb2312"，"utf-8-sig"等。
 
-newline: 控制读写文本文件时如何处理换行符。newline
-参数可以设置为以下值之一：
+newline: 控制读写文本文件时如何处理换行符。newline参数可以设置为以下值之一：
 
 - None（默认）：让 Python 自动处理行结束符。
 
@@ -4620,8 +4083,7 @@ writer.writerows()
 
 (1) **获取网页**
 
-**获取网页**就是利用程序模拟浏览器对目标网页发起请求，获取网页源代码。常用requests库实现网页请求。[]{#\_Hlk175751216
-.anchor}requests库为Python第三方库，使用pip命令安装如下：
+**获取网页**就是利用程序模拟浏览器对目标网页发起请求，获取网页源代码。常用requests库实现网页请求。requests库为Python第三方库，使用pip命令安装如下：
 
 ```python
 pip install requests 
@@ -4649,15 +4111,11 @@ pip install html5lib 
 
 - XPath
 
-XPath(XML Path
-Language)，是一种用于在XML文档中导航和查询的语言。HTML和XML都源自SGML（Standard
-Generalized Markup
-Language），都用于描述和结构化数据。因此XPath也可以用于解析HTML文档。XPath通过路径表达选择网页中的节点。
+XPath(XML Path Language)，是一种用于在XML文档中导航和查询的语言。HTML和XML都源自SGML（Standard Generalized Markup Language），都用于描述和结构化数据。因此XPath也可以用于解析HTML文档。XPath通过路径表达选择网页中的节点。
 
 - re
 
-正则表达式（Regular
-Expression）是一种用于描述字符串模式的强大工具，可以用正则表达式实现字符串的检索、替换、匹配验证等。也可以用正则表达式提取HTML代码中想要的信息。Python标准库re用于处理正则表达式。
+正则表达式（Regular Expression）是一种用于描述字符串模式的强大工具，可以用正则表达式实现字符串的检索、替换、匹配验证等。也可以用正则表达式提取HTML代码中想要的信息。Python标准库re用于处理正则表达式。
 
 本章案例用BeautifulSoup进行页面解析。
 
@@ -4672,13 +4130,13 @@ Expression）是一种用于描述字符串模式的强大工具，可以用正�
 #### 网页基本结构
 
 ![](./media/image142.png)
-例6_1：在任意一大模型API或AI编程工具中，用指定的文本生成一个网页（不同工具生成的网页代码可能不一样）。下面以Coze(GPT40
-mini模型) 为例：
-提示词：  
-| 以下面内容为素材，制作一个网页。 |
-| 何以中国 |
-| ...... |
-| 本网页内容来自故宫博物院网站 |
+例6_1：在任意一大模型API或AI编程工具中，用指定的文本生成一个网页（不同工具生成的网页代码可能不一样）。下面以Coze(GPT40mini模型) 为例：
+提示词：
+
+> 以下面内容为素材，制作一个网页。
+> 何以中国  
+>  ......  
+>  本网页内容来自故宫博物院网站
 
 | AI回复 |
 
@@ -4752,7 +4210,7 @@ mini模型) 为例：
 
 ![](./media/image143.png)
 
-图 6‑2 基本网页
+<p style="text-align: center;">图 6‑2 基本网页</p>
 
 尽管网页还有许多待美化和修改的地方，但上述代码反映了网页的基本结构，网页文件的基本组成。
 一个网页有三大部分组成------HTML、CSS和JavaScript，分别负责网页的结构、表现和行为。
@@ -4761,8 +4219,7 @@ mini模型) 为例：
 
 HTML（Hypertext Markup Language）是用来创建网页结构和内容的标记语言，它定义了网页中各个元素的结构和层次关系，如段落、标题、图像等。如上例中：以\<\>标识的"\<p\>......\</p\>,\<h1\>......\</h1\>"等都是HTML元素。
 
-CSS（Cascading Style
-Sheets）用于定义网页的样式和布局，包括字体、颜色、间距、边框等，使得网页可以更具有视觉吸引力并且更易于阅读和导航。如：
+CSS（Cascading Style Sheets）用于定义网页的样式和布局，包括字体、颜色、间距、边框等，使得网页可以更具有视觉吸引力并且更易于阅读和导航。如：
 
 ```HTML
 body {
@@ -4782,8 +4239,7 @@ JavaScript
 #### HTML
 
 HTML以标签
-(tag)的形式描述网页的结构和内容，HTML文件的扩展名为.html或.htm。网页与HTML文件是同一事物的两个不同侧面，用HTML语言编写的文件称为HTML文档，HTML文档在Web浏览器中的表现形式称为网页。HTML文档是由HTML元素组成的文本文件，HTML元素是通过使用
-HTML 标签进行定义的。HTML文档的基本结构为：
+(tag)的形式描述网页的结构和内容，HTML文件的扩展名为.html或.htm。网页与HTML文件是同一事物的两个不同侧面，用HTML语言编写的文件称为HTML文档，HTML文档在Web浏览器中的表现形式称为网页。HTML文档是由HTML元素组成的文本文件，HTML元素是通过使用HTML 标签进行定义的。HTML文档的基本结构为：
 
 ```HTML
 <html>
@@ -4802,7 +4258,7 @@ HTML标签通常由开始标签和结束标签组成。开始标签是被\<\>括
 HTML 元素没有结束标签，如\"\<br\>\" 。不同的标签对应不同的功能，表
 6‑1是常见标签及功能说明。
 
-表 6‑1常用html标签及功能
+<p style="text-align: center;">表 6‑1常用html标签及功能</p>
 
 | 标签        | 描述                 |
 | ----------- | -------------------- |
@@ -4824,17 +4280,17 @@ HTML 元素没有结束标签，如\"\<br\>\" 。不同的标签对应不同的�
 在HTML中，所有标签定义的内容都是节点，这些节点构成一个HTML节点树，也称HTML DOM(Document Object Model)树。例6_1的HTML
 DOM树如图 6‑3所示，在HTML DOM树中，html是根节点，树中同一级的节点称为兄弟节点，图中head与body是兄弟节点，h1与p是兄弟节点。节点的直接下级节点，称为该节点的子节点，如meta、title是head的子节点。节点的任意下级节点称为其后代节点，如h1、p、div都是body节点的后代节点。
 
-图 6‑3 HTML DOM树
+![](./media/image145.png)
+
+<p style="text-align: center;">图 6‑3 HTML DOM树</p>
 
 #### CSS
 
-CSS （Cascading Style Sheets，层叠样式表），是一种用来为结构化文档（如
-HTML 文档或 XML 应用）添加样式（字体、间距和颜色等）的计算机语言，CSS
-文件的扩展名为".css"。
+CSS （Cascading Style Sheets，层叠样式表），是一种用来为结构化文档（如HTML 文档或 XML 应用）添加样式（字体、间距和颜色等）的计算机语言，CSS文件的扩展名为".css"。
 
 CSS通过设置选择器(selector)实现对网页中的字体、字号、颜色、背景、图像及其他元素的控制。CSS样式的定义由两部分构成：选择器和声明(声明块)。选择器是要改变样式的HTML元素（如p、h1、类名称或ID）。声明（块）用于定义样式元素，声明由两部分组成：属性和属性值，所有声明放在大括号"{}"里面。
 
-> 如：
+如：
 
 ```HTML
 .intro{
@@ -4877,11 +4333,9 @@ h2 {
 
 ![](./media/image149.png)
 
-**类选择器**的名称以"."开头，应用类选择器时用HTML标签的class属性，如："\<pclass=\"intro\"\>"，表示p标签应用了intro类样式。一个标签可以应用多个类样式，多个类样式之间用空格隔开，如"\<div
-class=\"intro cons\"\>"表示div标签应用了intro 及cons类样式。
+**类选择器**的名称以"."开头，应用类选择器时用HTML标签的class属性，如："\<pclass=\"intro\"\>"，表示p标签应用了intro类样式。一个标签可以应用多个类样式，多个类样式之间用空格隔开，如"\<div class=\"intro cons\"\>"表示div标签应用了intro 及cons类样式。
 
-**ID选择器**的名称以"\#"开头，应用ID选择器需要用HTML标签的id属性，如："\<div
-id=\"container\"\>"表示div的id样式为"container"。
+**ID选择器**的名称以"\#"开头，应用ID选择器需要用HTML标签的id属性，如："\<div id=\"container\"\>"表示div的id样式为"container"。
 
 当需要选择一个元素的特定子元素时，可以使用形式如:"selectorA\>selectorB"的**子元素选择器**，表示选择selectorA的子元素selectorB，其中selectorA和selectorB可以是类选择器、标签选择器、ID选择器中的任意一种。如："\#container\>p"表示选择ID选择器container的子元素p。
 
@@ -4892,20 +4346,17 @@ p"表示选择类选择器cons后代元素p。
 
 ### 网页浏览过程
 
-![](./media/image150.jpeg)在浏览器地址栏输入一个URL，按下回车后便可以看到网页的内容。网页浏览过程如图
-6‑4所示。
+![](./media/image150.jpeg)在浏览器地址栏输入一个URL，按下回车后便可以看到网页的内容。网页浏览过程如图6‑4所示。
 
 浏览器先向网站所在服务器发送一个请求，网站服务器接收到请求之后，对其进行处理，然后返回对应的响应，传回浏览器。浏览器对返回的响应进行解析，我们便可以看到网页的内容。
 
-上文提到的URL(Uniform Resource
-Locator)统一资源定位器，就是我们俗称的网址，如：https://www.baidu.com/。在URL中的http或https指的是传输协议。HTTP(HyperText Transfer Protocol)超文本传输协议，HTTPS (HyperText Transfer Protocol over Secure Layer)，是HTTP的安全版。
+上文提到的URL(Uniform Resource Locator)统一资源定位器，就是我们俗称的网址，如：https://www.baidu.com/。在URL中的http或https指的是传输协议。HTTP(HyperText Transfer Protocol)超文本传输协议，HTTPS (HyperText Transfer Protocol over Secure Layer)，是HTTP的安全版。
 
 为了更直观地理解网页浏览原理，这里用Chrome浏览器开发者模式下的"网络（Network）"监听组件演示网页浏览的过程。网络监听组件可以在访问当前请求的网页时，显示产生的所有网络请求和响应。
 
 ![](./media/image151.jpeg)打开Chrome浏览器，在地址栏中输入"https://www.cuc.edu.cn/1404/list.htm"并回车。在打开的网页上单击鼠标右键并选择"检查"菜单（或者直接按F12快捷键）即可打开浏览器的开发者工具，如图 6‑5所示。
 
-切换到"网络"面板，然后刷新网页，这时就可以看到在网络面板下方出现了很多个条目，每一个条目就代表一次发送请求和接收响应的过程。如图
-6‑6所示。
+切换到"网络"面板，然后刷新网页，这时就可以看到在网络面板下方出现了很多个条目，每一个条目就代表一次发送请求和接收响应的过程。如图 6‑6所示。
 
 ![](./media/image152.jpeg)
 
@@ -4926,10 +4377,10 @@ Locator)统一资源定位器，就是我们俗称的网址，如：https://www.
 
 - **瀑布**：网络请求的可视化瀑布流。
 
-单击"名称"列的条目，即可看到更详细的信息，如单击上图中的"list.html"结果如图
-6‑7所示。![](./media/image153.jpeg)
+单击"名称"列的条目，即可看到更详细的信息，如单击上图中的"list.html"结果如图6‑7所示。
+![](./media/image153.jpeg)
 
-图 6‑7 网页访问与响应详细信息
+<p style="text-align: center;">图 6‑7 网页访问与响应详细信息</p>
 
 详细信息面板中，常用内容含义如下：
 
@@ -4983,12 +4434,9 @@ Locator)统一资源定位器，就是我们俗称的网址，如：https://www.
 
 - Host：用于指定请求资源的主机IP和端口号，其内容为请求URL的原始服务器或网关的位置。
 
-- Referer：标识这个请求是从哪个页面发过来的，服务器可以拿到这一信息并做相应的处理，如做来源统计、防盗链处理等
-  。
+- Referer：标识这个请求是从哪个页面发过来的，服务器可以拿到这一信息并做相应的处理，如做来源统计、防盗链处理等。
 
-- User-Agent：简称 UA
-  ，它是一个特殊的字符串头，可以使服务器识别客户使用的操作系统及版本、
-  浏览器及版本等信息 。 在写爬虫程序时通常需加上此信息，伪装为浏览器。
+- User-Agent：简称 UA，它是一个特殊的字符串头，可以使服务器识别客户使用的操作系统及版本、浏览器及版本等信息 。 在写爬虫程序时通常需加上此信息，伪装为浏览器。
 
 ## 案例实现
 
@@ -4996,18 +4444,19 @@ Locator)统一资源定位器，就是我们俗称的网址，如：https://www.
 
 ### 分析网页
 
-打开浏览器的开发者模式，选择"网络"选项卡，点击"list.htm"文件，查看请求地址和请求方法，如图
-6‑8所示。
+打开浏览器的开发者模式，选择"网络"选项卡，点击"list.htm"文件，查看请求地址和请求方法，如图6‑8所示。
 
-![](./media/image154.png){width="6.0in" height="1.425in"}
+![](./media/image154.png)
 
-图 6‑8 网页请求信息分析
+<p style="text-align: center;">图 6‑8 网页请求信息分析</p>
 
 ### 获取网页内容
 
 使用requests库爬取网页的基本流程如图 6‑9所示。
 
-[]{#\_Ref183861954 .anchor}图 6‑9 requests库爬取网页基本流程
+![](./media/image61.png)
+
+<p style="text-align: center;">图 6‑9 requests库爬取网页基本流程</p>
 
 1.  指定URL
 
@@ -5015,7 +4464,7 @@ Locator)统一资源定位器，就是我们俗称的网址，如：https://www.
 url = " https://www.cuc.edu.cn/news/1901/list.htm"  
 ```
 
-2.  发起请求
+1.  发起请求
 
 ```python
 r = requests.get(url) 
@@ -5023,7 +4472,7 @@ r = requests.get(url) 
 
 根据待爬取网页采用的请求方法，采用requests.get()或requests.post()访问网页，这两个方法可以返回response对象。response对象包含服务器返回的所有信息，如：网页内容、响应头、响应状态码等。本网页请求方法为GET，所以用requests.get(url)获取网页内容。
 
-3.  获取响应对象中的数据
+1.  获取响应对象中的数据
 
 ```python
 html = response.text
@@ -5031,8 +4480,7 @@ html = response.text
 
 response对象中网页部分存在content 和text属性中。
 
-text属性返回的是字符串。大多数情况都可以正确解码，如果显示内容乱码，可以用encoding属性指定字符编码，如：r.encoding=\'utf-8\'。其中字符编码可以是utf-8、GBK、GB2312
-等。
+text属性返回的是字符串。大多数情况都可以正确解码，如果显示内容乱码，可以用encoding属性指定字符编码，如：r.encoding=\'utf-8\'。其中字符编码可以是utf-8、GBK、GB2312等。
 
 content属性获取网页内容的字节码，对于字节码形式的中英文字符，设置解码方式后才能正确显示。如：html=response.content.decode(\"utf-8\")。
 
@@ -5062,9 +4510,7 @@ with open("tmp/cucnews.html",'w',encoding='utf-8') as fp:
 修改上述代码，爬取搜狗搜索“中国传媒大学”的结果，其中待爬取的URL为“https://www.sogou.com/web?query=中国传媒大学”。在爬取时，会现出“此验证码用于确认这些请求是您的正常行为而不是自动程序发出的，需要您协助验证。”等信息，如图 6_10所示。
 ![](./media/image156.jpeg)
 
-出现这个问题的原因是，没有设置HTTP请求头。HTTP请求时，会有一个请求头
-Requests
-Headers，请求头中有Cookie、Referer、User-Agent等信息。这些信息可以通过requests.get()方法的headers参数来进行设置，如通过headers参数设置User-Agent。
+出现这个问题的原因是，没有设置HTTP请求头。HTTP请求时，会有一个请求头Requests Headers，请求头中有Cookie、Referer、User-Agent等信息。这些信息可以通过requests.get()方法的headers参数来进行设置，如通过headers参数设置User-Agent。
 
 参考实现代码如下：
 
@@ -5083,14 +4529,11 @@ with open("tmp/cucnews.html",'w',encoding='utf-8') as fp:
     fp.write(page_text)
 ```
 
- 
-代码第2行设置请求头中的User-Agent参数。User-Agent
-用于爬虫进行UA伪装，User-Agent的字符串包含了客户端的操作系统、浏览器类型、版本等信息。User-Agent的值可以直接利用浏览器开发者工具获取，如图
-6‑11所示。
+代码第2行设置请求头中的User-Agent参数。User-Agent用于爬虫进行UA伪装，User-Agent的字符串包含了客户端的操作系统、浏览器类型、版本等信息。User-Agent的值可以直接利用浏览器开发者工具获取，如图6‑11所示。
 
-![](./media/image157.png){width="6.0in" height="2.326388888888889in"}
+![](./media/image157.png)
 
-图 6‑11 请求头信息
+<p style="text-align: center;">图 6‑11 请求头信息</p>
 
 ### 解析所需内容
 
@@ -5098,20 +4541,19 @@ with open("tmp/cucnews.html",'w',encoding='utf-8') as fp:
 
 ![](./media/image158.png)
 
-图 6‑12 聚集爬虫基本流程
+<p style="text-align: center;">图 6‑12 聚集爬虫基本流程</p>
 
-网页中的内容都保存在HTML标签中，信息提取就是对HTML文档进行解析，提取标签内容或标签的属性值。信息提取的基本过程是：（1）定位标签
-（2）提取标签内容或标签属性值。HTML网页数据解析常用的方法有：BeautifulSoup、Xpath、正则表达式。
+网页中的内容都保存在HTML标签中，信息提取就是对HTML文档进行解析，提取标签内容或标签的属性值。信息提取的基本过程是：（1）定位标签（2）提取标签内容或标签属性值。HTML网页数据解析常用的方法有：BeautifulSoup、Xpath、正则表达式。
 
 BeautifulSoup是一个用于从HTML或XML（eXtensible Markup Language）文档中提取数据的Python库，可以方便地从网页中提取信息。
 
-XPath(XML Path Language)，是一种用于在XML文档中导航和查询的语言。HTML和XML都源自SGML（Standard
-Generalized Markup Language），都用于描述和结构化数据。因此XPath也可以用于解析HTML文档。
+XPath(XML Path Language)，是一种用于在XML文档中导航和查询的语言。HTML和XML都源自SGML（Standard Generalized Markup Language），都用于描述和结构化数据。因此XPath也可以用于解析HTML文档。
 
 正则表达式（Regular Expression）是一种用于描述字符串模式的强大工具，可以用正则表达式实现字符串的检索、替换、匹配验证等。也可以用正则表达式提取HTML代码中想要的信息。
 
-本例采用Beautiful Soup进行页面解析。Beautiful
-Soup进行数据解析的过程如下：
+本例采用Beautiful Soup进行页面解析。Beautiful Soup进行数据解析的过程如下：
+
+![](./media/image61.png)
 
 1.  导入BeautifulSoup库
 
@@ -5119,7 +4561,7 @@ Soup进行数据解析的过程如下：
 from bs4 import BeautifulSoup 
 ```
 
-2.  实例化一个BeautifulSoup对象，并且将页面源码数据加载到该对象中。
+1.  实例化一个BeautifulSoup对象，并且将页面源码数据加载到该对象中。
 
 ```python
 soup=BeautifulSoup(markup,features,......)
@@ -5130,17 +4572,17 @@ soup=BeautifulSoup(markup,features,......)
 **markup**：被解析的HTML字符串或文件对象。
 
 **features**：拟使用的解析器类型,
-可以是html.parser、lxml、lxml-xml或html5lib。各解析器的使用方法及优缺点如表
-6‑2所示。一般推荐使用"lxml"获取较快的速度和较好的容错能力。
+可以是html.parser、lxml、lxml-xml或html5lib。各解析器的使用方法及优缺点如表 6‑2所示。一般推荐使用"lxml"获取较快的速度和较好的容错能力。
 
-表 6‑2Beautiful Soup解析器
-| **解析器** | **使用方法** | **优势** | **劣势** |
+<p style="text-align: center;">表 6‑2Beautiful Soup解析器</p>
+
+| 解析器                       | 使用方法                             | 优势                                                     | 劣势                               |
 | ---------------------------- | ------------------------------------ | -------------------------------------------------------- | ---------------------------------- |
-| html.parser | BeautifulSoup(markup, "html.parser") | •Python的内置标准库•执行速度适中•容错能力强 | 速度没有lxml快，容错没有html5lib强 |
-| lxml | BeautifulSoup(markup, "lxml") | •速度快•容错能力强 | 额外的C依赖 |
-| lxml-xml | BeautifulSoup(markup, "lxml-xml") |
-| BeautifulSoup(markup, "xml") | •速度快•唯一支持XML的解析器 | 额外的C依赖 |
-| html5lib | BeautifulSoup(markup, "html5lib") | •最好的容错性•以浏览器的方式解析文档•生成HTML5格式的文档 | 速度慢，额外的Python依赖 |
+| html.parser                  | BeautifulSoup(markup, "html.parser") | •Python的内置标准库•执行速度适中•容错能力强              | 速度没有lxml快，容错没有html5lib强 |
+| lxml                         | BeautifulSoup(markup, "lxml")        | •速度快•容错能力强                                       | 额外的C依赖                        |
+| lxml-xml                     | BeautifulSoup(markup, "lxml-xml")    |
+| BeautifulSoup(markup, "xml") | •速度快•唯一支持XML的解析器          | 额外的C依赖                                              |
+| html5lib                     | BeautifulSoup(markup, "html5lib")    | •最好的容错性•以浏览器的方式解析文档•生成HTML5格式的文档 | 速度慢，额外的Python依赖           |
 
 被解析对象可以是HTML字符串，如：
 
@@ -5163,10 +4605,9 @@ newsDetail=soup_detail.select('div.wp_articlecontent')[0].text 
 
 - #### 定位标签
 
-BeautifulSoup()类实例化后，返回的是BeautifulSoup对象，该对象表示的是一个文档的全部内容。在进行网页信息提取时，先定位标签再进行相应内容提取。常用的标签定位方法如表
-6‑3所示。
+BeautifulSoup()类实例化后，返回的是BeautifulSoup对象，该对象表示的是一个文档的全部内容。在进行网页信息提取时，先定位标签再进行相应内容提取。常用的标签定位方法如表6‑3所示。
 
-表 6‑3 Beautiful Soup标签定位
+<p style="text-align: center;">表 6‑3 Beautiful Soup标签定位</p>
 
 | **属性或方法**  | **含义**                                                                                    |
 | --------------- | ------------------------------------------------------------------------------------------- |
@@ -5302,8 +4743,6 @@ with open('cucnews.csv','w',encoding='utf-8-sig',newline='') as f:
         writer.writerow([news_title[i],news_detail[i],news_url[i]])
 ```
 
- 
-
 ## 案例总结与反思
 
 本案例展示了利用requests+BeautifulSoup进行网页爬取的基本流程。在利用爬虫获取数据资源时，要遵守相关的法律法规，合理获取数据信息。本案例实现了基本的静态网页的爬取，实际上在获取网上数据时要处理的情况会比这复杂很多。如：
@@ -5318,8 +4757,7 @@ with open('cucnews.csv','w',encoding='utf-8-sig',newline='') as f:
 
 ### 尝试其他解析方法
 
-本案例是用Beautiful
-Soup进行的网页解析，实际上网页解析还可以使用re正则表达式或XPath表达式。试将上述案例修改为用XPath解析。
+本案例是用Beautiful Soup进行的网页解析，实际上网页解析还可以使用re正则表达式或XPath表达式。试将上述案例修改为用XPath解析。
 
 ### 爬取动态加载的内容
 
@@ -5329,8 +4767,7 @@ Selenium 爬虫有以下特点：
 
 模拟真实用户行为：Selenium 可以模拟用户点击、输入、滚动等操作，使得爬虫行为更接近于正常用户的浏览行为，降低被目标网站检测到的风险。
 
-支持动态加载内容：Selenium 可以处理 JavaScript
-动态渲染的页面，能够获取到 AJAX
+支持动态加载内容：Selenium 可以处理JavaScript动态渲染的页面，能够获取到 AJAX
 请求后加载的数据，这是很多传统爬虫难以做到的。
 
 灵活性：Selenium 提供了丰富的 API，可以根据需求灵活地定制爬虫的行为。
@@ -5339,29 +4776,32 @@ Selenium自己不带浏览器，需要与第三方浏览器集成才能运行。
 
 Selenium网页爬取的基本流程如图 6‑14所示：
 
-图 6‑14selenium网页爬取基本流程
+![](./media/image162.png)
+
+<p style="text-align: center;">图 6‑14selenium网页爬取基本流程</p>
 
 试用Selenium库爬取百度网页以"大模型"为关键词的搜索结果。
 
-# 自然语言处理------
+# 自然语言处理------长文档信息分析
 
-自然语言处理（Natural Language
-Processing，简称NLP）是人工智能和语言学领域的一个分支，它致力于使计算机能够理解、解释和生成人类语言。词是语言的基本单位，人类学习语言的过程也是从理解词开始的。分词、词性标注是进行文本分类、信息提取、情感分析等自然语言处理的基础，关键词提取对于快速理解大量文本内容、文档分类和信息检索等任务至关重要。词云（Word
-Cloud）是一种将文本数据中出现频率较高的词汇以不同大小和颜色显示的视觉化工具。词云通过字体大小来展示词汇出现的频率，使得高频词汇一目了然，帮助观众快速识别文本中的关键概念或主题。主题模型是一个能够挖掘语言背后隐含信息的利器，是语义挖掘、自然语言理解、文本分类、信息检索的重要组成部分。
+<div style="background-color:grey">
+自然语言处理（Natural Language Processing，简称NLP）是人工智能和语言学领域的一个分支，它致力于使计算机能够理解、解释和生成人类语言。词是语言的基本单位，人类学习语言的过程也是从理解词开始的。分词、词性标注是进行文本分类、信息提取、情感分析等自然语言处理的基础，关键词提取对于快速理解大量文本内容、文档分类和信息检索等任务至关重要。词云（Word Cloud）是一种将文本数据中出现频率较高的词汇以不同大小和颜色显示的视觉化工具。词云通过字体大小来展示词汇出现的频率，使得高频词汇一目了然，帮助观众快速识别文本中的关键概念或主题。主题模型是一个能够挖掘语言背后隐含信息的利器，是语义挖掘、自然语言理解、文本分类、信息检索的重要组成部分。
 
 ## 需求分析
 
 - 快速了解长文档的核心内容，如：快速了解二十大报告中词频最高的10个词，前5个关键词，通过词云图了解二十大报告重点关注哪些方面。
 
 - 快速了解海量文档的主题，如：利用主题分析，了解众多新闻所关注的主题有哪些？
+</div>
+学习目的
 
-## 学习目的
+---
 
 1.  掌握中文分词、词性标注、关键词提取
     会利用jieba库进行中文分词、词性标注、关键词提取。
-2.  掌握词云制作
+1.  掌握词云制作
     会利用wordcloud制作词云图。
-3.  掌握主题分析
+1.  掌握主题分析
     会利用gensim主题模型库对语料进行主题分析，会利用PyLDAvis对主题分析结果进行可视化。
 
 ## 环境要求
@@ -5376,6 +4816,7 @@ Cloud）是一种将文本数据中出现频率较高的词汇以不同大小和
 
 ## 案例1: 长文档处理与可视化实践
 
+<div style="background-color:grey">
 统计二十大报告的词频，输出词频最高的10个词，输出前5个关键词，生成词云图。
 
 ### 相关知识
@@ -5385,14 +4826,15 @@ Cloud）是一种将文本数据中出现频率较高的词汇以不同大小和
 在Python中，常用的中文分词库有jieba、SnowNLP、HanLP、THULAC等。
 jieba是Python中最常用的中文分词工具，它不仅支持精确模式、全模式和搜索引擎模式多种分词模式，还允许用户自定义词典，从而实现对特定词汇的精准处理。此外，jieba还有词性标注和关键词提取等功能，为中文文本处理提供了强有力的支持。
 
-**jieba安装 **
+</div>
+**jieba安装**
 
 jieba库可以用pip命令在线安装，也可以利用源代码离线安装。
 
 **在线安装**：在命令行窗口运行
 
 ```python
-pip install jieba \#或者pip3 install jieba 
+pip install jieba #或者pip3 install jieba 
 ```
 
 **利用源代码安装**：
@@ -5413,29 +4855,27 @@ python setup.py install 
 jieba库支持四种分词模式：精确模式、全模式、搜索引擎模式和paddle模式。jieba提供cut()，lcut()两种分词方法，两种分词方法功能相似，函数参数含义相同，返回结果类型不同。jieba.cut()返回的是可迭代的生成器，jieba.lcut()返回分词结果的列表对象。下面以jieba.lcut()函数为例进行说明，该方法实现精确模式或全模式分词，返回分词结果列表，语法格式如下。
 
 ```python
-jieba.lcut(sentence, cut\_all=False, HMM=True, use\_paddle=False) 
+jieba.lcut(sentence, cut_all=False, HMM=True, use_paddle=False) 
 ```
 
 参数含义如下:
 sentence：为需要分词的字符串。
 cut_all ：用来设置是否采用全模式，cut_all
 =True表示是全模式，cut_all=False表示是精确模式。
-HMM ：用来设置是否使用 HMM（ Hidden Markov Model） 模型。use_paddle：用来设置是否利用PaddlePaddle深度学习框架实现分词。paddle模式使用需安装paddlepaddle-tiny，pip
-install paddlepaddle-tiny==1.6.1。目前paddle模式支持jieba
-v0.40及以上版本。
+HMM ：用来设置是否使用 HMM（ Hidden Markov Model） 模型。use_paddle：用来设置是否利用PaddlePaddle深度学习框架实现分词。paddle模式使用需安装paddlepaddle-tiny，pip install paddlepaddle-tiny==1.6.1。目前paddle模式支持jieba v0.40及以上版本。
 
 搜索引擎模式用lcut_for_search()或cut_for_search()方法实现。该方法适合用于搜索引擎构建倒排索引的分词，粒度比较细。
 
 语法如下：
 
 ```python
-jieba.lcut\_for\_search(sentence, HMM=True)  
+jieba.lcut_for_search(sentence, HMM=True)  
 ```
 
 参数与jieba.lcut()含义相同。
 
 例:
-利用jieba对中文字符串进行分词，比较不同分词模式的分词结果。（eg7_1\_分词基础.py）
+利用jieba对中文字符串进行分词，比较不同分词模式的分词结果。
 
 ```python
 import jieba
@@ -5465,8 +4905,7 @@ print("搜索引擎模式分词结果{}".format(seglist_search)) 
 
 #### 修改分词词典
 
-实际上"中国传媒大学"是一所高校名称，不需要分开为"中国"、"传媒"、"大学"等词，而应该作为一个词进行分割，那如何实现？在解决这个问题之前，先了解一下jieba的分词原理。jieba分词依据是jieba的词典，该词典为存放在jieaba安装目录下的"dict.txt"文件。虽然jieba有新词识别能力，但是自行添加新词可以保证更高的正确率。对于词典中没有的词，开发者可以在分词时添加新词或为jieba分词指定自定义的词典，也可以用del_word(word)
-在程序中动态删除词典中的词。
+实际上"中国传媒大学"是一所高校名称，不需要分开为"中国"、"传媒"、"大学"等词，而应该作为一个词进行分割，那如何实现？在解决这个问题之前，先了解一下jieba的分词原理。jieba分词依据是jieba的词典，该词典为存放在jieaba安装目录下的"dict.txt"文件。虽然jieba有新词识别能力，但是自行添加新词可以保证更高的正确率。对于词典中没有的词，开发者可以在分词时添加新词或为jieba分词指定自定义的词典，也可以用del_word(word)在程序中动态删除词典中的词。
 
 add_word()方法可以实现在程序中动态添加新词。
 
@@ -5511,7 +4950,7 @@ pseg.cut() #或pseg.lcut()
 
 其中cut()方法返回的是生成器，lcut()方法以列表形式返回结果。
 
-例： 对给定字符串进行分词，并进行词性标注。(eg7_2\_词性标注.py)
+例： 对给定字符串进行分词，并进行词性标注。
 
 ```python
 import jieba.posseg as pseg
@@ -5536,7 +4975,7 @@ for循环中的sentence.replace(i,\"\")是将字符串中的"、"，"，"等标�
 
 其中vn、n、v等表示词性。词性与对应标签的关系如表 7‑1所示。
 
-表 7‑1词性与对应标签
+<p style="text-align: center;">表 7‑1词性与对应标签</p>
 
 | 标签 | 含义     | 标签 | 含义     | 标签 | 含义     | 标签 | 含义     |
 | ---- | -------- | ---- | -------- | ---- | -------- | ---- | -------- |
@@ -5554,8 +4993,7 @@ for循环中的sentence.replace(i,\"\")是将字符串中的"、"，"，"等标�
 
 1.  基于 TF-IDF 算法的关键词抽取
 
-TF-IDF（Term Frequency-Inverse Document Frequency，词频-逆文档频率），
-TF-IDF算法衡量一个词语在文档中的重要程度。高TF-IDF分数的词语被认为是更重要的。TF的计算方法：
+TF-IDF（Term Frequency-Inverse Document Frequency，词频-逆文档频率），TF-IDF算法衡量一个词语在文档中的重要程度。高TF-IDF分数的词语被认为是更重要的。TF的计算方法：
 
 $$TF(t,d) = \frac{f_{t,d}}{N_{d}}$$
 
@@ -5563,8 +5001,7 @@ $f_{t,d}$是词t在文档d中出现的次数。
 
 $N_{d}$是文档d中所有词语出现的总次数。
 
-IDF（Inverse Document Freqeuncey,
-逆文档频率）：衡量一个词在整个文档集中的重要性。计算方法为：
+IDF（Inverse Document Freqeuncey, 逆文档频率）：衡量一个词在整个文档集中的重要性。计算方法为：
 
 $$IDF(t,D) = log(\frac{N}{1 + n_{t}})$$
 
@@ -5592,8 +5029,7 @@ sentence：待提取的文本
 
 topK ：返回 TF/IDF 权重最大的关键词的个数，默认值为 20
 
-withWeight：是否一并返回关键词权重值 ，默认值为
-False表示只返回包含关键词的列表。
+withWeight：是否一并返回关键词权重值 ，默认值为False表示只返回包含关键词的列表。
 
 allowPOS ：指定包括的词性，默认值为空，即不筛选。
 
@@ -5603,9 +5039,7 @@ TextRank是一种基于图的排序算法，用于从文本中提取关键词。
 
 $$\text{PR}(V_{i}) = (1 - d) + d\sum_{v_{j} \in In(V_{i})}^{}\frac{PR(V_{j})}{L(V_{j})}$$
 
-其中，$\text{PR}(V_{i})$ 是节点$V_{i}$的权重，$d$
-是阻尼因子（通常为0.85），$In(V_{i})$ 是指向节点
-$V_{i}$的所有节点集合，$L(V_{j})$是节点$V_{j}$指向的所有节点集合。当节点权重的变化小于某个阈值时，认为迭代已经收敛，停止迭代。最后，对节点权重进行归一化处理，得到最终的关键词权重。根据节点权重，选择权重较高的节点作为关键词。
+其中，$\text{PR}(V_{i})$ 是节点$V_{i}$的权重，$d$是阻尼因子（通常为0.85），$In(V_{i})$ 是指向节点$V_{i}$的所有节点集合，$L(V_{j})$是节点$V_{j}$指向的所有节点集合。当节点权重的变化小于某个阈值时，认为迭代已经收敛，停止迭代。最后，对节点权重进行归一化处理，得到最终的关键词权重。根据节点权重，选择权重较高的节点作为关键词。
 
 TextRank算法不仅考虑了词频，还考虑了词之间的上下文关系，能够较好地处理一词多义的情况。TextRank算法计算复杂度较高，提取速度相对较慢。性能受文本长度影响、短文提取效果较差。
 
@@ -5687,7 +5121,7 @@ pip install wordcloud 
 
 5.  显示或保存词云图：保存词云图 w.to_file(filename)
 
-表 7‑2 WordCloud()方法常用参数
+<p style="text-align: center;">表 7‑2 WordCloud()方法常用参数</p>
 
 | 参数             | 描述                                                                                                                                                  |
 | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -5712,13 +5146,11 @@ w.generate(txt)
 w.to_file("songWordCloud.png")
 ```
 
- 
-
 效果如图 7‑1所示。
 
 ![](./media/image163.png)
 
-图 7‑1 英文词云图
+<p style="text-align: center;">图 7‑1 英文词云图</p>
 
 如果需要指定词云图形状mask，则需要由其他可以处理图像的库读入图像。如：利用matplotlib、pillow、imageio等库读入图像，然后将读入的图像作为mask属性的值。当设置了mask属性后，词云图的大小由mask指定的图像大小确定，width、height属性失效。
 
@@ -5739,7 +5171,7 @@ w.to_file("songwordcloud2.png") 
 
 > ![](./media/image164.png)
 
-图 7‑2 指定mask的词云图
+<p style="text-align: center;">图 7‑2 指定mask的词云图</p>
 
 wordcloud库默认使用的是西文字体，要想正常显示中文，需要指定font_path参数，font_path=\"字体文件的路径\"如：font_path=\"simhei.ttf\"。字体可以使用系统已安装的TrueType字体（.ttf 格式）或 OpenType 字体（.otf格式）也可使用自定义字体。系统已经安装的字体，通常在操作系统的字体目录下。Windows系统中，字体通常位于"C:\\Windows\\Fonts"目录下；macOS系统中，字体位于"/Library/Fonts"或"/System/Library/Fonts"目录下。Linux系统中，字体可能位于"/usr/share/fonts"或"\~/.local/share/fonts"目录下。
 
@@ -5774,7 +5206,7 @@ wordcloud库默认是以空格作为分隔符识别词，然后生成词云图�
 
 ![](./media/image165.png)
 
-图 7‑3 中文词云图
+<p style="text-align: center;">图 7‑3 中文词云图</p>
 
 ### 案例实现
 
@@ -5820,8 +5252,7 @@ plt.show() 
 
 代码中在过滤停用词时，用了列表推导式filtered_words=[word for word in words if word not in stopwords\]，表示列表中的元素为words列表中的元素且不在stopwords集合中。
 
-代码在统计词频时，用到了Python标准库collections，Counter()方法是一个用于计数的字典子类，它可以用来统计可迭代对象中元素出现的次数。most_common(n)：返回一个列表，包含
-n 个最常见的元素及其计数。
+代码在统计词频时，用到了Python标准库collections，Counter()方法是一个用于计数的字典子类，它可以用来统计可迭代对象中元素出现的次数。most_common(n)：返回一个列表，包含n 个最常见的元素及其计数。
 
 运行结果如下：
 
@@ -5831,13 +5262,13 @@ n 个最常见的元素及其计数。
 
 ![](./media/image166.png)
 
-图 7‑4 二十大报告词云图
+<p style="text-align: center;">图 7‑4 二十大报告词云图</p>
 
 可见二十大报告重点关注"人民"、"发展"、"建 设"等内容。
 
 ## 案例2: 海量文档主题提取
 
-利用LDA模型对1500篇文档集进行主题提取。
+<div style="background-color:grey">利用LDA模型对1500篇文档集进行主题提取。
 
 识别出文档集中新闻包含的主题，每个主题主要关注点（每个主题的高频词有哪些）
 
@@ -5851,10 +5282,10 @@ LDA是一种概率主题模型，包含词、主题和文档三层结构。LDA�
 
 LDA主题模型在自然语言处理、文本挖掘、信息检索等领域有着广泛的应用。它可以用于文本分类、推荐系统、情感分析、舆情监测等任务。例如，在电商评论分析中，LDA可以帮助识别用户评论中的主题和情感倾向，从而为商家提供有价值的产品反馈信息。
 
+</div>
 #### gensim库实现LDA
 
-Python中实现LDA模型的库有很多种，常用的有gensim、scikit-learn、Spark
-MLlib、Cntopic，下面介绍gensim库中LDA的实现。
+Python中实现LDA模型的库有很多种，常用的有gensim、scikit-learn、Spark MLlib、Cntopic，下面介绍gensim库中LDA的实现。
 
 **利用pip命令安装gensim库：**
 
@@ -5864,7 +5295,9 @@ pip install gensim 
 
 使用gensim库实现LDA主题模型基本过程如下：
 
-图 7‑5 gensim库LDA主题模型实现步骤
+![](./media/image167.png)
+
+<p style="text-align: center;">图 7‑5 gensim库LDA主题模型实现步骤</p>
 
 (1) **文本预处理：**
 
@@ -5965,15 +5398,12 @@ lda = LdaModel(
 
 不同的参数会影响模型的训练结果，尤其是主题数量num_topics。模型训练时，需要事先设置主题数，主题数的选择直接影响LDA主题建模结果的准确性和可解释性。常用的确定主题个数方法有：经验法、计算困惑度、计算一致性、计算主题间相似等方法。本案例设置主题数为3，实际问题中确定的主题数量应该既能反映文本数据的内存结构和含义，又要避免过拟合和计算负担过大。
 
-**4.
-主题解读**：训练完成后，可以查看各主题对应的高权重词汇及其权重，各文档对应的主题分类等信息。如输出各主题的前10个关键词权重。
+**4.主题解读**：训练完成后，可以查看各主题对应的高权重词汇及其权重，各文档对应的主题分类等信息。如输出各主题的前10个关键词权重。
 
 ```python
 for topic in lda.print_topics(num_topics=3,num_words=10):
     print(topic)
 ```
-
- 
 
 结果如下：
 
@@ -6018,7 +5448,7 @@ pyLDAvis.gensim_models.prepare(topic_model, corpus, dictionary, doc_topic_dist=N
 
 ![](./media/image168.png)
 
-图 7‑6 LDA可视化结果
+<p style="text-align: center;">图 7‑6 LDA可视化结果</p>
 
 图中各部分含义如下：
 
@@ -6030,11 +5460,9 @@ pyLDAvis.gensim_models.prepare(topic_model, corpus, dictionary, doc_topic_dist=N
 
 条形图显示每个主题中最重要的词汇。浅蓝色的表示这个词在整个文档中出现的频率（权重），深红色的表示这个词在这个主题中所占的权重。$\lambda$值控制词汇的排序方式。默认情况下，$\lambda$值为0.6。你可以调整$\lambda$值查看不同排序方式下的词汇列表。
 
-$\lambda = 1$
-时，词汇是按照它们对于特定主题的贡献度来排序的。排名靠前的词汇是那些在该主题中出现频率最高的词汇。
+$\lambda = 1$时，词汇是按照它们对于特定主题的贡献度来排序的。排名靠前的词汇是那些在该主题中出现频率最高的词汇。
 
-$\lambda = 0$
-时，词汇是按照它们在整个语料库中的显著性来排序的。在整体语料中出现得越高频的词，会有越低的相关性。排名靠前的词汇是那些在该主题中独特且不常见的词汇。
+$\lambda = 0$时，词汇是按照它们在整个语料库中的显著性来排序的。在整体语料中出现得越高频的词，会有越低的相关性。排名靠前的词汇是那些在该主题中独特且不常见的词汇。
 
 $0 < \lambda < 1$，词汇的排序是两者的加权平均。这可以帮助平衡词汇在特定主题中的高频次和在整个语料库中的独特性。
 
@@ -6060,7 +5488,9 @@ $0 < \lambda < 1$，词汇的排序是两者的加权平均。这可以帮助平
 
 # 数据分析------广告点击率分析
 
-## 案例背景
+<div style="background-color:grey">
+案例背景
+--------
 
 平时上网看新闻或购物时，你是否会好奇：为什么看到的广告，正好是这几天自己想购买的物品？这是因为互联网记录下了你曾经的浏览信息，利用机器学习算法预估了你最有可能点击的广告并推送给你。广告点击率预测对于提高在线广告的效果、优化广告投放策略、控制广告成本、提升用户体验以及做出营销决策都具有重要的意义。对广告投放平台来说，点击率预测有助于决策投放哪些广告，可以实现流量价值最大化。对于广告主来说，了解点击率值，有助于决策将广告投放在哪个平台以及确定每次点击价格。
 
@@ -6074,13 +5504,14 @@ $0 < \lambda < 1$，词汇的排序是两者的加权平均。这可以帮助平
 
 本案例采用电商平台数据，以分析点击率影响因素和预估点击率为目标，介绍数据分析的过程和方法。影响点击率的因素众多，结合本案例选择的数据，从下面三个方面进行分析。项目重点讲述数据分析的一般思路和技术要点，读者掌握基本分析方法后，可以举一反三，针对实际问题和数据，采用合适的算法进行分析。
 
-![](./media/image170.png){width="6.0in" height="2.65in"}
+![](./media/image170.png)
 
 - 广告平台方面：分析广告整体点击率，比较不同广告位、投放时间对点击率的影响。
 
 - 用户方面：用户年龄、性别、城市等级、购物深度，消费等级对点击率的影响。
 
 - 商品方面：商品的价格、品牌等点击率的影响。
+</div>
 
 ## 学习目的
 
@@ -6096,8 +5527,7 @@ $0 < \lambda < 1$，词汇的排序是两者的加权平均。这可以帮助平
 
 ## 数据介绍
 
-数据改编自阿里云天池实验室数据集的用户行为数据和广告投放数据（<https://tianchi.aliyun.com/dataset/dataDetail?dataId=56>
-）。数据包含ad_info.csv、user_info.csv、user_behavior.csv三个数据文件。
+数据改编自阿里云天池实验室数据集的用户行为数据和广告投放数据（<https://tianchi.aliyun.com/dataset/dataDetail?dataId=56>）。数据包含ad_info.csv、user_info.csv、user_behavior.csv三个数据文件。
 
 - ad_info.csv: 广告基本信息和点击信息
 
@@ -6146,11 +5576,9 @@ $0 < \lambda < 1$，词汇的排序是两者的加权平均。这可以帮助平
 
 - Matplotlib :用于创建静态、动画和交互式可视化图表的Python第三方库。
 
-- scikit-learn:简称sklearn，是基于 Python
-  语言的机器学习工具，该库提供简单高效的数据分析和数据挖掘工具。
+- scikit-learn:简称sklearn，是基于 Python语言的机器学习工具，该库提供简单高效的数据分析和数据挖掘工具。
 
-- sklearn.preprocessing
-  模块实现数据预处理，包括数据标准化、归一化、缩放；缺失值处理（如填充、删除）；类别数据的编码（如独热编码、标签编码）等。
+- sklearn.preprocessing模块实现数据预处理，包括数据标准化、归一化、缩放；缺失值处理（如填充、删除）；类别数据的编码（如独热编码、标签编码）等。
 
 - sklearn.model_selection模块提供了用于模型选择和评估的工具。这个模块包含了一系列函数和类，用于数据集的划分、交叉验证、网格搜索、性能评估等操作，帮助用户选择最佳的模型和参数组合。
 
@@ -6164,13 +5592,14 @@ $0 < \lambda < 1$，词汇的排序是两者的加权平均。这可以帮助平
 
 **1. 与广告相关的几个概念**
 
-- `广告展示量（``Impressions/Exposure``）：指的是广告在一定时间内被展示的次数。展示量越高，意味着广告的曝光度越大，有更多机会被潜在客户看到。`
+- `广告展示量（Impressions/Exposure）：指的是广告在一定时间内被展示的次数。展示量越高，意味着广告的曝光度越大，有更多机会被潜在客户看到。`
 
-- `点击率（``Click-Through Rate, CTR``）：`指广告被点击的次数与广告展现次数的比例，`通常用来评估广告的吸引力和用户对广告内容的``感``兴趣程度``，``是衡量在线广告效果的一个关键指标。`
+- `点击率（Click-Through Rate, CTR）：`指广告被点击的次数与广告展现次数的比例，`通常用来评估广告的吸引力和用户对广告内容的``感``兴趣程度``，``是衡量在线广告效果的一个关键指标。`
 
 $$\text{CTR} = \left(点击次数 /广告展示次数 \right)*100\%$$
 
 **2. 数据分析基本流程**
+![](./media/image171.png)
 
 明确目的：明确数据分析的问题和目标。
 
@@ -6249,7 +5678,7 @@ from sklearn.linear_model import LogisticRegression
 Pandas库可以读取txt、csv、xlsx、HTML、JSON、pickle等格式的文件，返回对象为DataFrame对象。DataFrame对象是Pandas的一种数据结构，是带行列标签且大小可变的二维表格结构。Pandas读写不同格式文件的方法如表
 8‑1所示。
 
-表 8‑1 pandas读写文件方法
+<p style="text-align: center;">表 8‑1 pandas读写文件方法</p>
 
 | **文件格式**         | **读**        | **写**      |
 | -------------------- | ------------- | ----------- |
@@ -6269,7 +5698,7 @@ pd.read_csv(filepath_or_buffer, sep=’,’, header=’infer’, names=None, ind
 
 参数含义如表 8‑2所示。
 
-表 8‑2 read_csv()方法参数
+<p style="text-align: center;">表 8‑2 read\_csv()方法参数</p>
 
 | 参数名称       | 说明                                                                                       |
 | -------------- | ------------------------------------------------------------------------------------------ |
@@ -6290,7 +5719,7 @@ pd.read_excel(io, sheetname=0, header=0, index_col=None,names=None,dtype=None，
 
 参数含义如表 8‑3所示。
 
-表 8‑3 read_excel()方法参数
+<p style="text-align: center;">表 8‑3 read\_excel()方法参数</p>
 
 | **参数名称** | **说明**                                                                                            |
 | ------------ | --------------------------------------------------------------------------------------------------- |
@@ -6315,7 +5744,7 @@ ad_info=pd.read_csv('data/ad_info.csv',header=0,index_col=0) 
 可以从多个方面了解DataFrame的基本信息，假设df是一个DataFrame对象（本书后面均以df表示DataFrame对象），常用查看基本信息的方法如表
 8‑4所示。
 
-表 8‑4 DataFrame基本信息查看方法
+<p style="text-align: center;">表 8‑4 DataFrame基本信息查看方法</p>
 
 | **方法**      | **说明**                                                                                                                                                                                                                        |
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -6383,7 +5812,8 @@ print(df)  
 ```
 
 ![](./media/image172.png)
-图 8‑1 中文列名与内容不对齐示意
+
+<p style="text-align: center;">图 8‑1 中文列名与内容不对齐示意</p>
 
 可以通过设置下列显示选项，改变中文内容与列标题不对齐的问题。这些参数仅影响显示效果，不会改变DataFrame或Series对象的实际数据。
 
@@ -6400,10 +5830,9 @@ pd. get_option(\'参数名\', 参数值) ：获取相关显示选项。
 
 pd. reset_option(\'参数名\', 参数值) ：恢复默认相关选项。
 
-其中参数名为：\'display.参数名\'，在使用时可省略\'display.\'，直接用\'参数名\'，常用参数如表
-8‑5所示。
+其中参数名为：\'display.参数名\'，在使用时可省略\'display.\'，直接用\'参数名\'，常用参数如表8‑5所示。
 
-表 8‑5 常用显示参数及说明
+<p style="text-align: center;">表 8‑5 常用显示参数及说明</p>
 
 | 参数                              | 默认值  | 含义                                                                                                                                                                                                                                                                           |
 | --------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -6423,7 +5852,7 @@ pd. reset_option(\'参数名\', 参数值) ：恢复默认相关选项。
 
 数据清洗常用的方法如表 8‑6所示。
 
-表 8‑6 常用数据清洗方法
+<p style="text-align: center;">表 8‑6 常用数据清洗方法</p>
 
 | **方法**                  | **说明**                                                                                                                |
 | ------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
@@ -6453,7 +5882,7 @@ ad_info.dropna(inplace=True)#去掉包含缺失值的记录
 ad_info.drop_duplicates(inplace=True)#去掉重复值的记录 
 ```
 
-函数中的参数inplace=True，表示直接在原DataFrame对象上进行操作，inplace参数的默认值为False表示操作后再生成一个副本。如:ad_info.dropna(inplace=True)表示直接在ad_info上删除包含缺失值的记录。inplace参数在许多函数中都有，其含义均表示是否在原对象上进行操作。
+函数中的参数inplace=True，表示直接在DataFrame对象上进行操作，inplace参数的默认值为False表示操作后再生成一个副本。如:ad_info.dropna(inplace=True)表示直接在ad_info上删除包含缺失值的记录。inplace参数在许多函数中都有，其含义均表示是否在原对象上进行操作。
 
 #### 4. 数据预处理
 
@@ -6474,7 +5903,7 @@ df.drop(labels,axis,index=None,columns=None,inplace=False,errors=‘raise’)
 
 参数的含义如表 8‑7所示。
 
-表 8‑7 drop()方法参数及说明
+<p style="text-align: center;">表 8‑7 drop()方法参数及说明</p>
 
 | **参数名称** | **说明**                                                |
 | ------------ | ------------------------------------------------------- |
@@ -6566,7 +5995,7 @@ df.groupby(by, axis, level, as_index,sort,……    ) 
 
 常用参数具体含义：
 
-表 8‑8 grouby() 参数
+<p style="text-align: center;">表 8‑8 grouby() 参数</p>
 
 | 参数     | 含义                                                                                                                          |
 | -------- | ----------------------------------------------------------------------------------------------------------------------------- |
@@ -6580,7 +6009,7 @@ df.groupby(by, axis, level, as_index,sort,……    ) 
 
 常用汇总函数及含义如表 8‑9所示。
 
-表 8‑9 常用汇总函数
+<p style="text-align: center;">表 8‑9 常用汇总函数</p>
 
 | **函数**   | **功能**       |
 | ---------- | -------------- |
@@ -6671,7 +6100,7 @@ df.sort_values(by,axis=0,ascending=True,inplace=False,kind='quiksort',na_positio
 
 各参数说明如表 8‑10所示：
 
-表 8‑10 sort_values()参数说明
+<p style="text-align: center;">表 8‑10 sort\_values()参数说明</p>
 
 | **参数**     | **说明**                                                                                            |
 | ------------ | --------------------------------------------------------------------------------------------------- |
@@ -6722,7 +6151,7 @@ df[\"列名\"\]=value，如果列名不存，则增加一列，如果列索引�
 
 ![](./media/image173.png)
 
-图 8‑2 展现量倒序结果
+<p style="text-align: center;">图 8‑2 展现量倒序结果</p>
 
 由上述分析可见展现量大的广告，点击率并不一定高。可以进一步分析了解点击率高的广告的特点，这里不再做分析。
 
@@ -6750,7 +6179,7 @@ as_index取不同值时，运行结果如所示。
 
 ![](./media/image174.png)
 
-图 8‑3 as_index不同取值结果
+<p style="text-align: center;">图 8‑3 as\_index不同取值结果</p>
 
 可见广告位B的展现量更大。展现量大的广告，点击率是不是也更高？
 
@@ -6762,7 +6191,7 @@ pidGroup["clk_ratio"]=pidGroup["clk_sum"]/pidGroup["present_count"] 
 
 ![](./media/image175.png)
 
-图 8‑4 各广告位点击量和点击率
+<p style="text-align: center;">图 8‑4 各广告位点击量和点击率</p>
 
 由上面分析可见，广告位B的展示量是广告位A的近2倍，但点击率基本相等，为有更好的流量收益，可以分析广告位A展示量低的原因，提高广告位A的展示量，以及想办法提高广告位B的点击率，促进流量转换。
 
@@ -6779,7 +6208,7 @@ plt.show() 
 
 ![](./media/image176.png){width="6.0in" height="4.5in"}
 
-图 8‑5 不同广告位展示量
+<p style="text-align: center;">图 8‑5 不同广告位展示量</p>
 
 - ###### Matplotlib数据可视化
 
@@ -6816,7 +6245,7 @@ plt.bar()绘制折线图，其命令语法格式为
 
 各参数含义如下：
 
-表 8‑11 plt.bar()参数
+<p style="text-align: center;">表 8‑11 plt.bar()参数</p>
 
 | 参数      | 说明                                                                                                        |
 | --------- | ----------------------------------------------------------------------------------------------------------- |
@@ -6837,16 +6266,13 @@ plt.bar()绘制折线图，其命令语法格式为
 
 - ###### 中文显示
 
-代码中`rcParams``['``font.``family``'] = ['``SimHei``']``设置字体，是为了避免中文乱码现象。`Matplotlib默认使用的是西文字体，要在
-Matplotlib 中正确显示中文，我们可以通过两个方法：
+代码中`rcParams``['``font.``family``'] = ['``SimHei``']``设置字体，是为了避免中文乱码现象。`Matplotlib默认使用的是西文字体，要在Matplotlib 中正确显示中文，我们可以通过两个方法：
 
 - 设置 Matplotlib 的字体参数。
 
 - 下载使用支持中文的字体库。
 
-不同操作系统支持的中文字体名称不一样。如：Windows系统常用SimHei、SimSun等。MacOS常用Heiti
-TC等。也可以用同时设置多个字体。如：plt.rcParams[\'font.family\'\] =
-[\'SimHei\',\'SimSun\'\]，表示首先选用第一个字体，若第一个字体不能显示，则选用第二个字体，依次类推。
+不同操作系统支持的中文字体名称不一样。如：Windows系统常用SimHei、SimSun等。MacOS常用Heiti TC等。也可以用同时设置多个字体。如：plt.rcParams[\'font.family\'\] =[\'SimHei\',\'SimSun\'\]，表示首先选用第一个字体，若第一个字体不能显示，则选用第二个字体，依次类推。
 
 如果不确定系统中有哪些中文字体，可以用下列代码获取系统的字体参数，然后从中择一个中文字体即可。
 
@@ -6874,8 +6300,7 @@ for i in a:
 plt.rcParams['axes.unicode_minus'] = False 
 ```
 
-除了可以使用系统中的中文字体外，也可以下载中文字体放在项目文件夹中，通过matplotlib.font_manager.FontProperties(fname=\"字体文件路径\")
-指定字体文件路径，并用fontproperties 属性设置字体即可。如：
+除了可以使用系统中的中文字体外，也可以下载中文字体放在项目文件夹中，通过matplotlib.font_manager.FontProperties(fname=\"字体文件路径\")指定字体文件路径，并用fontproperties 属性设置字体即可。如：
 
 ```python
 import numpy as np
@@ -6898,7 +6323,7 @@ plt.show() 
 
 原数据集中"time_stamp"列记录了点击广告的时间，但是时间戳形式，要想了解各时间段的信息，需要将时间戳信息转换成datetime类型，然后从中获取日期中的小时信息。
 
-`pd.to_``datetime``(``arg``,…)`将Object类型的字段转换成datetime类型。其中arg可以是字符串、日期时间、字符串数组。
+_pd.to_datetime(arg,…)_ 将Object类型的字段转换成datetime类型。其中arg可以是字符串、日期时间、字符串数组。
 
 如：
 
@@ -6908,9 +6333,9 @@ ad_info["time_period"]=ad_info["date_time"].dt.hour
 print(ad_info.head()) 
 ```
 
-![](./media/image177.png){width="6.0in" height="0.9388888888888889in"}
+![](./media/image177.png)
 
-`pd.to_datetime``(``ad_info``["``time_stamp``"``],unit``="s")`将时间戳转换为日期时间格式。dt对象是用于获取日期属性的一个访问对象，通过它可以获取日期时间中的年、月、日、星期、小时等。`dt.hour`获取时间中的小时信息。
+_pd.to_datetime(ad_info["time_stamp"],unit="s")_ 将时间戳转换为日期时间格式。dt对象是用于获取日期属性的一个访问对象，通过它可以获取日期时间中的年、月、日、星期、小时等。`dt.hour`获取时间中的小时信息。
 
 了解不同时段对广告点击量及点击率的影响
 
@@ -6954,7 +6379,9 @@ plt.xticks(locs, \[labels\], \*\*kwargs) 
 
 可视化结果为：
 
-图 8‑6 点击率随时间变化折线图
+![](./media/image178.png)
+
+<p style="text-align: center;">图 8‑6 点击率随时间变化折线图</p>
 
 由图示可见点击率的特点比较符合大多数人的作息时间。一天中12-15点点击率较高、18-21点点击率达到高峰。7-8点由于是上学、上班高峰期，所以点击率很小，这时候的广告未能起到较好的推广作用；但是10点以后，点击率一直处于上升水平。18-21点用户下班休息时间，点击率达到顶峰，这个时间段的广告投放会达到最佳效果。晚上3-5点击率较高，可能因为本项目分析采用的数据集只是随机抽取的一小部分，不能反映数据全貌，造成了结果的歧义。
 
@@ -6970,11 +6397,9 @@ plt.xticks(locs, \[labels\], \*\*kwargs) 
 goods_price = ad_info[ad_info["price"] <= 2000]  
 ```
 
-ad_info[ad_info[\"price\"\] \<=
-2000\]表示抽取"price\"\<=2000的记录。其中ad_info[\"price\"\] \<=2000表示抽取的条件，如果有多个条件，每个条件用圆括号（）括起来，多个条件之间&（且）或\|（或）
-连接，如：
+ad_info[ad_info[\"price\"\] \<=2000\]表示抽取"price\"\<=2000的记录。其中ad_info[\"price\"\] \<=2000表示抽取的条件，如果有多个条件，每个条件用圆括号（）括起来，多个条件之间&（且）或\|（或）连接，如：
 
-`ad_info``[``ad_info``[("price"] <= ``2000)&``(``ad_info``["``clk``"]==1)]`表示抽取price\<=2000并且clk=1的记录。
+_ad_info[ad_info["price"] <= 2000)&(ad_info["clk"]==1)]_ 表示抽取price\<=2000并且clk=1的记录。
 
 价格是连续数据，我们要了解各价格区间对点击率的影响，可以先利用pd.cut()对"price"数据进行分段，然后对各价格区间进行分类汇总。
 
@@ -7006,7 +6431,7 @@ bins = [0, 200, 400, 600,800,1000,2000]
 goods_price['price_level'] = pd.cut(goods_price['price'], bins, labels=['0', '1', '2', '3', '4','5'])  
 ```
 
-将价格划分为`(``0, 200], ``(``200, 400], ``(``400,600],`` (``600,800],`` (``800,``1``000]``, (1000,2000``]`` 6``个区间`，并将每个区间分别标识为\'0\',\'1\', \'2\', \'3\', \'4\', \'5\'。
+将价格划分为 _(0, 200], (200, 400], (400,600], (600,800], (800,1000], (1000,2000] 6个区间_ ，并将每个区间分别标识为\'0\',\'1\', \'2\', \'3\', \'4\', \'5\'。
 
 #### 4. 数据分析
 
@@ -7041,7 +6466,7 @@ print(f'各价格区间点击率为:\n{priceGroup["clk_ratio"]}') 
 
 ### 从用户角度分析
 
-#### 读取数据
+#### 1.读取数据
 
 ```python
 import pandas as pd
@@ -7071,14 +6496,15 @@ plt.show() 
 
 结果如图 8‑7所示。
 
-![](./media/image179.png){width="6.0in" height="4.5in"}
-图 8‑7 消费等级与广告点击量
+![](./media/image179.png)
+
+<p style="text-align: center;">图 8‑7 消费等级与广告点击量</p>
 
 可见，中档消费人群的广告点击量显著多于其他两个消费人群，中档消费人群注重产品的品质和性价比，他们更愿意为那些能够提供良好性价比的商品买单。所以在广告投放时要突出产品的高品质和高性价比。
 
 - ###### `饼图绘制`
 
-`plt.pie``()`用于绘制饼图，饼图可以清楚地反映部分与部分，部分与整体之间的比例关系，易于显示每组数据相对于总数的大小。
+_plt.pie()_ 用于绘制饼图，饼图可以清楚地反映部分与部分，部分与整体之间的比例关系，易于显示每组数据相对于总数的大小。
 
 ```python
 plt.pie(x,explode,labels,colors,labeldistance,radius,autopct,……) 
@@ -7086,7 +6512,7 @@ plt.pie(x,explode,labels,colors,labeldistance,radius,autopct,……) 
 
 参数说明如表 8‑12所示。
 
-表 8‑12 plt.pie()参数
+<p style="text-align: center;">表 8‑12 plt.pie()参数</p>
 
 | 参数          | 说明                                                                        |
 | ------------- | --------------------------------------------------------------------------- |
@@ -7101,7 +6527,7 @@ plt.pie(x,explode,labels,colors,labeldistance,radius,autopct,……) 
 | startangle    | 起始角度，默认从0开始逆时针转。                                             |
 | pctdistance   | 设置圆内文本距圆心距离。                                                    |
 
-`如：``plt.pie(genderGroup["clk_sum"],labels=["``男``","``女``"],autopct='%.1f%%')`实现以点击量为数据，标签为"男"，"女"，并且显示百分比的饼图。
+*如：plt.pie(genderGroup["clk_sum"],labels=["男","女"],autopct=%.1f%%)*实现以点击量为数据，标签为"男"，"女"，并且显示百分比的饼图。
 
 #### 性别与点击量、点击率的关系
 
@@ -7128,7 +6554,7 @@ plt.show()  
 
 ![](./media/image180.png)
 
-图 8‑8 性别对点击量、点击率的影响
+<p style="text-align: center;">图 8‑8 性别对点击量、点击率的影响</p>
 
 可见女生的点击量、点击率都大于男生，因此广告投放要更关注女性的兴趣点，进行精准投放。
 
@@ -7144,8 +6570,7 @@ nrows表示子图的行数，ncols表示子图的列数，index表示当前子�
 
 ### 广告点击率预测
 
-常用的广告点击率预测模型有：逻辑回归（Logistic Regression, LR）、梯度提升决策树（Gradient Boosting Decision Trees, GBDT）、因子分解机（Factorization Machines,
-FM）等，本示例重点关注数据分析原理的讲解，不考虑模型的最优性，选择最基本的逻辑回归进行预测。下面使用Python中的scikit-learn库构建逻辑回归模型。
+常用的广告点击率预测模型有：逻辑回归（Logistic Regression, LR）、梯度提升决策树（Gradient Boosting Decision Trees, GBDT）、因子分解机（Factorization Machines,FM）等，本示例重点关注数据分析原理的讲解，不考虑模型的最优性，选择最基本的逻辑回归进行预测。下面使用Python中的scikit-learn库构建逻辑回归模型。
 
 利用user_info.csv中的数据预测广告点击率。
 
@@ -7168,7 +6593,7 @@ user_info=pd.read_csv('data/user_info.csv',index_col=0,header=0) 
 #### 数据清洗
 
 ```python
-user\_info.dropna(inplace=True) 
+user_info.dropna(inplace=True) 
 ```
 
 #### 数据预处理
@@ -7312,8 +6737,8 @@ plt.show() 
 
 可视化各阶段转化率，如图 8‑9所示。
 
-![](./media/image181.png){width="6.0in" height="4.5in"}
+![](./media/image181.png)
 
-图 8‑9 用户行为路径图
+<p style="text-align: center;">图 8‑9 用户行为路径图</p>
 
 用户在点击广告浏览后加入购物车的概率约为20%，说明用户在点击广告进入商品详情界面较难激发购物欲望，可以进一步分析原因，优化广告投放效果。
