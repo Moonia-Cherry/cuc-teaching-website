@@ -1,10 +1,31 @@
 <script setup lang="ts">
 import { ref, computed, watch, watchEffect, onMounted, reactive } from "vue";
-import { Search } from "@element-plus/icons-vue";
+import { Search, Plus } from "@element-plus/icons-vue";
 import MarkdownIt from "markdown-it";
 import Fuse from "fuse.js";
 import { Segment, useDefault } from "segmentit";
 import { debounce } from "lodash-es";
+import router from "@/router";
+const { VITE_BACKEND_ROOT_PATH } = import.meta.env;
+
+// defineOptions({
+//   name: "Markdown"
+// });
+
+const text = ref(`
+\`\`\`ts
+function sayHello(): void {
+\tconsole.log("Hello, World!");
+}
+sayHello();
+\`\`\`
+# 一级标题
+## 二级标题
+### 三级标题
+#### 四级标题
+##### 五级标题
+###### 六级标题
+`);
 
 // 初始化中文分词器
 const segment = useDefault(new Segment());
@@ -29,7 +50,7 @@ const mdContent = ref("");
 
 async function f() {
   try {
-    const response = await fetch("/faq/101.md"); // 直接从 public 目录加载
+    const response = await fetch(`${VITE_BACKEND_ROOT_PATH}` + `faq/101.md`); // 直接从 public 目录加载
     mdContent.value = await response.text();
     console.log(mdContent.value);
     console.log(typeof mdContent.value);
@@ -38,8 +59,22 @@ async function f() {
   }
 }
 
+const getFaqData = async () => {
+  const response = await fetch(`${VITE_BACKEND_ROOT_PATH}` + `faq`);
+  console.log(`getFaqData: `, response);
+  const faqData = await response.json();
+  console.log(`getFaqData data: `, faqData);
+  faqs.value = faqData;
+};
+
+const addFaq = () => {
+  router.push(`/faq/add`);
+  // console.log("预留");
+};
+
 onMounted(() => {
-  f();
+  // f();
+  getFaqData();
 });
 
 // 初始化FAQ列表
@@ -71,8 +106,8 @@ const faqs = ref<FAQ[]>([
     id: "101",
     question: "Python中关于0.1+0.2!=0.3的解释",
     answer:
-      // "![图1](src/assets/faq/101-1.png)\n\n这里涉及到一个知识点，叫做不确定尾数。因为Python在计算前会将我们输入的十进制数字转换为二进制，计算后，然后将二进制的结果又转换为十进制数字显示出来。\n\n![图2](src/assets/faq/101-2.png)\n\n对于小数而言，因为十进制小数与二进制小数之间并不是完全对等转换的，一般来说，一个十进制小数会转换为无限位数的二进制小数，但是呢，因为计算机一般只截取无限位数中前53位，所以造成同一个小数的十进制表示结果与二进制表示结果并不等价。\n\n![图3](src/assets/faq/101-3.png)\n\n<div style='text-align:center;color:gray'>0.1用二进制表示(截取前53位)</div>\n\n经过两次转换就造成了不确定尾数。\n\n下面是0.1,0.2及0.3在内存中25位有效位数的表示，可以看出0.1+0.2!=0.3\n\n![图4](src/assets/faq/101-4.png)\n",
-      mdContent.value,
+      "![图1](src/assets/faq/101-1.png)\n\n这里涉及到一个知识点，叫做不确定尾数。因为Python在计算前会将我们输入的十进制数字转换为二进制，计算后，然后将二进制的结果又转换为十进制数字显示出来。\n\n![图2](src/assets/faq/101-2.png)\n\n对于小数而言，因为十进制小数与二进制小数之间并不是完全对等转换的，一般来说，一个十进制小数会转换为无限位数的二进制小数，但是呢，因为计算机一般只截取无限位数中前53位，所以造成同一个小数的十进制表示结果与二进制表示结果并不等价。\n\n![图3](src/assets/faq/101-3.png)\n\n<div style='text-align:center;color:gray'>0.1用二进制表示(截取前53位)</div>\n\n经过两次转换就造成了不确定尾数。\n\n下面是0.1,0.2及0.3在内存中25位有效位数的表示，可以看出0.1+0.2!=0.3\n\n![图4](src/assets/faq/101-4.png)\n",
+    // mdContent.value,
     isOpen: false,
     type: "python"
   }
@@ -234,7 +269,7 @@ const renderer = (strToBeRend: string) => {
       </div>
 
       <!-- <div v-if="searchText" class="faq-answer">test</div>
-  searchText -->
+      searchText -->
       <div
         v-for="faq in filteredFaqs"
         :id="faq.id"
@@ -254,6 +289,16 @@ const renderer = (strToBeRend: string) => {
             v-html="renderer(faq.answer)"
           />
         </div>
+      </div>
+      <div class="add-question-wrapper">
+        <el-button class="add-question" type="primary" @click="addFaq">
+          <template #icon>
+            <el-icon>
+              <Plus />
+            </el-icon>
+          </template>
+          添加问题</el-button
+        >
       </div>
     </div>
   </div>
@@ -364,5 +409,16 @@ const renderer = (strToBeRend: string) => {
 .toggle-icon {
   font-weight: bold;
   color: #666;
+}
+
+.add-question-wrapper {
+  // content: center;
+  align-items: center;
+  max-width: 100px;
+  margin: 0 auto;
+
+  .add-question {
+    margin: 0 auto;
+  }
 }
 </style>

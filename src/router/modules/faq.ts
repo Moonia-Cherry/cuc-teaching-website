@@ -14,6 +14,15 @@ export default {
       meta: {
         title: "常见问题"
       }
+    },
+    {
+      path: "/faq/add",
+      name: "addFaq",
+      component: () => import("@/views/faq/addFaq.vue"),
+      meta: {
+        title: "添加问题",
+        showLink: false
+      }
     }
   ]
 } satisfies RouteConfigsTable;

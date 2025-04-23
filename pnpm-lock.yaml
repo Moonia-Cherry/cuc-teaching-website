@@ -83,6 +83,9 @@ importers:
       sortablejs:
         specifier: ^1.15.6
         version: 1.15.6
+      vditor:
+        specifier: ^3.11.0
+        version: 3.11.0
       vue:
         specifier: ^3.5.13
         version: 3.5.13(typescript@5.6.3)
@@ -1638,6 +1641,9 @@ packages:
 
   didyoumean@1.2.2:
     resolution: {integrity: sha512-gxtyfqMg7GKyhQmb056K7M3xszy/myH8w+B4RT+QXBQsvAOdc3XymqDDPHx1BgPgsdAA5SIifona89YtRATDzw==}
+
+  diff-match-patch@1.0.5:
+    resolution: {integrity: sha512-IayShXAgj/QMXgB0IWmKx+rOPuGMhqm5w6jvFxmVenXKIzRqTAAsbBPT3kWQeGANj3jGgvcvv4yK6SxqYmikgw==}
 
   dir-glob@3.0.1:
     resolution: {integrity: sha512-WkrWp9GR4KXfKGYzOLmTuGVi1UWFfws377n9cc55/tb6DuqyF6pcQ5AbiHEshaDpY9v6oaSr2XCDidGmMwdzIA==}
@@ -3407,6 +3413,9 @@ packages:
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
+  vditor@3.11.0:
+    resolution: {integrity: sha512-UfucKF2wstR6w92RG8BOMjbfbE241qP9qIb5i5J64vHTVdWzkWhv6DFNsKe6THBiD+RKQdeQMorCW1uDgoHaMw==}
+
   vite-code-inspector-plugin@0.18.2:
     resolution: {integrity: sha512-MfHvere+71vL0BOposwgbHKZ8o973mYnMhGmU4uzOMt+gsmIjqHxcUkak9K2RMkRB1mG7/Gehvyy28SkUuhg3A==}
 
@@ -5131,6 +5140,8 @@ snapshots:
     optional: true
 
   didyoumean@1.2.2: {}
+
+  diff-match-patch@1.0.5: {}
 
   dir-glob@3.0.1:
     dependencies:
@@ -6980,6 +6991,10 @@ snapshots:
       punycode: 2.3.1
 
   util-deprecate@1.0.2: {}
+
+  vditor@3.11.0:
+    dependencies:
+      diff-match-patch: 1.0.5
 
   vite-code-inspector-plugin@0.18.2:
     dependencies:
