@@ -14,6 +14,8 @@ import {
 } from "element-plus";
 import "vditor/dist/js/icons/ant.js"; // 必须导入，否则生产环境无图标
 
+const isProdEnv = process.env.NODE_ENV === "production";
+
 // 初始化时尝试从 localStorage 读取数据
 const initialData = localStorage.getItem("faqData");
 const initialFAQ: FAQ = initialData
@@ -311,7 +313,11 @@ const handleClearValidateStatus = () => {
           </template>
           清空
         </el-button>
-        <el-button type="info" @click="handleClearValidateStatus">
+        <el-button
+          v-if="!isProdEnv"
+          type="info"
+          @click="handleClearValidateStatus"
+        >
           <template #icon>
             <el-icon>
               <Close />
