@@ -4,14 +4,29 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="description" content="Description" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, minimum-scale=1.0"
-    />
+    <title>Docsify Docs</title>
     <link
       rel="stylesheet"
       href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <style>
+      .run-button {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background-color: #f9f9f9;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        padding: 3px 6px;
+        cursor: pointer;
+        font-size: 12px;
+      }
+    </style>
   </head>
 
   <body>
@@ -25,7 +40,8 @@
         }
       };
     </script>
-    <!-- Docsify v4 -->
     <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+    <script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>
+    <script src="./docsify-run-plugin.js"></script>
   </body>
 </html>
