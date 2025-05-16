@@ -6,6 +6,7 @@ import Fuse from "fuse.js";
 import { Segment, useDefault } from "segmentit";
 import { debounce } from "lodash-es";
 import router from "@/router";
+import { hasPerms } from "@/utils/auth";
 const { VITE_BACKEND_ROOT_PATH } = import.meta.env;
 
 // defineOptions({
@@ -291,7 +292,12 @@ const renderer = (strToBeRend: string) => {
         </div>
       </div>
       <div class="add-question-wrapper">
-        <el-button class="add-question" type="primary" @click="addFaq">
+        <el-button
+          v-if="hasPerms('permission:btn:add')"
+          class="add-question"
+          type="primary"
+          @click="addFaq"
+        >
           <template #icon>
             <el-icon>
               <Plus />
