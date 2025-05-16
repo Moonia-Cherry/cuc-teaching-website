@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { nextTick, ref } from "vue";
 import { onMounted } from "vue"; // 不导入就卡页面加载
 import {
   ElInput,
@@ -8,21 +8,23 @@ import {
   ElCol,
   ElRow,
   ElDatePicker,
-  ElMessage
+  ElMessage,
+  ElMessageBox
 } from "element-plus";
 import "element-plus/dist/index.css";
 import axios, { AxiosResponse } from "axios";
 // import {Refresh} from "@iconify-json/material-symbols-light"
-import { Refresh } from "@element-plus/icons-vue";
+import { Delete, Refresh } from "@element-plus/icons-vue";
+import { Edit } from "@element-plus/icons-vue";
+import { getToken, hasPerms } from "@/utils/auth";
 const { VITE_BACKEND_ROOT_PATH } = import.meta.env;
 
-// 定义留言类型
-interface Message {
-  username: string;
-  content: string;
-  time: string;
-}
+import { deleteMessageApi, editMessageApi, Message } from "@/api/message";
+import { useUserStoreHook } from "@/store/modules/user";
 
+const nickname = ref(useUserStoreHook()?.nickname);
+
+// 留言列表
 const messages = ref<Message[]>([
   // {
   //   username:"test",
@@ -33,7 +35,7 @@ const messages = ref<Message[]>([
 
 // 存储新的留言内容
 const newMessage = ref({
-  username: "",
+  username: nickname,
   content: ""
 });
 
@@ -92,6 +94,7 @@ async function fetchComments(needEcho: boolean = true) {
       for (let index = 0; index < response.data.data.length; index++) {
         // currentMessage = new Message();
         const currentMessage: Message = {
+          id: response.data.data[index].id,
           username: response.data.data[index].username,
           content: response.data.data[index].content,
           time: response.data.data[index].comment_time
@@ -115,9 +118,82 @@ async function fetchComments(needEcho: boolean = true) {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   fetchComments(false);
 });
+
+const handleEdit = (id: number) => {
+  editDialogData.value.id = id;
+  editDialogVisible.value = true;
+};
+
+const submitEditMessage = async () => {
+  console.log(editDialogData.value);
+
+  const editRes = await editMessageApi({
+    id: editDialogData.value.id,
+    ...editDialogData.value
+  });
+
+  // console.log(editRes);
+
+  if (editRes.code == 200) {
+    ElMessage.success("修改成功！");
+    fetchComments(false);
+    editDialogVisible.value = false;
+    editDialogData.value = {
+      id: null,
+      username: nickname,
+      content: ""
+    };
+  } else {
+    ElMessage.error(`Error:${editRes.data}`);
+  }
+};
+
+const editDialogVisible = ref<boolean>(false);
+const editDialogData = ref({
+  id: null,
+  username: nickname,
+  content: ""
+});
+
+const handleDelete = (id: number) => {
+  ElMessageBox.confirm("确认删除？", "删除", {
+    // if you want to disable its autofocus
+    // autofocus: false,
+    confirmButtonText: "确认",
+    cancelButtonText: "Cancel"
+  })
+    .then(() => {
+      submitDelete(id);
+    })
+    .catch(() => {
+      ElMessage({
+        type: "info",
+        message: "取消删除"
+      });
+    });
+};
+
+const submitDelete = async (id: number) => {
+  const editRes = await deleteMessageApi({
+    id: id
+  });
+
+  if (editRes.code == 200) {
+    ElMessage.success("删除成功！");
+    fetchComments(false);
+    editDialogVisible.value = false;
+    editDialogData.value = {
+      id: null,
+      username: nickname,
+      content: ""
+    };
+  } else {
+    ElMessage.error(`Error:${editRes.data}`);
+  }
+};
 </script>
 
 <template>
@@ -158,7 +234,7 @@ onMounted(() => {
           <div v-if="messages.length">
             <div
               v-for="(message, index) in messages"
-              :key="message.time"
+              :key="message.id"
               class="message-card"
             >
               <el-divider v-if="index != 0" />
@@ -169,6 +245,23 @@ onMounted(() => {
                 <p class="comment_content">{{ message.content }}</p>
                 <p class="comment_time">
                   <em>{{ message.time }}</em>
+                  <el-button
+                    v-if="hasPerms('permission:btn:delete')"
+                    :icon="Delete"
+                    style="float: right"
+                    circle
+                    @click="handleDelete(message.id)"
+                  />
+                  <el-button
+                    v-if="
+                      hasPerms('permission:btn:edit') ||
+                      nickname == message.username
+                    "
+                    :icon="Edit"
+                    style="float: right"
+                    circle
+                    @click="handleEdit(message.id)"
+                  />
                 </p>
               </div>
             </div>
@@ -177,6 +270,33 @@ onMounted(() => {
         </div>
       </ElCard>
     </div>
+    <el-dialog
+      v-model="editDialogVisible"
+      title=""
+      width="800"
+      style="padding: 30px"
+    >
+      <!-- <h2>修改留言</h2> -->
+      <!-- <template #title><h2>修改留言</h2></template> -->
+      <template #default>
+        <h2>修改留言</h2>
+        <ElInput
+          v-model="editDialogData.username"
+          placeholder="请输入您的名字"
+          style="margin-bottom: 10px"
+        />
+        <ElInput
+          v-model="editDialogData.content"
+          type="textarea"
+          placeholder="请输入您的留言"
+          :rows="4"
+          style="margin-bottom: 10px"
+        />
+        <ElButton type="primary" @click="submitEditMessage()"
+          >提交留言</ElButton
+        >
+      </template>
+    </el-dialog>
   </div>
 </template>
 
