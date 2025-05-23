@@ -66,6 +66,7 @@
     "markdown-it": "^14.1.0",
     "mitt": "^3.0.1",
     "nprogress": "^0.2.0",
+    "papaparse": "^5.5.3",
     "path-browserify": "^1.0.1",
     "pinia": "^2.3.0",
     "pinyin-pro": "^3.26.0",

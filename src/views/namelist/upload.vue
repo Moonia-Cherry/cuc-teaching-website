@@ -2,6 +2,7 @@
 import { ref, reactive } from "vue";
 import { ElMessage } from "element-plus";
 import { UploadFilled } from "@element-plus/icons-vue";
+import Papa from "papaparse";
 
 const form = reactive({
   name: "",
@@ -71,13 +72,13 @@ const validateCSVHeaders = file => {
     reader.onload = e => {
       try {
         const content = e.target.result.replace(/^\uFEFF/, "");
-        const results = parse(content, { preview: 1 }); // 只解析第一行
+        const results = Papa.parse(content, { preview: 1 }); // 只解析第一行
         if (!results.data || results.data.length === 0) {
           resolve(false);
           return;
         }
         const headers = results.data[0]
-          .map(h => (h || "").toString().trim())
+          .map(h => (h || "").toString().trim()) // 转为字符串并去空格
           .filter(Boolean);
 
         const isValid = requiredHeaders.every((h, i) => headers[i] == h);
@@ -113,7 +114,7 @@ const onSubmit = async () => {
       text: "文件上传中..."
     });
     try {
-      const { data } = await postFaq(formData);
+      const { data } = await uploadFileApi(formData);
       if (data.code === 200) {
         emit("success", data);
         resetForm();
@@ -177,9 +178,10 @@ const handlePreview = file => {
 .upload-demo {
   width: 100%;
 }
+
 .el-upload__tip {
   margin-top: 10px;
-  color: #666;
   font-size: 12px;
+  color: #666;
 }
 </style>
