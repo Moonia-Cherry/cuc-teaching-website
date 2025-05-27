@@ -5,8 +5,9 @@ defineOptions({
 });
 import UploadDialog from "@/views/namelist/upload.vue";
 import { ref, reactive, onMounted } from "vue";
-import { ElNotification } from "element-plus";
+import { ElMessage, ElMessageBox, ElNotification } from "element-plus";
 import axios, { AxiosResponse } from "axios";
+import { deleteTableApi } from "@/api/namelist";
 // import axio from "@/http";
 interface ItableData {
   name: string;
@@ -100,8 +101,39 @@ const handleUploadSuccess = (responseData: {
     handleError(responseData.message || "上传文件处理失败");
   }
 };
+
+const deleteRow = (index: number, acc: string) => {
+  ElMessageBox.confirm("确认删除？", "删除", {
+    // if you want to disable its autofocus
+    // autofocus: false,
+    confirmButtonText: "确认",
+    cancelButtonText: "Cancel"
+  })
+    .then(() => {
+      submitDelete(index, acc);
+    })
+    .catch(() => {
+      ElMessage({
+        type: "info",
+        message: "取消删除"
+      });
+    });
+};
+
+const submitDelete = async (index: number, acc: string) => {
+  const editRes = await deleteTableApi({
+    id: acc
+  });
+
+  if (editRes.code == 200) {
+    ElMessage.success("删除成功！");
+    tableData.value.splice(index, 1);
+  } else {
+    ElMessage.error(`Error:${editRes.data}`);
+  }
+};
 </script>
-<script setup></script>
+
 <template>
   <el-card>
     <el-form>
@@ -120,6 +152,17 @@ const handleUploadSuccess = (responseData: {
       <el-table-column prop="name" label="姓名" width="200" />
       <el-table-column prop="acc" label="账号" width="200" />
       <el-table-column prop="pwd" label="密码" />
+      <el-table-column label="操作" width="120">
+        <template #default="scope">
+          <el-button
+            link
+            type="danger"
+            @click="deleteRow(scope.$index, scope.row.acc)"
+          >
+            删除
+          </el-button>
+        </template>
+      </el-table-column>
     </el-table>
   </el-card>
 </template>

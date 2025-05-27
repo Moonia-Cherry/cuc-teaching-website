@@ -3,6 +3,7 @@ import { ref, reactive } from "vue";
 import { ElMessage } from "element-plus";
 import { UploadFilled } from "@element-plus/icons-vue";
 import Papa from "papaparse";
+import { uploadFileApi } from "@/api/namelist";
 
 const form = reactive({
   name: "",

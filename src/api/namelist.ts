@@ -11,7 +11,7 @@ export const uploadFileApi = (data: FormData) => {
   });
 };
 
-export const deleteMessageApi = (data?: { id: number }) => {
+export const deleteTableApi = (data: { id: string }) => {
   return http.request<UploadResult>("post", "/api/comment/delete", {
     data
   });
