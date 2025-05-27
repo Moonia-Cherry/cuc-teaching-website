@@ -22,7 +22,7 @@ const { VITE_BACKEND_ROOT_PATH } = import.meta.env;
 import { deleteMessageApi, editMessageApi, Message } from "@/api/message";
 import { useUserStoreHook } from "@/store/modules/user";
 
-const nickname = ref(useUserStoreHook()?.nickname);
+const nickname = useUserStoreHook()?.nickname;
 
 // 留言列表
 const messages = ref<Message[]>([
@@ -64,7 +64,7 @@ const addMessage = async () => {
         // ElMessage.success('留言提交成功！');
         fetchComments(false);
         // 清空输入框
-        newMessage.value.username = ""; //测试时，可不清空文本框
+        newMessage.value.username = nickname; //测试时，可不清空文本框
         newMessage.value.content = "";
         ElMessage.success("留言成功！");
       } else {
@@ -124,6 +124,9 @@ onMounted(async () => {
 
 const handleEdit = (id: number) => {
   editDialogData.value.id = id;
+  const msgToBeEdited: Message = messages.value.find(item => item.id == id);
+  editDialogData.value.username = msgToBeEdited.username;
+  editDialogData.value.content = msgToBeEdited.content;
   editDialogVisible.value = true;
 };
 
@@ -143,7 +146,7 @@ const submitEditMessage = async () => {
     editDialogVisible.value = false;
     editDialogData.value = {
       id: null,
-      username: nickname,
+      username: "",
       content: ""
     };
   } else {
@@ -207,6 +210,7 @@ const submitDelete = async (id: number) => {
           v-model="newMessage.username"
           placeholder="请输入您的名字"
           style="margin-bottom: 10px"
+          :disabled="!hasPerms('permission:btn:edit')"
         />
         <ElInput
           v-model="newMessage.content"
@@ -246,7 +250,10 @@ const submitDelete = async (id: number) => {
                 <p class="comment_time">
                   <em>{{ message.time }}</em>
                   <el-button
-                    v-if="hasPerms('permission:btn:delete')"
+                    v-if="
+                      hasPerms('permission:btn:delete') ||
+                      nickname == message.username
+                    "
                     :icon="Delete"
                     style="float: right"
                     circle
@@ -284,6 +291,7 @@ const submitDelete = async (id: number) => {
           v-model="editDialogData.username"
           placeholder="请输入您的名字"
           style="margin-bottom: 10px"
+          :disabled="!hasPerms('permission:btn:edit')"
         />
         <ElInput
           v-model="editDialogData.content"
