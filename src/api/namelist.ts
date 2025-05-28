@@ -16,3 +16,18 @@ export const deleteTableApi = (data: { id: string }) => {
     data
   });
 };
+
+interface ItableData {
+  name: string;
+  acc: string;
+  pwd: string;
+}
+interface IAccountResponse {
+  code: number;
+  data: ItableData[];
+  message?: string;
+}
+
+export const getAccountInfoApi = () => {
+  return http.request<IAccountResponse>("get", "/account/");
+};

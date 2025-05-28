@@ -1,15 +1,17 @@
 <script setup>
 import { ref, reactive } from "vue";
-import { ElMessage } from "element-plus";
+import { ElMessage, ElLoading } from "element-plus";
 import { UploadFilled } from "@element-plus/icons-vue";
 import Papa from "papaparse";
 import { uploadFileApi } from "@/api/namelist";
-
+//文件格式
 const form = reactive({
   name: "",
   file: ""
 });
+//文件链
 const fileList = ref([]);
+//表头要求
 const requiredHeaders = [
   "姓名",
   "学号/工号",
@@ -20,14 +22,18 @@ const requiredHeaders = [
   "角色",
   "密码"
 ];
+//尝试预览
 const dialogImageUrl = ref("");
+//
 const dialogVisible = ref(false);
+
 const props = defineProps({
   modelValue: {
     type: Boolean,
     default: false
   }
 });
+//刷新成功的消息
 const emit = defineEmits(["update:modelValue", "success"]);
 // 重置表单
 const resetForm = () => {
@@ -106,10 +112,18 @@ const onSubmit = async () => {
       fileList.value = [];
       return;
     }
+    console.log("1");
+    // console.log(fileList.value);
     const formData = new FormData();
     fileList.value.forEach(file => {
-      formData.append("files", file.raw);
+      formData.append("name", file.name);
+      formData.append("file", file.raw);
     });
+    console.log("2");
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value instanceof File ? `[File] ${value.name}` : value);
+    }
+    console.log(formData);
     const loading = ElLoading.service({
       lock: true,
       text: "文件上传中..."
@@ -130,6 +144,7 @@ const onSubmit = async () => {
     ElMessage.error("文件上传失败: " + error.message);
   }
 };
+//处理预览（不知道能不能成功
 const handlePreview = file => {
   dialogImageUrl.value = file.url;
   dialogVisible.value = true;

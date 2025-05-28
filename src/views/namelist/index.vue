@@ -7,7 +7,7 @@ import UploadDialog from "@/views/namelist/upload.vue";
 import { ref, reactive, onMounted } from "vue";
 import { ElMessage, ElMessageBox, ElNotification } from "element-plus";
 import axios, { AxiosResponse } from "axios";
-import { deleteTableApi } from "@/api/namelist";
+import { deleteTableApi, getAccountInfoApi } from "@/api/namelist";
 // import axio from "@/http";
 interface ItableData {
   name: string;
@@ -24,6 +24,21 @@ const tableData = ref<ItableData[]>([
     name: "测试",
     acc: "begin",
     pwd: "11111"
+  },
+  {
+    name: "测试",
+    acc: "begin",
+    pwd: "11111"
+  },
+  {
+    name: "测试",
+    acc: "begin",
+    pwd: "11111"
+  },
+  {
+    name: "测试",
+    acc: "begin",
+    pwd: "11111"
   }
 ]);
 
@@ -32,11 +47,8 @@ const uploadDialogVisible = ref(false);
 // 获取账户列表方法
 const fetchAccountList = async (showNotification: boolean = true) => {
   try {
-    const response: AxiosResponse<IAccountResponse> = await axios.get(
-      `${import.meta.env.VITE_BACKEND_ROOT_PATH}account/`
-    );
-
-    if (response.data.code === 200) {
+    const response = await getAccountInfoApi();
+    if (response.code === 200) {
       if (showNotification) {
         ElNotification({
           title: "刷新成功",
@@ -46,13 +58,13 @@ const fetchAccountList = async (showNotification: boolean = true) => {
         });
       }
       // 清空并更新表格数据
-      tableData.value = response.data.data.map(item => ({
+      tableData.value = response.data.map(item => ({
         name: item.name,
         acc: item.acc,
         pwd: item.pwd
       }));
     } else {
-      handleError(response.data.message || "未知错误");
+      handleError(response.message || "未知错误");
     }
   } catch (error) {
     handleNetworkError(error);
@@ -102,12 +114,14 @@ const handleUploadSuccess = (responseData: {
   }
 };
 
+//删除！
+//发起删除
 const deleteRow = (index: number, acc: string) => {
   ElMessageBox.confirm("确认删除？", "删除", {
     // if you want to disable its autofocus
     // autofocus: false,
     confirmButtonText: "确认",
-    cancelButtonText: "Cancel"
+    cancelButtonText: "取消"
   })
     .then(() => {
       submitDelete(index, acc);
@@ -119,7 +133,7 @@ const deleteRow = (index: number, acc: string) => {
       });
     });
 };
-
+//提交删除
 const submitDelete = async (index: number, acc: string) => {
   const editRes = await deleteTableApi({
     id: acc
