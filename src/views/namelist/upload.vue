@@ -22,10 +22,6 @@ const requiredHeaders = [
   "角色",
   "密码"
 ];
-//尝试预览
-const dialogImageUrl = ref("");
-//
-const dialogVisible = ref(false);
 
 const props = defineProps({
   modelValue: {
@@ -113,23 +109,22 @@ const onSubmit = async () => {
       return;
     }
     console.log("1");
+    console.log(fileList.value);
     // console.log(fileList.value);
     const formData = new FormData();
     fileList.value.forEach(file => {
-      formData.append("name", file.name);
       formData.append("file", file.raw);
     });
     console.log("2");
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value instanceof File ? `[File] ${value.name}` : value);
+    for (const [key, val] of formData.entries()) {
+      console.log(key, val);
     }
-    console.log(formData);
     const loading = ElLoading.service({
       lock: true,
       text: "文件上传中..."
     });
     try {
-      const { data } = await uploadFileApi(formData);
+      const data = await uploadFileApi(formData);
       if (data.code === 200) {
         emit("success", data);
         resetForm();
@@ -143,11 +138,6 @@ const onSubmit = async () => {
   } catch (error) {
     ElMessage.error("文件上传失败: " + error.message);
   }
-};
-//处理预览（不知道能不能成功
-const handlePreview = file => {
-  dialogImageUrl.value = file.url;
-  dialogVisible.value = true;
 };
 </script>
 
@@ -167,7 +157,6 @@ const handlePreview = file => {
           drag
           :auto-upload="false"
           multiple
-          :on-preview="handlePreview"
           :before-upload="beforeUpload"
           :show-file-list="true"
           accept=".csv"

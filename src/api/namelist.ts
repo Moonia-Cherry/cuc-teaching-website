@@ -6,13 +6,13 @@ export interface UploadResult {
 }
 
 export const uploadFileApi = (data: FormData) => {
-  return http.request<UploadResult>("post", "/api/comment/update", {
+  return http.request<UploadResult>("post", "/api/user/upload", {
     data
   });
 };
 
 export const deleteTableApi = (data: { id: string }) => {
-  return http.request<UploadResult>("post", "/api/comment/delete", {
+  return http.request<UploadResult>("post", "/api/user/delete", {
     data
   });
 };
@@ -29,5 +29,5 @@ interface IAccountResponse {
 }
 
 export const getAccountInfoApi = () => {
-  return http.request<IAccountResponse>("get", "/account/");
+  return http.request<IAccountResponse>("get", "/api/user/account");
 };
