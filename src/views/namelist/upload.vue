@@ -167,6 +167,9 @@ const onSubmit = async () => {
           <div class="el-upload__tip">
             要求表头顺序：姓名、学号/工号、年级、院系、专业、班级、角色、密码
           </div>
+          <div class="el-upload__tip">
+            学号/工号不能重复<br />"角色"内的教师会被当作管理员（写'admin'亦可），学生会被当做普通用户（写'common'亦可）<br />密码需大于等于8位，否则无法登陆
+          </div>
         </el-upload>
       </el-form-item>
 
