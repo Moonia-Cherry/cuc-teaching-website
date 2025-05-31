@@ -12,7 +12,8 @@ export default {
       name: "Fighting",
       component: () => import("@/views/namelist/index.vue"),
       meta: {
-        title: "用户名单"
+        title: "用户名单",
+        roles: ["admin"]
       }
     }
   ]

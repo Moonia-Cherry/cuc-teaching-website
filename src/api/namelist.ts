@@ -20,7 +20,7 @@ export const deleteTableApi = (data: { id: string }) => {
 interface ItableData {
   name: string;
   acc: string;
-  pwd: string;
+  // pwd: string;
 }
 interface IAccountResponse {
   code: number;

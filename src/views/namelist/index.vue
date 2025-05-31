@@ -12,7 +12,7 @@ import { deleteTableApi, getAccountInfoApi } from "@/api/namelist";
 interface ItableData {
   name: string;
   acc: string;
-  pwd: string;
+  // pwd: string;
 }
 interface IAccountResponse {
   code: number;
@@ -22,25 +22,13 @@ interface IAccountResponse {
 const tableData = ref<ItableData[]>([
   {
     name: "测试",
-    acc: "begin",
-    pwd: "11111"
-  },
-  {
-    name: "测试",
-    acc: "begin",
-    pwd: "11111"
-  },
-  {
-    name: "测试",
-    acc: "begin",
-    pwd: "11111"
-  },
-  {
-    name: "测试",
-    acc: "begin",
-    pwd: "11111"
+    acc: "begin"
+    // pwd: "11111"
   }
 ]);
+const total = ref(0); // 数据总数
+const pageSize = ref(10); // 每页显示的条数
+const currentPage = ref(1); // 当前页数
 
 const uploadDialogVisible = ref(false);
 
@@ -60,8 +48,8 @@ const fetchAccountList = async (showNotification: boolean = true) => {
       // 清空并更新表格数据
       tableData.value = response.data.map(item => ({
         name: item.name,
-        acc: item.acc,
-        pwd: item.pwd
+        acc: item.acc
+        // pwd: item.pwd
       }));
     } else {
       handleError(response.message || "未知错误");
@@ -89,6 +77,12 @@ const handleNetworkError = (error: unknown) => {
     type: "error",
     duration: 3000
   });
+
+  // 翻页
+  const handlePageChange = (page: number) => {
+    currentPage.value = page;
+    fetchAccountList(false); // 获取当前页的数据
+  };
 };
 
 // 初始化时自动加载数据
@@ -146,6 +140,12 @@ const submitDelete = async (index: number, acc: string) => {
     ElMessage.error(`Error:${editRes.data}`);
   }
 };
+
+// 翻页方法
+const handlePageChange = (page: number) => {
+  currentPage.value = page;
+  fetchAccountList(false); // 获取当前页的数据
+};
 </script>
 
 <template>
@@ -162,22 +162,34 @@ const submitDelete = async (index: number, acc: string) => {
       @success="handleUploadSuccess"
     />
 
-    <el-table :data="tableData" style="width: 100%">
-      <el-table-column prop="name" label="姓名" width="200" />
-      <el-table-column prop="acc" label="账号" width="200" />
-      <el-table-column prop="pwd" label="密码" />
-      <el-table-column label="操作" width="120">
-        <template #default="scope">
-          <el-button
-            link
-            type="danger"
-            @click="deleteRow(scope.$index, scope.row.acc)"
-          >
-            删除
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    <!-- 表格 -->
+    <div style="height: calc(100vh - 350px); overflow: auto">
+      <el-table :data="tableData" style="width: 100%" height="100%">
+        <el-table-column prop="name" label="姓名" width="250" />
+        <el-table-column prop="acc" label="账号" />
+        <!-- <el-table-column prop="pwd" label="密码" /> -->
+        <el-table-column label="操作" width="120">
+          <template #default="scope">
+            <el-button
+              link
+              type="danger"
+              @click="deleteRow(scope.$index, scope.row.acc)"
+            >
+              删除
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+
+    <!-- 分页 -->
+    <el-pagination
+      :current-page="currentPage"
+      :page-size="pageSize"
+      :total="total"
+      layout="prev, pager, next, jumper"
+      @current-change="handlePageChange"
+    />
   </el-card>
 </template>
 
