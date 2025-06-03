@@ -12,6 +12,7 @@ import { deleteTableApi, getAccountInfoApi } from "@/api/namelist";
 interface ItableData {
   name: string;
   acc: string;
+  role: string;
   // pwd: string;
 }
 interface IAccountResponse {
@@ -22,7 +23,8 @@ interface IAccountResponse {
 const tableData = ref<ItableData[]>([
   {
     name: "测试",
-    acc: "begin"
+    acc: "begin",
+    role: "admin"
     // pwd: "11111"
   }
 ]);
@@ -48,7 +50,8 @@ const fetchAccountList = async (showNotification: boolean = true) => {
       // 清空并更新表格数据
       tableData.value = response.data.map(item => ({
         name: item.name,
-        acc: item.acc
+        acc: item.acc,
+        role: item.role
         // pwd: item.pwd
       }));
     } else {
@@ -77,12 +80,6 @@ const handleNetworkError = (error: unknown) => {
     type: "error",
     duration: 3000
   });
-
-  // 翻页
-  const handlePageChange = (page: number) => {
-    currentPage.value = page;
-    fetchAccountList(false); // 获取当前页的数据
-  };
 };
 
 // 初始化时自动加载数据
@@ -146,6 +143,13 @@ const handlePageChange = (page: number) => {
   currentPage.value = page;
   fetchAccountList(false); // 获取当前页的数据
 };
+
+const downloadFile = () => {
+  const link = document.createElement("a");
+  link.href = "/public/files/格式文件.csv";
+  link.download = "格式文件.csv";
+  link.click();
+};
 </script>
 
 <template>
@@ -155,6 +159,7 @@ const handlePageChange = (page: number) => {
       <el-form-item>
         <el-button @click="uploadDialogVisible = true"> 上传名单 </el-button>
         <el-button @click="fetchAccountList()">刷新列表</el-button>
+        <el-button type="primary" @click="downloadFile">下载格式文件</el-button>
       </el-form-item>
     </el-form>
     <UploadDialog
@@ -165,9 +170,14 @@ const handlePageChange = (page: number) => {
     <!-- 表格 -->
     <div style="height: calc(100vh - 350px); overflow: auto">
       <el-table :data="tableData" style="width: 100%" height="100%">
-        <el-table-column prop="name" label="姓名" width="250" />
-        <el-table-column prop="acc" label="账号" />
+        <el-table-column prop="name" label="姓名" width="200" />
+        <el-table-column prop="acc" label="账号" width="200" />
         <!-- <el-table-column prop="pwd" label="密码" /> -->
+        <el-table-column prop="role" label="身份">
+          <template #default="scope">
+            <span>{{ scope.row.role === "admin" ? "老师" : "学生" }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="120">
           <template #default="scope">
             <el-button
