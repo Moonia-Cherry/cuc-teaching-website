@@ -146,7 +146,7 @@ const handlePageChange = (page: number) => {
 
 const downloadFile = () => {
   const link = document.createElement("a");
-  link.href = "/public/files/格式文件.csv";
+  link.href = "./files/格式文件.csv";
   link.download = "格式文件.csv";
   link.click();
 };
@@ -159,7 +159,7 @@ const downloadFile = () => {
       <el-form-item>
         <el-button @click="uploadDialogVisible = true"> 上传名单 </el-button>
         <el-button @click="fetchAccountList()">刷新列表</el-button>
-        <el-button type="primary" @click="downloadFile">下载格式文件</el-button>
+        <el-button type="primary" @click="downloadFile">下载模板文件</el-button>
       </el-form-item>
     </el-form>
     <UploadDialog
