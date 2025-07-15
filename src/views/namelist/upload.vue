@@ -67,31 +67,37 @@ const validateAllFiles = async () => {
   );
   return results.every(Boolean);
 };
+
 // 表头验证函数
 const validateCSVHeaders = file => {
   return new Promise(resolve => {
     const reader = new FileReader();
-
     reader.onload = e => {
       try {
         const content = e.target.result.replace(/^\uFEFF/, "");
-        const results = Papa.parse(content, { preview: 1 }); // 只解析第一行
-        if (!results.data || results.data.length === 0) {
+        const results = Papa.parse(content, {
+          header: true, // 将第一行作为键
+          skipEmptyLines: true // 跳过空行
+        });
+
+        // 验证表头
+        const headers = results.meta.fields || [];
+        const isHeaderValid = requiredHeaders.every(h => headers.includes(h));
+        if (!isHeaderValid) {
           resolve(false);
           return;
         }
-        const headers = results.data[0]
-          .map(h => (h || "").toString().trim()) // 转为字符串并去空格
-          .filter(Boolean);
 
-        const isValid = requiredHeaders.every((h, i) => headers[i] == h);
-        // const isValid = ture;
-        resolve(isValid);
+        // 验证密码长度
+        const isPasswordValid = results.data.every(
+          row => row["密码"] && row["密码"].toString().trim().length >= 8
+        );
+
+        resolve(isPasswordValid);
       } catch (error) {
         resolve(false);
       }
     };
-
     reader.readAsText(file.raw);
   });
 };
@@ -104,7 +110,7 @@ const onSubmit = async () => {
     }
     const allValid = await validateAllFiles();
     if (!allValid) {
-      ElMessage.error("CSV 表头格式不正确，请使用模板文件");
+      ElMessage.error("CSV格式不正确");
       fileList.value = [];
       return;
     }
@@ -189,6 +195,11 @@ const onSubmit = async () => {
 
 .el-upload__tip {
   margin-top: 10px;
+  font-size: 12px;
+  color: #666;
+}
+
+.el-upload__tip1 {
   font-size: 12px;
   color: #666;
 }
