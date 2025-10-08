@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>视频播放</title>
+    <style>
+      body {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        background-color: #000;
+        color: #fff;
+        font-family: Arial, sans-serif;
+      }
+
+      header {
+        padding: 10px 20px;
+        background-color: #1e88e5;
+        text-align: center;
+        font-size: 18px;
+      }
+
+      .video-container {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #000;
+      }
+
+      video {
+        max-width: 100%;
+        max-height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <header id="video-title">视频播放</header>
+    <div class="video-container">
+      <video id="player" controls></video>
+    </div>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const src = params.get("src");
+      const title = params.get("title");
+
+      const video = document.getElementById("player");
+      const header = document.getElementById("video-title");
+
+      video.src = src;
+      header.textContent = title;
+    </script>
+  </body>
+</html>

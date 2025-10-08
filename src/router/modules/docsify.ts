@@ -10,10 +10,18 @@ export default {
   children: [
     {
       path: "/docs/docsify",
-      name: "Docsify",
+      name: "Docsifysiwei",
+      component: () => import("@/views/anli/VideoList.vue"),
+      meta: {
+        title: "思维案例"
+      }
+    },
+    {
+      path: "/docs/qiujie",
+      name: "DocsifyQiujie",
       component: () => import("@/views/DocsView.vue"),
       meta: {
-        title: "课程案例"
+        title: "求解案例"
       }
     }
   ]

@@ -8,11 +8,19 @@ export default {
   },
   children: [
     {
-      path: "/graph/index",
-      name: "Graph",
+      path: "/graph/siwei",
+      name: "GraphSiwei",
       component: () => import("@/views/graph/index.vue"),
       meta: {
-        title: "知识图谱"
+        title: "思维图谱"
+      }
+    },
+    {
+      path: "/graph/qiujie",
+      name: "GraphQiujie",
+      component: () => import("@/views/graph/index.vue"),
+      meta: {
+        title: "求解图谱"
       }
     }
   ]
