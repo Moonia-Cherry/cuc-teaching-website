@@ -6,27 +6,28 @@
           v-model="searchQuery"
           type="text"
           placeholder="搜索视频..."
-          @input="search"
+          @keyup.enter="handleSearch"
         />
-        <button @click="search">搜索</button>
+        <button @click="handleSearch">搜索</button>
       </div>
     </header>
 
     <main class="main-content">
       <div v-if="isLoading" class="loading">加载视频中...</div>
-      <div v-else-if="filteredList.length === 0" class="empty-state">
+      <div v-else-if="displayList.length === 0" class="empty-state">
         <p v-if="videoList.length === 0">未找到视频文件</p>
-        <p v-else>搜索 "{{ searchQuery }}" 无结果</p>
+        <p v-else>搜索 "{{ searchKeyword }}" 无结果</p>
       </div>
       <div v-else class="video-grid">
         <div
-          v-for="video in filteredList"
-          :key="video.url"
+          v-for="video in displayList"
+          :key="video.id"
           class="video-card"
           @click="openVideo(video)"
         >
           <div class="video-thumbnail">
             <video
+              crossorigin="anonymous"
               :src="video.url"
               :poster="video.poster || defaultPoster"
               muted
@@ -34,7 +35,6 @@
               @loadedmetadata="capturePoster(video, $event)"
               @error="handleVideoError(video)"
             />
-            <span class="duration">{{ formatDuration(video.duration) }}</span>
           </div>
           <div class="video-info">
             <h3 class="video-title" :title="video.title">{{ video.title }}</h3>
@@ -47,79 +47,82 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
-
-const videoFiles = [
-  "00.计算思维导论.mp4",
-  "1-1-1 计算机硬件.mp4",
-  "1-1-2 计算机软件.mp4",
-  "1-1-3 二进制.mp4",
-  "1-1-4 R进制转十进制.mp4",
-  "1-2-1 数值的表示.mp4"
-];
+import { getVideoListApi } from "@/api/videos";
 
 // 响应式数据
 const videoList = ref([]);
 const searchQuery = ref("");
+const searchKeyword = ref("");
 const isLoading = ref(true);
-const defaultPoster = "https://picsum.photos/400/225?random=100"; // 默认封面
+const defaultPoster = "https://picsum.photos/400/225?random=100";
 
-// 页面加载时初始化视频列表
-onMounted(() => {
-  // 模拟网络请求延迟
-  setTimeout(() => {
-    videoList.value = videoFiles.map(file => {
-      const title = file.replace(/\.[^/.]+$/, "");
-      return {
-        title,
-        url: "./files/videos/" + file,
-        duration: 0,
-        poster: ""
-      };
-    });
+// 页面加载时从后端获取视频列表
+const fetchVideos = async (search = "") => {
+  isLoading.value = true;
+  try {
+    const res = await getVideoListApi();
+    if (res && res.code === 0 && Array.isArray(res.data)) {
+      // 保证每个 item 有必要字段
+      videoList.value = res.data.map(v => ({
+        id: v.id ?? "",
+        title:
+          v.title ??
+          (v.filename ? v.filename.replace(/\.[^/.]+$/, "") : "untitled"),
+        url: v.url, // 后端返回可直接访问的 url
+        poster: v.poster ?? ""
+      }));
+    } else {
+      console.warn("getVideoListApi 返回结构异常或 code 非 0", res);
+      videoList.value = [];
+    }
+  } catch (err) {
+    console.error("获取视频列表失败", err);
+    videoList.value = [];
+  } finally {
     isLoading.value = false;
-  }, 300);
-});
-
-// 格式化视频时长
-const formatDuration = seconds => {
-  if (!seconds) return "00:00";
-  const min = Math.floor(seconds / 60);
-  const sec = Math.floor(seconds % 60);
-  return `${min.toString().padStart(2, "0")}:${sec.toString().padStart(2, "0")}`;
+  }
 };
+
+onMounted(() => {
+  fetchVideos();
+});
 
 // 生成封面
 const capturePoster = (video, event) => {
+  if (video.poster && video.poster !== defaultPoster) return;
   const vid = event.target;
 
   // 确保视频元数据已加载
-  if (vid.readyState < vid.METADATA_LOADED) {
+  if (vid.readyState < vid.HAVE_METADATA) {
     console.warn("视频元数据未加载，等待中...");
     return;
   }
 
   try {
-    video.duration = Math.floor(vid.duration);
-    const targetTime = Math.min(5, vid.duration > 1 ? vid.duration - 1 : 0.5); // 避免视频过短
-    vid.currentTime = targetTime;
-
+    const targetTime = Math.min(5, vid.duration > 1 ? vid.duration - 1 : 0.5);
     const onSeeked = () => {
-      const canvas = document.createElement("canvas");
-      canvas.width = vid.videoWidth || 400;
-      canvas.height = vid.videoHeight || 225;
-      const ctx = canvas.getContext("2d");
+      try {
+        const canvas = document.createElement("canvas");
+        canvas.width = vid.videoWidth || 400;
+        canvas.height = vid.videoHeight || 225;
+        const ctx = canvas.getContext("2d");
 
-      if (ctx && vid.videoWidth && vid.videoHeight) {
-        ctx.drawImage(vid, 0, 0, canvas.width, canvas.height);
-        video.poster = canvas.toDataURL("image/png");
-      } else {
-        video.poster = defaultPoster; // 画布创建失败时使用默认封面
+        if (ctx && vid.videoWidth && vid.videoHeight) {
+          ctx.drawImage(vid, 0, 0, canvas.width, canvas.height);
+          video.poster = canvas.toDataURL("image/png");
+        } else {
+          video.poster = defaultPoster;
+        }
+      } catch (e) {
+        console.error("capturePoster 内部错误", e);
+        video.poster = defaultPoster;
+      } finally {
+        vid.removeEventListener("seeked", onSeeked);
       }
-
-      vid.removeEventListener("seeked", onSeeked);
     };
 
     vid.addEventListener("seeked", onSeeked);
+    vid.currentTime = targetTime;
   } catch (error) {
     console.error("封面生成错误", error);
     video.poster = defaultPoster;
@@ -129,19 +132,22 @@ const capturePoster = (video, event) => {
 // 处理视频加载错误
 const handleVideoError = video => {
   console.error(`视频加载失败: ${video.title}`, video.url);
-  video.poster = defaultPoster;
 };
 
-// 搜索过滤
-const filteredList = computed(() => {
-  if (!searchQuery.value) return videoList.value;
-  return videoList.value.filter(v =>
-    v.title.toLowerCase().includes(searchQuery.value.toLowerCase())
-  );
-});
+// 搜索处理函数
+const handleSearch = () => {
+  searchKeyword.value = searchQuery.value.trim();
+};
 
-// 搜索逻辑
-const search = () => {};
+// 显示列表
+const displayList = computed(() => {
+  if (!searchKeyword.value) {
+    return videoList.value;
+  }
+
+  const query = searchKeyword.value.toLowerCase();
+  return videoList.value.filter(v => v.title?.toLowerCase().includes(query));
+});
 
 // 点击视频打开播放页
 const openVideo = video => {
@@ -254,19 +260,6 @@ const openVideo = video => {
 .video-card:hover .video-thumbnail video,
 .video-card:hover .video-thumbnail img {
   transform: scale(1.05);
-}
-
-/* 视频时长 */
-.duration {
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
-  padding: 3px 8px;
-  font-size: 13px;
-  font-weight: 500;
-  color: white;
-  background-color: rgb(0 0 0 / 80%);
-  border-radius: 4px;
 }
 
 /* 视频标题 */
