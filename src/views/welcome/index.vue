@@ -19,8 +19,6 @@
   </main>
 </template>
 <style scoped>
-
-
 @media (width <= 767px) {
   .content {
     padding: 10px;
@@ -132,7 +130,6 @@
   text-decoration: none;
   text-shadow: 0 2px 4px rgb(0 0 0 / 20%);
   background: rgb(255 255 255 / 15%);
-  backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   border: 1px solid rgb(255 255 255 / 30%);
   border-radius: 15px;

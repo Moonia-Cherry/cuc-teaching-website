@@ -10,7 +10,14 @@ import { useUserStoreHook } from "@/store/modules/user";
 import { initRouter, getTopMenu } from "@/router/utils";
 import { bg, avatar, illustration } from "./utils/static";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
-import { ref, reactive, toRaw, onMounted, onBeforeUnmount } from "vue";
+import {
+  ref,
+  reactive,
+  toRaw,
+  onMounted,
+  onBeforeUnmount,
+  nextTick
+} from "vue";
 import { useDataThemeChange } from "@/layout/hooks/useDataThemeChange";
 
 import dayIcon from "@/assets/svg/day.svg?component";
@@ -34,7 +41,7 @@ const { title } = useNav();
 
 const ruleForm = reactive({
   username: "admin",
-  password: ""
+  password: "admin123"
 });
 
 const onLogin = async (formEl: FormInstance | undefined) => {
@@ -71,8 +78,10 @@ function onkeypress({ code }: KeyboardEvent) {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   window.document.addEventListener("keypress", onkeypress);
+  await nextTick();
+  onLogin(ruleFormRef.value);
 });
 
 onBeforeUnmount(() => {
