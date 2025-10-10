@@ -17,43 +17,28 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { ref, onMounted } from "vue";
 import Sidebar from "./Sidebar.vue";
 import DocViewer from "./DocViewer.vue";
+import { getDocListApi, Doc } from "@/api/docs";
 
-// 文档列表
-const docList = ref([]);
+const docList = ref<Doc[]>([]);
+const selectedDoc = ref<Doc | null>(null);
 
-// 当前选中的文档
-const selectedDoc = ref(null);
-
-// 页面加载时初始化文档列表
-onMounted(() => {
-  const files = [
-    "实验1-1.docx",
-    "实验1-2.docx",
-    "实验2-1.docx",
-    "实验2-2.docx",
-    "实验2-3.docx",
-    "实验3-1.docx",
-    "实验3-2.docx",
-    "实验3-3.docx",
-    "实验4-1.docx",
-    "实验4-2.docx",
-    "实验5-1.docx",
-    "实验5-2.docx"
-  ];
-
-  docList.value = files.map((file, idx) => ({
-    id: idx,
-    name: file.replace(/\.[^/.]+$/, ""), // 去掉扩展名
-    url: "./files/test_files/" + file // 文档路径
-  }));
-
-  // 默认选中第一个文档
-  if (docList.value.length > 0) {
-    selectedDoc.value = docList.value[0];
+onMounted(async () => {
+  try {
+    const res = await getDocListApi();
+    if (res.code === 0 || res.code === 200) {
+      docList.value = res.data;
+      if (docList.value.length > 0) {
+        selectedDoc.value = docList.value[0];
+      }
+    } else {
+      console.error(res.message || "获取文档列表失败");
+    }
+  } catch (err) {
+    console.error("请求文档列表失败", err);
   }
 });
 
@@ -64,7 +49,6 @@ const selectDoc = doc => {
 </script>
 
 <style scoped>
-/* 布局：左右两栏 */
 .layout-root {
   display: flex;
   height: 100%;
