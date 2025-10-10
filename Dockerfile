@@ -19,6 +19,7 @@ RUN pnpm build
 # 第四阶段：生产环境部署
 FROM nginx:stable-alpine as prod
 COPY --from=prod-build /app/dist /usr/share/nginx/html/dist
+COPY --from=prod-build /app/welcome /usr/share/nginx/html/welcome
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 8849
 CMD ["nginx", "-g", "daemon off;"]

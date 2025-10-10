@@ -12,6 +12,8 @@ npm-debug.log*
 .pnpm-error.log*
 .pnpm-debug.log
 tests/**/coverage/
+log
+*.log
 
 # Editor directories and files
 .idea
