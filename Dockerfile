@@ -1,6 +1,6 @@
 # frontend/Dockerfile
 # 第一阶段：基础依赖安装（公共）
-FROM node:20-alpine as base
+FROM node:20-alpine AS base
 WORKDIR /app
 RUN npm config set registry https://registry.npmjs.org/
 RUN npm install -g pnpm
@@ -9,16 +9,17 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 
 # 第二阶段：开发环境（不构建，直接运行 dev server）
-FROM base as dev
+FROM base AS dev
 CMD ["pnpm", "dev"]
 
 # 第三阶段：生产环境构建
-FROM base as prod-build
+FROM base AS prod-build
 RUN pnpm build
 
 # 第四阶段：生产环境部署
-FROM nginx:stable-alpine as prod
+FROM nginx:stable-alpine AS prod
 COPY --from=prod-build /app/dist /usr/share/nginx/html/dist
+COPY --from=prod-build /app/welcome /usr/share/nginx/html/welcome
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 8849
 CMD ["nginx", "-g", "daemon off;"]
