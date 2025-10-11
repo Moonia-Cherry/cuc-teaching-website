@@ -1,0 +1,2454 @@
+<!doctype html>
+<html lang="zh-CN" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>模拟科学实验 - 计算思维之问题求解</title>
+    <!-- 外部资源引入 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/line-numbers/prism-line-numbers.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind 配置 -->
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#2563eb", // 主色调：蓝色
+              secondary: "#10b981", // 辅助色：绿色
+              dark: {
+                100: "#374151",
+                200: "#1F2937",
+                300: "#111827"
+              },
+              light: {
+                100: "#F9FAFB",
+                200: "#F3F4F6",
+                300: "#E5E7EB"
+              }
+            },
+            fontFamily: {
+              sans: ["Inter", "system-ui", "sans-serif"],
+              mono: ["Fira Code", "monospace"]
+            }
+          }
+        }
+      };
+    </script>
+
+    <style type="text/tailwindcss">
+      @layer utilities {
+        .content-auto {
+          content-visibility: auto;
+        }
+        .section-id {
+          @apply scroll-mt-20; /* 锚点跳转时避开顶部 */
+        }
+        .code-block {
+          @apply bg-dark-300 dark:bg-dark-400 rounded-lg overflow-hidden my-6;
+        }
+        .code-header {
+          @apply flex items-center justify-between px-4 py-2 bg-dark-200 dark:bg-dark-300 border-b border-dark-100 dark:border-dark-200;
+        }
+        .table-responsive {
+          @apply overflow-x-auto my-6;
+        }
+        .doc-table {
+          @apply min-w-full bg-white dark:bg-dark-200 rounded-lg shadow-sm;
+        }
+        .doc-table th {
+          @apply px-4 py-3 text-left bg-light-200 dark:bg-dark-100;
+        }
+        .doc-table td {
+          @apply px-4 py-3 border-b border-light-300 dark:border-dark-100;
+        }
+        .figure-placeholder {
+          @apply bg-white dark:bg-dark-200 p-6 rounded-lg shadow-sm my-6 text-center;
+        }
+        .figure-caption {
+          @apply text-sm text-dark-100 dark:text-light-400 mt-2;
+        }
+      }
+    </style>
+  </head>
+
+  <body
+    class="bg-light-100 text-dark-300 dark:bg-dark-300 dark:text-light-100 min-h-screen flex flex-col"
+  >
+    <!-- 主内容区 -->
+    <main class="flex-1 overflow-y-auto p-4 lg:p-8">
+      <!-- 1. 模拟科学实验 总标题 -->
+      <section class="mb-16 w-full">
+        <h2
+          class="text-2xl md:text-3xl font-bold mb-6 text-dark-200 dark:text-light-200"
+        >
+          <i class="fa fa-flask mr-2"></i>2. 模拟科学实验
+        </h2>
+        <p class="mb-4">
+          计算思维是一种通过抽象、问题分解、模式识别、算法设计、自动化和泛化来解决问题的思维方式，它能够将复杂的现实问题转化为可计算、可执行的步骤。在科学研究中常常需要借助程序进行辅助计算、模拟、预测等。通过计算机模拟，可以在虚拟环境中快速重复实验，验证假设，优化方案，并预测结果。这不仅节省了时间和资源，还有助于更好地理解问题的本质。
+        </p>
+        <p class="mb-4">
+          科学实验是科学研究的基础，通过实验可以验证理论、发现新现象和探索未知领域。随着计算机技术的不断发展，利用计算机模拟科学实验已成为一种重要的研究方法。Python作为一种通用的编程语言，具有丰富的科学计算和数据分析库，这为模拟科学实验提供了有力的支持。本章使用Python模拟“标记重捕法”的过程，来估计生物种群的大小。通过学习，体会计算思维在模拟科学实验领域的广泛前景。
+        </p>
+
+        <!-- 2.1 需求分析 -->
+
+        <h3
+          class="text-xl font-semibold mb-4 text-primary section-id"
+          id="section-2-1"
+        >
+          2.1 需求分析
+        </h3>
+        <p class="mb-4">
+          “标记重捕法”是一种用于估算野生动物种群数量的经典生态学方法。其基本原理是通过两次捕获并标记部分个体，然后根据重捕样本中标记个体的比例来推算整个种群的大小。首先，研究人员在第一次捕获中标记一定数量的个体并释放回原环境，经过一段时间后再次捕获，记录重捕样本中标记个体的数量。假设种群在两次捕获期间保持相对稳定，且标记不会影响个体的行为和生存，那么种群中标记个体的比例应与重捕样本中的比例相似。通过简单的比例计算，即可估算出种群的大致数量。尽管该方法在实际应用中可能受到各种因素的影响，但它仍然是一种简便且广泛应用的种群数量评估工具。
+        </p>
+        <p class="mb-4">
+          为了实现标记重捕法的模拟，Python程序需要具备以下功能：
+        </p>
+        <ol class="custom-list pl-6 mb-4 space-y-3">
+          <li>
+            <span style="font-weight: bold; color: #2563eb">模拟种群生成：</span
+            >生成一个虚拟的种群，并设定其初始大小。
+          </li>
+          <li>
+            <span style="font-weight: bold; color: #2563eb">标记过程模拟：</span
+            >在第一次捕获中随机标记一定比例的个体。
+          </li>
+          <li>
+            <span style="font-weight: bold; color: #2563eb">重捕过程模拟：</span
+            >在第二次捕获中随机选择一定数量的个体，并统计其中标记个体的数量。
+          </li>
+          <li>
+            <span style="font-weight: bold; color: #2563eb">种群数量估算：</span
+            >根据重捕样本中标记个体的比例，推算整个种群的大小。
+          </li>
+          <li>
+            <span style="font-weight: bold; color: #2563eb"
+              >结果展示与可视化：</span
+            >输出模拟结果，并可视化种群数量。
+          </li>
+        </ol>
+        <p class="mb-4">
+          本案例通过模拟真实的研究过程，统计模拟结果，验证“标记重捕法”公式的准确性。
+        </p>
+
+        <!-- 2.2 学习目标 -->
+
+        <h3
+          class="text-xl font-semibold mb-4 text-primary section-id"
+          id="section-2-2"
+        >
+          2.2 学习目标
+        </h3>
+        <div class="bg-light-200 dark:bg-dark-100 p-4 rounded-lg mb-6">
+          <h4 class="font-semibold mb-3">1. 熟悉Python基础知识</h4>
+          <p class="mb-3">
+            首先对案例涉及到的Python基础知识进行回顾。包括：列表的使用、程序基本结构、库的使用、Matplotlib库进行数据可视化、函数定义等。
+          </p>
+
+          <h4 class="font-semibold mb-3">2. 掌握科学研究方法</h4>
+          <p class="mb-3">
+            使用计算机模拟科学实验有助于探索和理解复杂系统的行为，是科学研究方法的一个重要组成部分。通过计算机模拟验证科学实验，可以更全面理解科学现象、探索未知领域。
+          </p>
+
+          <h4 class="font-semibold mb-3">3. 提高数据分析能力</h4>
+          <p class="mb-3">
+            模拟实验将要解决的科学实验问题进行抽象，利用数据和算法模拟现实世界的实验过程。计算机模拟可以方便处理复杂且难以直接实验的问题，如核物理学和气象学的研究等。模拟实验还可以方便地改变实验条件，进行多次重复实验，这对于验证假设、发现新思路、预测未来等都很有帮助。
+          </p>
+
+          <h4 class="font-semibold mb-3">4. 促进跨学科学习</h4>
+          <p class="mb-3">
+            通过计算机跨学科模拟科学实验的案例，学习运用计算思维解决科学问题的方法。跨学科学习把来自不同学科的知识和技能结合起来，可以更全面的理解科学现象、探索未知领域。
+          </p>
+          <p class="mb-3">
+            本案例的“标记重捕法”涉及生态学、统计学、计算机科学等多个领域。通过案例的实现，体会计算思维与其他学科、科学研究的关联，能够将自己的专业知识与计算思维联系起来，在今后的学习中主动将计算思维应用到自己专业领域，理解计算思维对问题求解的意义。
+          </p>
+        </div>
+
+        <!-- 2.3 环境要求 -->
+
+        <h3
+          class="text-xl font-semibold mb-4 text-primary section-id"
+          id="section-2-3"
+        >
+          2.3 环境要求
+        </h3>
+        <div class="bg-white dark:bg-dark-200 p-4 rounded-lg shadow-sm mb-6">
+          <ul class="list-disc pl-6 space-y-2">
+            <li>Python环境</li>
+            <li>Matplotlib库</li>
+          </ul>
+        </div>
+
+        <!-- 2.4 相关知识 -->
+
+        <h3
+          class="text-xl font-semibold mb-4 text-primary section-id"
+          id="section-2-4"
+        >
+          2.4 相关知识
+        </h3>
+
+        <!-- 2.4.1 列表 -->
+        <h4
+          class="text-lg font-semibold mb-3 text-dark-200 dark:text-light-200"
+        >
+          1. 列表
+        </h4>
+        <p class="mb-4">
+          Python列表是一种灵活的数据结构，可以存储不同数据类型的数据。列表是包含0个或多个元素的有序序列，列表中的元素类型不限，可以是数值型、字符型、逻辑型等。同一个列表中的元素类型可以不同。列表中的元素也可以是另一个列表，或是元组，形成这些结构的嵌套。例如：
+        </p>
+        <pre
+          class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mb-4"
+        ><code class="language-python line-numbers">student1 = ["张三", 18, [99, 98, 100]]</code></pre>
+        <p class="mb-4">
+          student1列表中包含了字符型数据“张三”，数值型数据18以及列表[99,98,100]。
+        </p>
+        <p class="mb-4">
+          列表的长度和内容都是可变的，可对列表中的元素进行增加、删除或修改。表3-1列举了列表常用的方法。
+        </p>
+
+        <div class="overflow-x-auto mb-6">
+          <p
+            class="text-center font-semibold mb-2 text-dark-200 dark:text-light-200"
+          >
+            表2-1 列表常用方法
+          </p>
+          <table
+            class="min-w-full bg-white dark:bg-dark-200 rounded-lg shadow-sm"
+          >
+            <thead>
+              <tr class="bg-light-200 dark:bg-dark-100">
+                <th class="px-4 py-3 text-left">方法</th>
+                <th class="px-4 py-3 text-left">功能描述</th>
+                <th class="px-4 py-3 text-left">示例及输出</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-3">append()</td>
+                <td class="px-4 py-3">在列表末尾添加一个元素</td>
+                <td class="px-4 py-3">my_list.append(5)</td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-3">extend()</td>
+                <td class="px-4 py-3">
+                  将另一个列表（或任何可迭代对象）的元素添加到当前列表末尾
+                </td>
+                <td class="px-4 py-3">my_list.extend([5, 6])</td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-3">insert()</td>
+                <td class="px-4 py-3">在列表的指定位置插入元素</td>
+                <td class="px-4 py-3">
+                  my_list.insert(1,2)（在索引 1 的位置插入元素 2）
+                </td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-3">remove()</td>
+                <td class="px-4 py-3">移除列表中第一个出现的指定元素</td>
+                <td class="px-4 py-3">my_list.remove(2)</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">pop(index)</td>
+                <td class="px-4 py-3">
+                  移除列表中指定位置的元素，并返回该元素的值
+                </td>
+                <td class="px-4 py-3">
+                  my_list.pop(0) （移除索引为 0 的元素）
+                </td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">index()</td>
+                <td class="px-4 py-3">
+                  返回列表中指定元素的第一个匹配项的索引
+                </td>
+                <td class="px-4 py-3">my_list.index(3)</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">count()</td>
+                <td class="px-4 py-3">返回列表中指定元素出现的次数</td>
+                <td class="px-4 py-3">my_list.count(3)</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">reverse()</td>
+                <td class="px-4 py-3">反转列表中元素的顺序</td>
+                <td class="px-4 py-3">my_list.reverse()</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">sort()</td>
+                <td class="px-4 py-3">对列表中的元素进行排序</td>
+                <td class="px-4 py-3">my_list.sort()</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">sorted()</td>
+                <td class="px-4 py-3">
+                  返回列表的一个已排序的副本，原列表不变
+                </td>
+                <td class="px-4 py-3">sorted_list = sorted(my_list)</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">len()</td>
+                <td class="px-4 py-3">返回列表的长度</td>
+                <td class="px-4 py-3">length = len(my_list)</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">in</td>
+                <td class="px-4 py-3">判断一个元素是否存在于列表中</td>
+                <td class="px-4 py-3">5 in my_list</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">not in</td>
+                <td class="px-4 py-3">判断一个元素是否不存在于列表中</td>
+                <td class="px-4 py-3">5 not in my_list</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">iter()</td>
+                <td class="px-4 py-3">创建列表的迭代器</td>
+                <td class="px-4 py-3">iter_list = iter(my_list)</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">list()</td>
+                <td class="px-4 py-3">将其他可迭代对象转换为列表</td>
+                <td class="px-4 py-3">numbers = list((1, 2, 3))</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mb-6">
+          <h4 class="font-semibold mb-2 text-dark-200 dark:text-light-200">
+            例2-1：列表操作
+          </h4>
+
+          <pre
+            class="p-4 overflow-x-auto"
+          ><code class="language-python line-numbers">my_list = ["red", "green", "blue", "white"]  # 创建列表
+my_list.append("black")  # 添加元素，到末尾添加元素
+my_list.insert(1, "pink")  # 在索引为1的位置插入"pink"
+first_element = my_list[0]  # 获取第一个元素
+last_element = my_list[-1]  # 获取最后一个元素
+my_list[0] = "orange"  # 修改第一个元素
+del my_list[0]  # 删除索引为0的元素
+last_element = my_list.pop()  # 删除并返回列表的最后一个元素
+my_list.sort()  # 升序排序
+my_list.sort(reverse=True)  # 降序排序
+my_list.reverse()  # 反转列表
+length = len(my_list)  # 列表长度
+
+# 遍历列表
+for item in my_list:
+    print(item, end=" ")</code></pre>
+        </div>
+
+        <!-- 1.4.2 程序基本结构 -->
+        <h4
+          class="text-lg font-semibold mb-3 mt-8 text-dark-200 dark:text-light-200"
+        >
+          2. 程序基本结构
+        </h4>
+        <p class="mb-4">
+          程序的基本结构有三类，分别是顺序结构、选择结构和循环结构。它们决定了代码块的执行顺序。
+        </p>
+
+        <!-- （1）顺序结构 -->
+        <h5 class="font-medium mb-2 text-dark-100 dark:text-light-300">
+          （1）顺序结构
+        </h5>
+        <p class="mb-4">
+          顺序结构是最基本的控制结构，也是大多数程序的基础。顺序结构程序中的代码按照从上到下的顺序依次执行。顺序结构流程图如图2-1所示。
+        </p>
+        <div class="flex flex-col items-center my-6">
+          <img
+            src="image/2/2-1.png"
+            alt="顺序结构流程图"
+            class="max-w-full h-auto rounded-lg shadow-md"
+          />
+          <p class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
+            图2-1 顺序结构流程图
+          </p>
+        </div>
+        <!-- 例3-2：求矩形的面积和周长 -->
+        <div class="mb-6">
+          <h4 class="font-semibold mb-2 text-dark-200 dark:text-light-200">
+            例2-2：求矩形的面积和周长(顺序结构)
+          </h4>
+
+          <pre
+            class="p-4 overflow-x-auto"
+          ><code class="language-python line-numbers">
+# 从键盘接收用户输入的长和宽
+length = float(input("请输入矩形的长: "))
+width = float(input("请输入矩形的宽: "))
+
+# 计算矩形的面积
+area = length * width
+print(f"矩形的面积是: {area}")
+
+# 计算矩形的周长
+perimeter = 2 * (length + width)
+print(f"矩形的周长是: {perimeter}")</code></pre>
+        </div>
+        <p class="mb-4">运行结果：</p>
+        <pre
+          class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mb-4 text-light-100"
+        >
+请输入矩形的长: 5
+请输入矩形的宽: 6.8
+矩形的面积是: 34.0
+矩形的周长是: 23.6</pre
+        >
+
+        <!-- （2）选择结构 -->
+        <h5 class="font-medium mb-2 mt-6 text-dark-100 dark:text-light-300">
+          （2）选择结构
+        </h5>
+        <p class="mb-4">
+          当需要分情况进行处理时，就需要使用选择结构。选择结构又称分支结构，是依据条件来选择执行路径。根据分支路径的多少分为：单分支结构、双分支结构和多分支结构。
+        </p>
+
+        <h6 class="font-medium mb-2 text-dark-100 dark:text-light-300">
+          • 单分支结构
+        </h6>
+        <p class="mb-3">
+          单分支结构流程图如图2-2所示。单分支结构中如果条件为真，执行代码块中的代码；如果条件为假，就直接跳过代码块继续执行后续代码。
+        </p>
+        <div class="flex flex-col items-center my-6">
+          <img
+            src="image/2/2-2.png"
+            alt="单分支结构"
+            class="max-w-full h-auto rounded-lg shadow-md"
+          />
+          <p class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
+            图2-2 单分支结构流程图
+          </p>
+        </div>
+
+        <h6 class="font-medium mb-2 mt-4 text-dark-100 dark:text-light-300">
+          • 双分支结构
+        </h6>
+        <p class="mb-3">
+          双分支结构流程图如图2-3所示。当条件表达式为真时，执行语句块1，否则执行语句块2。
+        </p>
+        <div class="flex flex-col items-center my-6">
+          <img
+            src="image/2/2-3.png"
+            alt="双分支结构流程图"
+            class="max-w-full h-auto rounded-lg shadow-md"
+          />
+          <p class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
+            图2-3 双分支结构流程图
+          </p>
+        </div>
+        <p class="mb-3">双分支语法结构如下：</p>
+        <pre
+          class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mb-4"
+        ><code class="language-python line-numbers">if 条件表达式:
+    语句块1
+else:
+    语句块2</code></pre>
+
+        <!-- 例3-3：成绩判断 -->
+        <div class="mb-6">
+          <h4 class="font-semibold mb-2 text-dark-200 dark:text-light-200">
+            例2-3：根据输入的学生成绩，输出“通过”或“没有通过”。
+          </h4>
+
+          <pre
+            class="p-4 overflow-x-auto"
+          ><code class="language-python line-numbers">score = eval(input("输入学生成绩："))
+if score >= 60:
+    print("通过！")
+else:
+    print("没有通过！")</code></pre>
+        </div>
+        <p class="mb-4">运行结果：</p>
+        <pre
+          class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mb-4 text-light-100"
+        >
+输入学生成绩：88
+通过！</pre
+        >
+
+        <h6 class="font-medium mb-2 mt-4 text-dark-100 dark:text-light-300">
+          • 多分支结构
+        </h6>
+        <p class="mb-3">
+          多分支结构流程图如图2-4所示。多分支结构使用if-elif-else语句来实现。如果表达式1为真，则执行语句块1，否则判断条件表达式2是否为真，如果为真则执行语句块2，……，如果所有条件都为假，则执行语句块n+1中的代码。
+        </p>
+        <div class="flex flex-col items-center my-6">
+          <img
+            src="image/2/2-4.png"
+            alt="多分支结构流程图"
+            class="max-w-full h-auto rounded-lg shadow-md"
+          />
+          <p class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
+            图2-4 多分支结构流程图
+          </p>
+        </div>
+        <p class="mb-3">语法结构如下：</p>
+        <pre
+          class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mb-4"
+        ><code class="language-python line-numbers">if 条件表达式1:
+    语句块1
+elif 条件表达式2:
+    语句块2
+……
+elif 条件表达式 n:
+    语句块n
+else:
+    语句块n+1</code></pre>
+
+        <!-- 例3-4：成绩等级判断 -->
+        <div class="mb-6">
+          <h4 class="font-semibold mb-2 text-dark-200 dark:text-light-200">
+            例2-4：利用多分支结构，根据输入的百分制学生成绩，打印出“优秀、良好、中等、及格、不及格”等级。
+          </h4>
+
+          <pre
+            class="p-4 overflow-x-auto"
+          ><code class="language-python line-numbers"># 从键盘接收用户输入的分数
+score = float(input("请输入分数: "))
+
+# 使用多分支结构判断成绩等级
+if score >= 90:
+    grade = "优秀"
+elif score >= 80:
+    grade = "良好"
+elif score >= 70:
+    grade = "中等"
+elif score >= 60:
+    grade = "及格"
+else:
+    grade = "不及格"
+
+# 打印成绩等级
+print(f"该分数的成绩等级是: {grade}")</code></pre>
+        </div>
+        <p class="mb-4">运行结果：</p>
+        <pre
+          class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mb-4 text-light-100"
+        >
+请输入分数: 89
+该分数的成绩等级是: 良好</pre
+        >
+
+        <!-- （3）循环结构 -->
+        <h5 class="font-medium mb-2 mt-6 text-dark-100 dark:text-light-300">
+          （3）循环结构
+        </h5>
+        <p class="mb-4">
+          循环结构是指重复执行某段代码块的控制流程结构。Python的循环结构主要包括“for循环”和“while循环”。通常循环次数确定，使用
+          “for循环”；当循环次数不确定时，使用“while循环”。在遍历数据集合或处理重复任务时使用循环结构简单而高效。
+        </p>
+
+        <h6 class="font-medium mb-2 text-dark-100 dark:text-light-300">
+          • for循环
+        </h6>
+        <p class="mb-3">
+          “for循环”主要用于遍历序列（如列表、元组、字符串等）或其他可迭代对象，通过在序列中迭代每个元素，执行指定的语句块。“for循环”流程图如图2-5所示。
+        </p>
+        <div class="flex flex-col items-center my-6">
+          <img
+            src="image/2/2-5.png"
+            alt="循环结构流程图"
+            class="max-w-full h-auto rounded-lg shadow-md"
+          />
+          <p class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
+            图2-5 循环结构流程图
+          </p>
+        </div>
+        <p class="mb-3">“for循环”的语法结构如下：</p>
+        <pre
+          class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mb-4"
+        ><code class="language-python line-numbers">for &lt;循环变量&gt; in &lt;遍历结构&gt;:
+    循环体语句块</code></pre>
+
+        <!-- 例3-5：输出购书清单 -->
+        <div class="mb-6">
+          <h4 class="font-semibold mb-2 text-dark-200 dark:text-light-200">
+            例3-5：输出购书清单中每一本书的名称和价格。
+          </h4>
+
+          <pre
+            class="p-4 overflow-x-auto"
+          ><code class="language-python line-numbers"># 定义购书清单列表
+book_list = [
+    {"title": "Python编程", "price": 99.00},
+    {"title": "深度学习", "price": 66.00},
+    {"title": "机器学习实战", "price": 86.00},
+    {"title": "人工智能", "price": 69.00}
+]
+
+# 使用for循环遍历购书清单
+for book in book_list:
+    print(f"书名: {book['title']}, 价格: {book['price']}元")</code></pre>
+        </div>
+        <p class="mb-4">运行结果：</p>
+        <pre
+          class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mb-4 text-light-100"
+        >
+书名: Python编程, 价格: 99.0元
+书名: 深度学习, 价格: 66.0元
+书名: 机器学习实战, 价格: 86.0元
+书名: 人工智能, 价格: 69.0元</pre
+        >
+        <p class="mb-4">
+          “遍历结构”可以是任何可迭代的元素，如列表、元组、字符串等，也常用range()函数形成的数字序列。range(start,stop[,step])函数返回从start到stop（不包含stop）步长为step的整数序列。其中start为开始的数值，默认从0开始
+          ；stop为结束的数值，生成的序列不包括该值；step步长，默认为1。
+        </p>
+        <p class="mb-3">例如：求100以内的奇数和。</p>
+        <pre
+          class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mb-4"
+        ><code class="language-python line-numbers">sum = 0  # 初始化总和为0
+for i in range(1, 100, 2):  # range生成1到100步长为2的奇数序列
+    sum += i      # 将当前数字加到总和上
+print(f"1+3+5+……+99={sum}")</code></pre>
+        <p class="mb-4">运行结果：</p>
+        <pre
+          class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mb-4 text-light-100"
+        >
+1+3+5+……+99=2500</pre
+        >
+
+        <h6 class="font-medium mb-2 mt-4 text-dark-100 dark:text-light-300">
+          • while循环
+        </h6>
+        <p class="mb-3">
+          “while循环”用于在满足特定条件的情况下重复执行一组语句。流程图如图2-6所示。
+        </p>
+        <div class="flex flex-col items-center my-6">
+          <img
+            src="image/2/2-6.png"
+            alt="while循环结构流程图"
+            class="max-w-full h-auto rounded-lg shadow-md"
+          />
+          <p class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
+            图2-6 while循环结构流程图
+          </p>
+        </div>
+        <p class="mb-3">
+          “while循环”在执行时先检查条件，如果条件为真，则执行循环体语句块，执行完毕后再次检查条件，只要条件表达式为真，就执行循环体，直到条件为假时退出循环。
+        </p>
+        <p class="mb-3">while循环的语法结构如下：</p>
+        <pre
+          class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mb-4"
+        ><code class="language-python line-numbers">while 条件表达式:
+    循环体语句</code></pre>
+        <p class="mb-3">例如：求100以内的偶数和。</p>
+        <pre
+          class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mb-4"
+        ><code class="language-python line-numbers"># 初始化变量
+s = 0
+i = 2  # 偶数从2开始
+
+# 使用while循环计算100以内的偶数和
+while i <= 100:
+    s += i
+    i += 2  # 每次循环增加2，以保证是偶数
+
+print(f"2+4+6+……+100={s}")</code></pre>
+        <p class="mb-4">运行结果：</p>
+        <pre
+          class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mb-4 text-light-100"
+        >
+2+4+6+……+100=2550</pre
+        >
+
+        <!-- 1.4.3 库的使用 -->
+        <h4
+          class="text-lg font-semibold mb-3 mt-8 text-dark-200 dark:text-light-200"
+        >
+          3. 库的使用
+        </h4>
+        <p class="mb-4">
+          在Python中经常听到“库”、“模块”、“包”，这三个概念在含义上是有区别的，但在引用方法上都一样，因此本书不做概念上的区分统一称为库。Python中有丰富的可以实现不同功能的库，这些库可以分为标准库和第三方库。标准库是在安装Python解释器时默认安装的库，如：math、random、turtle等，使用时直接导入。第三方库是由Python开发者编写并在PyPi平台上开源的文件，第三方库需要先安装再导入。
+        </p>
+
+        <h5 class="font-medium mb-2 text-dark-100 dark:text-light-300">
+          （1）安装第三方库
+        </h5>
+        <p class="mb-4">
+          安装第三方库可以在线安装也可以离线安装。离线安装时先下载第三方库文件，然后按照相关说明进行安装。在线安装使用pip工具进行安装，如果安装了Anaconda，还可以用conda命令进行安装。下面以pip工具为例说明在线安装第三方库的方法。
+        </p>
+        <ol class="list-decimal pl-6 mb-4 space-y-2">
+          <li>
+            打开命令行界面：
+            <ul class="list-disc pl-6 mt-1">
+              <li>在 Windows 上，打开“命令提示符”或“PowerShell”。</li>
+              <li>在 macOS 或 Linux 上，打开“终端”。</li>
+            </ul>
+          </li>
+          <li>
+            使用pip 安装库
+            <pre
+              class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mb-4 text-light-100"
+            >
+pip install 库名</pre
+            >
+            <p class="mt-2">
+              因为PyPI服务器在国外，有时在线安装比较慢，可以使用国内镜像安装。
+            </p>
+            <pre
+              class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mb-4 text-light-100"
+            >
+pip install 库名 -i 国内镜像地址</pre
+            >
+          </li>
+        </ol>
+        <p class="mb-3">常用的国内镜像地址有：</p>
+        <ul class="list-disc pl-6 mb-4 space-y-1">
+          <li>清华大学： https://pypi.tuna.tsinghua.edu.cn/simple</li>
+          <li>中国科学技术大学 : https://pypi.mirrors.ustc.edu.cn/simple</li>
+          <li>豆瓣：http://pypi.douban.com/simple/</li>
+          <li>阿里云：http://mirrors.aliyun.com/pypi/simple/</li>
+        </ul>
+        <p class="mb-3">例如：安装matplotlib库</p>
+        <pre
+          class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mb-4"
+        ><code class="language-bash line-numbers">pip install matplotlib
+
+# 或使用清华镜像安装matplotlib
+pip install matplotlib -i https://pypi.tuna.tsinghua.edu.cn/simple</code></pre>
+
+        <h5 class="font-medium mb-2 mt-4 text-dark-100 dark:text-light-300">
+          （2）导入库模块
+        </h5>
+        <p class="mb-4">常用的导入库模块的方式有下面三种。</p>
+        <ul class="list-disc pl-6 mb-4 space-y-3">
+          <li>
+            <strong>方式1：import &lt;模块名&gt;</strong>
+            <p class="mt-1">
+              调用：&lt;库名&gt;.&lt;函数名&gt;(&lt;函数参数&gt;)
+            </p>
+            <p class="mt-1">
+              特点：这种方式引入了整个库，包括其中的变量和函数。不会出现函数重名问题，但由于每个函数都要写库名，程序代码会比较繁琐。
+            </p>
+            <pre
+              class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mb-4 text-light-100"
+            >
+import math
+print(math.ceil(2.8))  #向上取整，值为3</pre
+            >
+          </li>
+          <li>
+            <strong>方式2：from &lt;模块名&gt; import &lt;函数名&gt;</strong>
+            <p class="mt-1">调用：&lt;函数名&gt;(&lt;函数参数&gt;)</p>
+            <p class="mt-1">
+              特点：这种方法引入了模块中某些函数和变量。调用其中的变量或模块时只需用函数和变量的名称，不需要带模块名，所以代码简单。但是在引用多个模块的情况下可能会存在函数重名问题。如果需要引用模块中所有函数，可以用from
+              &lt;模块名&gt; import *的形式。
+            </p>
+            <pre
+              class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mb-4 text-light-100"
+            >
+from math import ceil
+print(ceil(2.8))  #向上取整，值为3</pre
+            >
+          </li>
+          <li>
+            <strong>方式3：import&lt;模块名&gt;as&lt;别名&gt;</strong>
+            <p class="mt-1">
+              调用：&lt;别名&gt;.&lt;函数名&gt;(&lt;函数参数&gt;)
+            </p>
+            <p class="mt-1">
+              特点：引入了整个模块，并给模块以别名，在后续程序调用时使用别名即可。这种方法将繁琐复杂的模块名用别名代替，既简化了代码书写，又避免了函数重名。
+            </p>
+            <pre
+              class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mb-4 text-light-100"
+            >
+import matplotlib.pyplot as plt
+x = [0, 1, 3, 5, 7]
+y = [0, 2, 4, 6, 10]
+plt.plot(x, y, 'r--o')
+plt.show()</pre
+            >
+          </li>
+        </ul>
+
+        <!-- 1.4.4 random库 -->
+        <h4
+          class="text-lg font-semibold mb-3 mt-8 text-dark-200 dark:text-light-200"
+        >
+          4. random库
+        </h4>
+        <p class="mb-4">
+          随机数在模拟实验、数据采样、密码学等领域中都有重要的应用。random库是Python中用于生成随机数的标准库，该库提供了多种方法来生成不同类型的随机数，包括随机整数、随机浮点数以及从序列中随机选择元素等。random库常用方法见表2-2所示。
+        </p>
+
+        <!-- 表2-2 random库常用方法 -->
+        <!-- 表2-2 random库常用方法 -->
+        <div class="overflow-x-auto mb-6">
+          <p
+            class="text-center font-semibold mb-2 text-dark-200 dark:text-light-200"
+          >
+            表2-2 random库常用方法
+          </p>
+          <table
+            class="min-w-full bg-white dark:bg-dark-200 rounded-lg shadow-sm"
+          >
+            <thead>
+              <tr class="bg-light-200 dark:bg-dark-100">
+                <th class="px-4 py-2 text-left">方法名称</th>
+                <th class="px-4 py-2 text-left">操作描述</th>
+                <th class="px-4 py-2 text-left">示例代码</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">random()</td>
+                <td class="px-4 py-2">返回0到1之间的随机浮点数</td>
+                <td class="px-4 py-2">random.random()</td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">uniform(a,b)</td>
+                <td class="px-4 py-2">返回[a,b)之间随机浮点数</td>
+                <td class="px-4 py-2">random.uniform(-1,1)</td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">randint(a,b)</td>
+                <td class="px-4 py-2">返回[a,b]之间的随机整数</td>
+                <td class="px-4 py-2">random.randint(1,10)</td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">randrange(start,stop[,step])</td>
+                <td class="px-4 py-2">
+                  返回[start,stop)之间，按step变化的随机整数
+                </td>
+                <td class="px-4 py-2">random.randrange(0,8,2)</td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">choice(sequence)</td>
+                <td class="px-4 py-2">从非空序列中随机选一个元素</td>
+                <td class="px-4 py-2">random.choice(['TV','PC'])</td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">choices(population,weights=None,k=1)</td>
+                <td class="px-4 py-2">
+                  根据权重weights从population中选择k个元素
+                </td>
+                <td class="px-4 py-2">
+                  random.choices(['TV','PC'],weights=[0.2,0.8],k=10)
+                </td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">sample(population,k)</td>
+                <td class="px-4 py-2">从population中随机抽取k个不同的元素</td>
+                <td class="px-4 py-2">random.sample([1,2,3,4,5],k=3)</td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">shuffle(x[,random])</td>
+                <td class="px-4 py-2">将序列x中的元素随机打乱顺序</td>
+                <td class="px-4 py-2">
+                  li=[3,5,2,1,4]<br />random.shuffle(li)
+                </td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2">seed(a=None,version=2)</td>
+                <td class="px-4 py-2">初始化随机数生成器的种子</td>
+                <td class="px-4 py-2">random.seed(5)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="mb-4">例如：生成随机浮点数。</p>
+        <pre
+          class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mb-4"
+        ><code class="language-python line-numbers">import random  # 导入random模块
+random.uniform (1,5)   # 生成一个1到5之间的随机浮点数</code></pre>
+
+        <!-- 1.4.5 Matplotlib库 -->
+        <h4
+          class="text-lg font-semibold mb-3 mt-8 text-dark-200 dark:text-light-200"
+        >
+          5. Matplotlib库
+        </h4>
+        <p class="mb-4">
+          Matplotlib是Python的一个绘图库，主要用于数据可视化。Matplotlib提供了多种高质量的图形形式，包括折线图、柱状图、散点图、饼图等。Matplotlib的核心是pyplot模块，该模块常用于绘制各种静态、动态和交互式的二维图形。
+        </p>
+
+        <ul class="list-disc pl-6 mb-4">
+          <li class="font-medium text-dark-100 dark:text-light-300">
+            <strong>matplotlib.pyplot函数式绘图的基本步骤</strong>
+          </li>
+        </ul>
+        <ol class="custom-list pl-6 mb-4 space-y-3">
+          <li>
+            <strong>导入matplotlib.pyplot</strong>
+            <pre
+              class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mb-4 text-light-100"
+            >
+import matplotlib.pyplot as plt</pre
+            >
+          </li>
+          <li>
+            <strong>设置中文字体</strong>
+            <p class="mt-1">
+              在 Matplotlib
+              中，如果遇到中文乱码问题，通常是因为字体设置不当或者没有正确加载中文字体。首先确保安装了支持中文的字体，字体可以是“matplotlib\mpl-data\fonts”下的字体或者是“Windows\Fonts”下的字体，使用plt.rcParams["font.family
+              "]指定中文字体。
+            </p>
+            <pre
+              class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mb-4 text-light-100"
+            >
+# 设置中文字体
+plt.rcParams['font.family'] = ['SimHei']  # 使用黑体
+plt.rcParams['axes.unicode_minus'] = False  # 解决负号显示问题</pre
+            >
+            <p class="mt-2">常用中文字体名称的中英文对照表见表2-3所示。</p>
+            <!-- 表3-3 中英文字体名称对照表 -->
+            <!-- 表2-3 中英文字体名称对照表 -->
+            <div class="overflow-x-auto mb-6">
+              <p
+                class="text-center font-semibold mb-2 text-dark-200 dark:text-light-200"
+              >
+                表2-3 中英文字体名称对照表
+              </p>
+              <table
+                class="min-w-full bg-white dark:bg-dark-200 rounded-lg shadow-sm"
+              >
+                <thead>
+                  <tr class="bg-light-200 dark:bg-dark-100">
+                    <th class="px-4 py-2 text-left">字体名称</th>
+                    <th class="px-4 py-2 text-left">字体英文表示</th>
+                    <th class="px-4 py-2 text-left">字体名称</th>
+                    <th class="px-4 py-2 text-left">字体英文表示</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="border-b border-light-300 dark:border-dark-100">
+                    <td class="px-4 py-2">宋体</td>
+                    <td class="px-4 py-2">SimSun</td>
+                    <td class="px-4 py-2">仿宋</td>
+                    <td class="px-4 py-2">FangSong</td>
+                  </tr>
+                  <tr class="border-b border-light-300 dark:border-dark-100">
+                    <td class="px-4 py-2">黑体</td>
+                    <td class="px-4 py-2">SimHei</td>
+                    <td class="px-4 py-2">幼圆</td>
+                    <td class="px-4 py-2">YouYuan</td>
+                  </tr>
+                  <tr class="border-b border-light-300 dark:border-dark-100">
+                    <td class="px-4 py-2">楷体</td>
+                    <td class="px-4 py-2">KaiTi</td>
+                    <td class="px-4 py-2">华文宋体</td>
+                    <td class="px-4 py-2">STSong</td>
+                  </tr>
+                  <tr class="border-b border-light-300 dark:border-dark-100">
+                    <td class="px-4 py-2">微软雅黑</td>
+                    <td class="px-4 py-2">Microsoft YaHei</td>
+                    <td class="px-4 py-2">华文黑体</td>
+                    <td class="px-4 py-2">STHeiti</td>
+                  </tr>
+                  <tr class="border-b border-light-300 dark:border-dark-100">
+                    <td class="px-4 py-2">隶书</td>
+                    <td class="px-4 py-2">LiSu</td>
+                    <td class="px-4 py-2">华文仿宋</td>
+                    <td class="px-4 py-2">STFangsong</td>
+                  </tr>
+                  <tr>
+                    <td class="px-4 py-2">华文楷体</td>
+                    <td class="px-4 py-2">STKaiti</td>
+                    <td class="px-4 py-2">华文隶书</td>
+                    <td class="px-4 py-2">STLiti</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </li>
+          <li>
+            <strong>准备数据</strong>
+            <p class="mt-1">准备用于绘制图表的数据。</p>
+          </li>
+          <li>
+            <strong>绘制图形</strong>
+            <p class="mt-1">
+              使用各种绘图方法（如plt.plot，plt.scatter，plt.bar……）来绘制图形。pyplot常用绘图方法见表2-4所示。
+            </p>
+            <!-- 表3-4 plt常用方法 -->
+            <!-- 表2-4 plt常用方法 -->
+            <div class="overflow-x-auto mb-6">
+              <p
+                class="text-center font-semibold mb-2 text-dark-200 dark:text-light-200"
+              >
+                表2-4 plt常用方法
+              </p>
+              <table
+                class="min-w-full bg-white dark:bg-dark-200 rounded-lg shadow-sm"
+              >
+                <thead>
+                  <tr class="bg-light-200 dark:bg-dark-100">
+                    <th class="px-4 py-2 text-left">方法名称</th>
+                    <th class="px-4 py-2 text-left">操作描述</th>
+                    <th class="px-4 py-2 text-left">示例代码</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="border-b border-light-300 dark:border-dark-100">
+                    <td class="px-4 py-2">plot()</td>
+                    <td class="px-4 py-2">绘制二维图表，如折线图、散点图等</td>
+                    <td class="px-4 py-2">plt.plot(x, y)</td>
+                  </tr>
+                  <tr class="border-b border-light-300 dark:border-dark-100">
+                    <td class="px-4 py-2">scatter()</td>
+                    <td class="px-4 py-2">绘制散点图</td>
+                    <td class="px-4 py-2">plt.scatter(x, y)</td>
+                  </tr>
+                  <tr class="border-b border-light-300 dark:border-dark-100">
+                    <td class="px-4 py-2">bar()</td>
+                    <td class="px-4 py-2">绘制条形图</td>
+                    <td class="px-4 py-2">plt.bar(x, y)</td>
+                  </tr>
+                  <tr class="border-b border-light-300 dark:border-dark-100">
+                    <td class="px-4 py-2">hist()</td>
+                    <td class="px-4 py-2">绘制直方图</td>
+                    <td class="px-4 py-2">plt.hist(x, bins=n)</td>
+                  </tr>
+                  <tr class="border-b border-light-300 dark:border-dark-100">
+                    <td class="px-4 py-2">boxplot()</td>
+                    <td class="px-4 py-2">绘制箱形图</td>
+                    <td class="px-4 py-2">plt.boxplot(data)</td>
+                  </tr>
+                  <tr class="border-b border-light-300 dark:border-dark-100">
+                    <td class="px-4 py-2">pie()</td>
+                    <td class="px-4 py-2">绘制饼图</td>
+                    <td class="px-4 py-2">plt.pie(sizes, labels, colors)</td>
+                  </tr>
+                  <tr class="border-b border-light-300 dark:border-dark-100">
+                    <td class="px-4 py-2">imshow()</td>
+                    <td class="px-4 py-2">显示图像数据</td>
+                    <td class="px-4 py-2">plt.imshow(A, cmap='gray')</td>
+                  </tr>
+                  <tr class="border-b border-light-300 dark:border-dark-100">
+                    <td class="px-4 py-2">fill_between()</td>
+                    <td class="px-4 py-2">在两个函数之间填充区域</td>
+                    <td class="px-4 py-2">
+                      plt.fill_between(x, func1, func2, color)
+                    </td>
+                  </tr>
+                  <tr class="border-b border-light-300 dark:border-dark-100">
+                    <td class="px-4 py-2">plot_date()</td>
+                    <td class="px-4 py-2">绘制带有日期标签的图表</td>
+                    <td class="px-4 py-2">plt.plot_date(x, y, fmt='-')</td>
+                  </tr>
+                  <tr class="border-b border-light-300 dark:border-dark-100">
+                    <td class="px-4 py-2">errorbar()</td>
+                    <td class="px-4 py-2">绘制带有误差线的图表</td>
+                    <td class="px-4 py-2">
+                      plt.errorbar(x, y, yerr=None, fmt='none')
+                    </td>
+                  </tr>
+                  <tr class="border-b border-light-300 dark:border-dark-100">
+                    <td class="px-4 py-2">subplot()</td>
+                    <td class="px-4 py-2">创建一个子图布局</td>
+                    <td class="px-4 py-2">plt.subplot(2, 2, 1)</td>
+                  </tr>
+                  <tr class="border-b border-light-300 dark:border-dark-100">
+                    <td class="px-4 py-2">figure()</td>
+                    <td class="px-4 py-2">创建一个新的图形对象</td>
+                    <td class="px-4 py-2">plt.figure(figsize=(8, 6))</td>
+                  </tr>
+                  <tr class="border-b border-light-300 dark:border-dark-100">
+                    <td class="px-4 py-2">clf()</td>
+                    <td class="px-4 py-2">清除当前图形</td>
+                    <td class="px-4 py-2">plt.clf()</td>
+                  </tr>
+                  <tr>
+                    <td class="px-4 py-2">cla()</td>
+                    <td class="px-4 py-2">清除当前轴上的图形</td>
+                    <td class="px-4 py-2">plt.cla()</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </li>
+          <li>
+            <strong>添加图表元素</strong>
+            <p class="mt-1">
+              图表元素包括图表标题、坐标轴标签、坐标轴标题、图例等，添加图表元素常用方法见表2-5。
+            </p>
+            <!-- 表3-5 图表元素常用方法 -->
+            <!-- 表2-5 图表元素常用方法 -->
+            <div class="overflow-x-auto mb-6">
+              <p
+                class="text-center font-semibold mb-2 text-dark-200 dark:text-light-200"
+              >
+                表2-5 图表元素常用方法
+              </p>
+              <table
+                class="min-w-full bg-white dark:bg-dark-200 rounded-lg shadow-sm"
+              >
+                <thead>
+                  <tr class="bg-light-200 dark:bg-dark-100">
+                    <th class="px-4 py-2 text-left">方法名称</th>
+                    <th class="px-4 py-2 text-left">描述</th>
+                    <th class="px-4 py-2 text-left">示例代码</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="border-b border-light-300 dark:border-dark-100">
+                    <td class="px-4 py-2">title()</td>
+                    <td class="px-4 py-2">设置图表标题</td>
+                    <td class="px-4 py-2">plt.title('ChartTitle')</td>
+                  </tr>
+                  <tr class="border-b border-light-300 dark:border-dark-100">
+                    <td class="px-4 py-2">xlabel()</td>
+                    <td class="px-4 py-2">设置X轴标签</td>
+                    <td class="px-4 py-2">plt.xlabel('XAxisLabel')</td>
+                  </tr>
+                  <tr class="border-b border-light-300 dark:border-dark-100">
+                    <td class="px-4 py-2">ylabel()</td>
+                    <td class="px-4 py-2">设置Y轴标签</td>
+                    <td class="px-4 py-2">plt.ylabel('YAxisLabel')</td>
+                  </tr>
+                  <tr class="border-b border-light-300 dark:border-dark-100">
+                    <td class="px-4 py-2">legend()</td>
+                    <td class="px-4 py-2">设置图例</td>
+                    <td class="px-4 py-2">plt.legend(['1','2'])</td>
+                  </tr>
+                  <tr class="border-b border-light-300 dark:border-dark-100">
+                    <td class="px-4 py-2">xlim()</td>
+                    <td class="px-4 py-2">设置X轴的范围</td>
+                    <td class="px-4 py-2">plt.xlim(0,5)</td>
+                  </tr>
+                  <tr class="border-b border-light-300 dark:border-dark-100">
+                    <td class="px-4 py-2">ylim()</td>
+                    <td class="px-4 py-2">设置Y轴的范围</td>
+                    <td class="px-4 py-2">plt.ylim(0,35)</td>
+                  </tr>
+                  <tr class="border-b border-light-300 dark:border-dark-100">
+                    <td class="px-4 py-2">grid()</td>
+                    <td class="px-4 py-2">设置是否显示网格</td>
+                    <td class="px-4 py-2">plt.grid(True)</td>
+                  </tr>
+                  <tr class="border-b border-light-300 dark:border-dark-100">
+                    <td class="px-4 py-2">show()</td>
+                    <td class="px-4 py-2">显示绘制的图像</td>
+                    <td class="px-4 py-2">plt.show()</td>
+                  </tr>
+                  <tr>
+                    <td class="px-4 py-2">savefig()</td>
+                    <td class="px-4 py-2">保存图形到文件</td>
+                    <td class="px-4 py-2">plt.savefig('plot.png')</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </li>
+          <li>
+            <strong>保存/显示图表</strong>
+            <p class="mt-1">plt.savefig()/plt.show()</p>
+            <p class="mt-1">
+              如果需要同时保存和显示图表时，保存图表要放在显示图表之前，否则保存的图表是空白的。
+            </p>
+          </li>
+        </ol>
+
+        <ul class="list-disc pl-6 mb-4">
+          <li class="font-medium text-dark-100 dark:text-light-300">
+            <strong>plt.plot( ) 绘制二维图形</strong>
+          </li>
+        </ul>
+        <p class="mb-4">
+          plt.plot()是 Matplotlib
+          库中用于绘制二维图形的核心函数之一。支持丰富的参数和样式设置，适合绘制折线图、散点图等二维图形。
+        </p>
+        <p class="mb-3">
+          plt.plot(x,y,[可选参数])，这里，x和y是要绘制的数据点的二维数组。可选参数见表3-6所示。
+        </p>
+
+        <!-- 表3-6 可选参数 -->
+        <div class="overflow-x-auto mb-6">
+          <p
+            class="text-center font-semibold mb-2 text-dark-200 dark:text-light-200"
+          >
+            表3-6 可选参数
+          </p>
+          <table
+            class="min-w-full bg-white dark:bg-dark-200 rounded-lg shadow-sm"
+          >
+            <thead>
+              <tr class="bg-light-200 dark:bg-dark-100">
+                <th class="px-4 py-2 text-left">参数名称</th>
+                <th class="px-4 py-2 text-left">描述</th>
+                <th class="px-4 py-2 text-left">示例代码</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">color</td>
+                <td class="px-4 py-2">线条或标记的颜色</td>
+                <td class="px-4 py-2">
+                  plt.plot(x,y,color='red')或plt.plot(x,y,c='green')
+                </td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">marker</td>
+                <td class="px-4 py-2">数据点的标记样式</td>
+                <td class="px-4 py-2">plt.plot(x,y,marker='o')</td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">linewidth或lw</td>
+                <td class="px-4 py-2">线条的宽度</td>
+                <td class="px-4 py-2">
+                  plt.plot(x,y,linewidth=1.0)或plt.plot(x,y,lw=1.0)
+                </td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">linestyle或ls</td>
+                <td class="px-4 py-2">线条的样式</td>
+                <td class="px-4 py-2">
+                  plt.plot(x,y,linestyle='--')或plt.plot(x,y,ls='--')
+                </td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2">label</td>
+                <td class="px-4 py-2">用于图例的标签</td>
+                <td class="px-4 py-2">plt.plot(x,y,label='MyLine')</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="mb-3">
+          其中常用的“数据点的标记样式”和“线条的样式”见表3-7 所示。
+        </p>
+
+        <!-- 表3-7 常用标记和线条样式 -->
+        <div class="overflow-x-auto mb-6">
+          <p
+            class="text-center font-semibold mb-2 text-dark-200 dark:text-light-200"
+          >
+            表3-7 常用标记和线条样式
+          </p>
+          <table
+            class="min-w-full bg-white dark:bg-dark-200 rounded-lg shadow-sm"
+          >
+            <thead>
+              <tr class="bg-light-200 dark:bg-dark-100">
+                <th class="px-4 py-2 text-left">标记样式</th>
+                <th class="px-4 py-2 text-left">描述</th>
+                <th class="px-4 py-2 text-left">标记样式</th>
+                <th class="px-4 py-2 text-left">描述</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">'.'</td>
+                <td class="px-4 py-2">圆点</td>
+                <td class="px-4 py-2">'1'</td>
+                <td class="px-4 py-2">竖线</td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">','</td>
+                <td class="px-4 py-2">像素点</td>
+                <td class="px-4 py-2">'2'</td>
+                <td class="px-4 py-2">双竖线</td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">'o'</td>
+                <td class="px-4 py-2">圆圈</td>
+                <td class="px-4 py-2">'s'</td>
+                <td class="px-4 py-2">方块</td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">'v'</td>
+                <td class="px-4 py-2">倒三角形</td>
+                <td class="px-4 py-2">'p'</td>
+                <td class="px-4 py-2">星号</td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">'^'</td>
+                <td class="px-4 py-2">三角形</td>
+                <td class="px-4 py-2">'*'</td>
+                <td class="px-4 py-2">填充星号</td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">'<'< /td></td>
+                <td class="px-4 py-2">左三角形</td>
+                <td class="px-4 py-2">'h'</td>
+                <td class="px-4 py-2">菱形</td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">'>'</td>
+                <td class="px-4 py-2">右三角形</td>
+                <td class="px-4 py-2">'H'</td>
+                <td class="px-4 py-2">填充菱形</td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">'+'</td>
+                <td class="px-4 py-2">加号</td>
+                <td class="px-4 py-2">'x'</td>
+                <td class="px-4 py-2">叉号</td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">'D'</td>
+                <td class="px-4 py-2">减号（倒梯形）</td>
+                <td class="px-4 py-2">'d'</td>
+                <td class="px-4 py-2">减号（三角形）</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2">'_'</td>
+                <td class="px-4 py-2">横线</td>
+                <td class="px-4 py-2">'|'</td>
+                <td class="px-4 py-2">竖线</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 例3-6：绘制销售部门季度销售量折线图 -->
+        <div class="mb-6">
+          <h4 class="font-semibold mb-2 text-dark-200 dark:text-light-200">
+            例2-6：绘制销售部门季度销售量折线图。
+          </h4>
+
+          <pre
+            class="p-4 overflow-x-auto"
+          ><code class="language-python line-numbers">
+# 绘制两个销售部的四个季度“销售量”折线图，其中“销售一部”数据用红色圆点直线表示，“销售二部”数据用蓝色小叉虚线表示。
+
+import matplotlib.pyplot as plt
+# 设置中文字体
+plt.rcParams['font.family'] = ['SimHei']
+plt.rcParams['axes.unicode_minus'] = False
+
+# 数据
+x = ["第一季度", "第二季度", "第三季度", "第四季度"]
+y1 = [2, 11, 12.5, 19]  # 销售一部
+y2 = [5, 6.8, 19, 19]   # 销售二部
+
+# 绘制折线图
+plt.plot(x, y1, color='red', linestyle='-', marker='o', label='销售一部')
+plt.plot(x, y2, color='blue', linestyle='--', marker='x', label='销售二部')
+
+# 添加标题和标签
+plt.title('部门季度产品销量')
+plt.xlabel('季度')
+plt.ylabel('产品销量（万件）')
+
+# 显示图例
+plt.legend()
+
+# 设置坐标轴范围
+plt.xlim(0, 3)  # X 轴范围
+plt.ylim(0, 20)      # Y 轴范围
+
+# 显示网格
+plt.grid(True)
+
+# 保存图形
+plt.savefig('sales_plot.png')
+
+# 显示图形
+plt.show()</code></pre>
+        </div>
+        <p class="mb-4">效果如图2-7所示。</p>
+        <div class="flex flex-col items-center my-6">
+          <img
+            src="image/2/2-7.png"
+            alt="各部门每季度产品销量图"
+            class="max-w-full h-auto rounded-lg shadow-md"
+          />
+          <p class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
+            图2-7 各部门每季度产品销量图
+          </p>
+        </div>
+
+        <h5 class="font-medium mb-2 mt-6 text-dark-100 dark:text-light-300">
+          （3）plt.subplots( )创建子图布局展示多个图表
+        </h5>
+        <p class="mb-4">
+          利用plt.subplots(
+          )函数创建子图布局，可以将一个大的画布分成多块子画布，每个子画布中显示一个图表。subplots函数语法如下：
+        </p>
+        <pre
+          class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mb-4"
+        ><code class="language-python line-numbers">plt.subplots(nrows, ncols, figsize=None, dpi=None, facecolor='w', edgecolor='k')</code></pre>
+        <p class="mb-3">其中参数含义见表2-8所示。</p>
+        <!-- 表3-8 subplots函数参数 -->
+
+        <div class="overflow-x-auto mb-6">
+          <p
+            class="text-center font-semibold mb-2 text-dark-200 dark:text-light-200"
+          >
+            表2-8 subplots函数参数
+          </p>
+          <table
+            class="min-w-full bg-white dark:bg-dark-200 rounded-lg shadow-sm"
+          >
+            <thead>
+              <tr class="bg-light-200 dark:bg-dark-100">
+                <th class="px-4 py-2 text-left">参数</th>
+                <th class="px-4 py-2 text-left">类型</th>
+                <th class="px-4 py-2 text-left">作用</th>
+                <th class="px-4 py-2 text-left">示例</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">nrows</td>
+                <td class="px-4 py-2">整数</td>
+                <td class="px-4 py-2">设置子图的行数</td>
+                <td class="px-4 py-2">nrows=2</td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">ncols</td>
+                <td class="px-4 py-2">整数</td>
+                <td class="px-4 py-2">设置子图的列数</td>
+                <td class="px-4 py-2">ncols=3</td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">figsize</td>
+                <td class="px-4 py-2">元组 (宽度, 高度)</td>
+                <td class="px-4 py-2">设置整个画布的尺寸，单位为英寸</td>
+                <td class="px-4 py-2">figsize=(10, 6)</td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">dpi</td>
+                <td class="px-4 py-2">整数</td>
+                <td class="px-4 py-2">设置图像的分辨率（每英寸点数）</td>
+                <td class="px-4 py-2">dpi=300<br />默认100</td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">facecolor</td>
+                <td class="px-4 py-2">颜色字符串或 RGB 颜色代码</td>
+                <td class="px-4 py-2">设置画布的背景颜色</td>
+                <td class="px-4 py-2">facecolor='w'<br />默认白色</td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">edgecolor</td>
+                <td class="px-4 py-2">颜色字符串或 RGB 颜色代码</td>
+                <td class="px-4 py-2">设置画布的边框颜色</td>
+                <td class="px-4 py-2">edgecolor='k'<br />默认黑色</td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">sharex</td>
+                <td class="px-4 py-2">布尔值或 'all'/'row'/'col'</td>
+                <td class="px-4 py-2">
+                  控制子图是否共享 x 轴。sharex=True 使所有子图共享 x
+                  轴，sharex='row' 使行内共享，sharex='col' 使列内共享
+                </td>
+                <td class="px-4 py-2">sharex='row'<br />默认False</td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">sharey</td>
+                <td class="px-4 py-2">布尔值或 'all'/'row'/'col'</td>
+                <td class="px-4 py-2">
+                  控制子图是否共享 y 轴。sharey=True 使所有子图共享 y
+                  轴，sharey='row' 使行内共享，sharey='col' 使列内共享
+                </td>
+                <td class="px-4 py-2">sharey='col'<br />默认False</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2">tight_layout</td>
+                <td class="px-4 py-2">布尔值</td>
+                <td class="px-4 py-2">启用后自动调整子图布局，防止标签重叠</td>
+                <td class="px-4 py-2">tight_layout=True<br />默认False</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="mb-4">
+          `fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))` 表示创建12x6
+          英寸包含两个子图的图形，返回 fig（图形对象）和
+          ax1、ax2（两个子图对象）。
+        </p>
+
+        <!-- 例3-7：饼图与柱状图 -->
+        <div class="mb-6">
+          <h4 class="font-semibold mb-2 text-dark-200 dark:text-light-200">
+            例2-7：绘制“各类别图书销量占比”饼图以及“利润”柱形图。
+          </h4>
+
+          <pre
+            class="p-4 overflow-x-auto"
+          ><code class="language-python line-numbers">
+# 分析：创建包含两个子图的图表。在第一个子图中，使用ax1.pie()绘制饼图，展示各类别图书销量占比；
+# 在第二个子图中，使用ax2.bar()绘制柱状图，展示各类别图书利润分布。
+
+# 导入库
+import matplotlib.pyplot as plt
+
+# 设置中文字体
+plt.rcParams['font.family'] = ['SimHei']
+plt.rcParams['axes.unicode_minus'] = False
+
+# 数据存储为字典
+data = {
+    "categories": ['文学', '经济学', '哲学', '自然科学', '医药卫生'],
+    "sales": [120, 150, 130, 160, 200],  # 各类别图书销量
+    "profit": [30, 40, 35, 45, 60]       # 各类别图书利润
+}
+
+# 创建子图布局
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
+
+# 在第一个子图中绘制饼图
+ax1.pie(data["sales"], autopct='%1.1f%%', startangle=90,
+        colors=['#ff9999', '#66b3ff', '#99ff99', '#ffcc99', '#c2c2f0'],
+        shadow=True, explode=(0.05, 0.05, 0.05, 0.05, 0.05))
+ax1.set_title('各类别图书销量占比')
+ax1.legend(data["categories"], title="图书类别", loc="center left", bbox_to_anchor=(1, 0.5))
+
+# 在第二个子图中绘制柱状图
+ax2.bar(data["categories"], data["profit"], color='skyblue', label='利润')
+ax2.set_title('各类别图书利润分布')
+ax2.set_xlabel('图书类别')
+ax2.set_ylabel('利润（万元）')
+ax2.legend()  # 显示图例
+ax2.grid(True)
+
+# 为整个图形添加标题
+fig.suptitle("图书销量及利润", size=18)
+
+# 调整布局并显示
+plt.tight_layout()
+plt.savefig("result.png")
+plt.show()</code></pre>
+        </div>
+        <p class="mb-4">效果如图2-8所示。</p>
+        <div class="flex flex-col items-center my-6">
+          <img
+            src="image/2/2-8.png"
+            alt="创建子图分布"
+            class="max-w-full h-auto rounded-lg shadow-md"
+          />
+          <p class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
+            图2-8创建子图分布
+          </p>
+        </div>
+
+        <!-- 1.4.6 函数 -->
+        <h4
+          class="text-lg font-semibold mb-3 mt-8 text-dark-200 dark:text-light-200"
+        >
+          6. 函数
+        </h4>
+        <p class="mb-4">
+          当某些功能模块需要在不同项目或者同一项目的不同模块中重复使用时，可以将这些模块封装为函数，在需要的地方调用即可。函数可以实现代码复用，提高开发效率。
+        </p>
+
+        <h5 class="font-medium mb-2 text-dark-100 dark:text-light-300">
+          （1）函数定义
+        </h5>
+        <pre
+          class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mb-4"
+        ><code class="language-python line-numbers">def 函数名(形式参数(0个或多个)):
+    函数体
+    return 返回值</code></pre>
+        <p class="mb-4">
+          形式参数只代表参数的个数、顺序与类型。形式参数可以没有，也可以有多个，多个形式参数用逗号进行分隔。return
+          语句用来传递返回值。函数可以有返回值，也可以没有返回值。没有return语句的函数会在执行完函数体的最后一条语句后自动返回None。返回值有多个时，中间用逗号隔开，返回结果可按顺序赋值给多个变量，返回值可以赋给一个变量或者作为表达式的一部分。
+        </p>
+
+        <h5 class="font-medium mb-2 text-dark-100 dark:text-light-300">
+          （2）函数调用
+        </h5>
+        <pre
+          class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mb-4"
+        ><code class="language-python line-numbers">函数名(实际参数(0个或多个))</code></pre>
+        <p class="mb-3">例如：定义函数，实现任意两个数的加法运算。</p>
+        <pre
+          class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mb-4"
+        ><code class="language-python line-numbers"># 函数定义
+def add(number1, number2):
+    result = number1 + number2
+    return result
+
+# 函数调用
+result = add(3, 5)
+print(result)  # 输出：8</code></pre>
+
+        <!-- 2.5 案例目标 -->
+
+        <h3
+          class="text-xl font-semibold mb-4 text-primary section-id"
+          id="section-2-5"
+        >
+          2.5 案例目标
+        </h3>
+
+        <h4
+          class="text-lg font-semibold mb-3 text-dark-200 dark:text-light-200"
+        >
+          标记重捕法
+        </h4>
+        <p class="mb-4">
+          标记重捕法是一种生态学中常用的种群数量估计方法。其基本思路是：首先捕捉一定数量的个体并进行标记，然后将这些标记个体放回原环境中。经过一段时间后，再次捕捉一定数量的个体，统计其中被标记个体的比例，从而估算整个种群的规模。
+        </p>
+        <p class="mb-3">计算公式：</p>
+        <div
+          class="bg-light-200 dark:bg-dark-100 p-3 rounded-md mb-4 text-center"
+        >
+          <span class="text-lg">N = (X × Y) / Z</span>
+        </div>
+        <p class="mb-4">
+          其中：𝑁表示种群密度；X表示第一次捕捉并标记的个体数量；Y表示第二次捕捉的个体数量；Z表示第二次样本中被标记的个体数（重新被捕捉的个体数）。即：N=第一次捕捉并标记的个数×第二次捕捉的个数/第二次捕捉到的带有标记的个数。
+        </p>
+        <p class="mb-4">
+          例如，在花园里有很多蝴蝶，第一次捕捉40只蝴蝶，给它们做上标记，放回花园；经过一段时间，重新捕捉80只蝴蝶，假设重捕后的蝴蝶中有16只蝴蝶带有标记，那么花园里蝴蝶的总数N为：N=40×80/16=200只蝴蝶。
+        </p>
+
+        <h4
+          class="text-lg font-semibold mb-3 text-dark-200 dark:text-light-200"
+        >
+          案例目标
+        </h4>
+        <p class="mb-4">
+          本案例旨在通过Python模拟标记重捕法的过程，验证是否可以使用公式N=X×Y/Z来估计一个生物种群的规模。即通过模拟科学实验，验证由该公式计算得出的生物种群数量是否与假设的种群数量相近。
+        </p>
+
+        <!-- 2.6 案例实现 -->
+
+        <h3
+          class="text-xl font-semibold mb-4 text-primary section-id"
+          id="section-2-6"
+        >
+          2.6 案例实现
+        </h3>
+        <p class="mb-4">标记重捕法思路如图2-9所示。</p>
+        <div class="flex flex-col items-center my-6">
+          <img
+            src="image/2/2-9.png"
+            alt="求解思路"
+            class="max-w-full h-auto rounded-lg shadow-md"
+          />
+          <p class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
+            图2-9 求解思路
+          </p>
+        </div>
+
+        <h4
+          class="text-lg font-semibold mb-3 text-dark-200 dark:text-light-200"
+        >
+          1. 模拟种群环境
+        </h4>
+        <p class="mb-4">
+          假设调查区域有N只蝴蝶，且个体均匀随机分布。蝴蝶分布的位置坐标可以用random.uniform(a,b)来模拟。下面模拟N=1000只蝴蝶的位置，用xList保存所有横坐标，yList保存所有纵坐标，使用循环生成N只蝴蝶的位置坐标。
+        </p>
+
+        <!-- 例3-8：模拟种群环境 -->
+        <div class="mb-6">
+          <h4 class="font-semibold mb-2 text-dark-200 dark:text-light-200">
+            例2-8：模拟种群环境
+          </h4>
+
+          <pre
+            class="p-4 overflow-x-auto"
+          ><code class="language-python line-numbers">import random
+import matplotlib.pyplot as plt
+
+# 指定中文字体
+plt.rcParams["font.sans-serif"] = "SimHei"  # 中文黑体
+plt.rcParams['axes.unicode_minus'] = False  # 解决保存图像时负号'-'显示为方块的问题
+
+N = 1000  # 种群数量
+
+# 将随机产生的个体位置的横、纵坐标分别保存至xList、yList列表
+xList = []
+yList = []
+
+for i in range(N):
+    x = random.uniform(-1, 1)
+    y = random.uniform(-1, 1)
+    xList.append(x)
+    yList.append(y)
+
+# 可视化种群位置
+plt.plot(xList, yList, 'bo')
+plt.title("模拟种群")
+plt.show()</code></pre>
+        </div>
+        <p class="mb-4">
+          运行上述代码后，模拟的蝴蝶种群分布结果如图 2-10所示。
+        </p>
+        <div class="flex flex-col items-center my-6">
+          <img
+            src="image/2/2-10.png"
+            alt="模拟生物种群"
+            class="max-w-full h-auto rounded-lg shadow-md"
+          />
+          <p class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
+            图2-10 模拟生物种群
+          </p>
+        </div>
+
+        <h4
+          class="text-lg font-semibold mb-3 mt-8 text-dark-200 dark:text-light-200"
+        >
+          2. 第一次捕捉个体并做标记
+        </h4>
+        <p class="mb-4">
+          假设每个个体有 20% 的概率被捕捉到。使用random.uniform(0, 1)生成一个 0
+          到 1 之间的随机数，若该数小于等于
+          0.2，则认为该个体被捕捉到。将第一次捕捉到的个体的横、纵坐标分别存储在xList1和yList1列表中，未被捕捉到的个体则存储在xList2和yList2列表中。
+        </p>
+        <p class="mb-4">第一次捕捉个体流程图如图2-11所示。</p>
+        <div class="flex flex-col items-center my-6">
+          <img
+            src="image/2/2-11.png"
+            alt="第一次捕捉模拟流程图"
+            class="max-w-full h-auto rounded-lg shadow-md"
+          />
+          <p class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
+            图2-11 第一次捕捉模拟流程图
+          </p>
+        </div>
+
+        <!-- 例3-9：第一次捕捉结果 -->
+        <div class="mb-6">
+          <h4 class="font-semibold mb-2 text-dark-200 dark:text-light-200">
+            例2-9：第一次捕捉
+          </h4>
+
+          <pre
+            class="p-4 overflow-x-auto"
+          ><code class="language-python line-numbers"># 第一次捕捉并标记（需先运行例2-8模拟种群环境生成xList和yList）
+
+xList1 = []  # 被捕捉到的个体
+yList1 = []
+xList2 = []  # 未被捕捉到的个体
+yList2 = []
+
+for i in range(N):
+    if random.uniform(0, 1) <= 0.2:
+        xList1.append(xList[i])
+        yList1.append(yList[i])
+    else:
+        xList2.append(xList[i])
+        yList2.append(yList[i])
+
+# 可视化种群位置，被标记的个体与未被标记的个体使用不同的颜色区分
+plt.plot(xList1, yList1, 'ro')  # 标记的为红色
+plt.plot(xList2, yList2, 'bo')  # 未标记的为蓝色
+plt.legend(['被捕捉', '未被捕捉'])
+plt.title("第一次捕捉的结果")
+plt.show()</code></pre>
+        </div>
+        <p class="mb-4">
+          第一次捕捉后，将捕捉到的个体以红色标记，没有被捕捉到的个体用蓝色表示，可视化模拟结果如图2-12所示。
+        </p>
+        <div class="flex flex-col items-center my-6">
+          <img
+            src="image/2/2-12.png"
+            alt="第一次捕捉结果"
+            class="max-w-full h-auto rounded-lg shadow-md"
+          />
+          <p class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
+            图2-12 第一次捕捉结果
+          </p>
+        </div>
+
+        <h4
+          class="text-lg font-semibold mb-3 mt-8 text-dark-200 dark:text-light-200"
+        >
+          3. 有放回地重新捕捉
+        </h4>
+        <p class="mb-4">
+          在第一次捕捉并标记后，将捕捉到的个体放回原环境中。经过一段时间后，再次进行捕捉。假设每个个体仍有
+          20% 的概率被捕捉到。第二次捕捉后，所有个体被分为四类：
+        </p>
+        <ul class="list-disc pl-6 mb-4 space-y-1">
+          <li>第一次被捕捉且第二次被捕捉的个体。</li>
+          <li>第一次被捕捉但第二次未被捕捉的个体。</li>
+          <li>第一次未被捕捉但第二次被捕捉的个体。</li>
+          <li>第一次未被捕捉且第二次未被捕捉的个体。</li>
+        </ul>
+        <p class="mb-4">
+          为了简化计算，将第二次未被捕捉的个体归为一类。如图 2-13所示。
+        </p>
+        <div class="flex flex-col items-center my-6">
+          <img
+            src="image/2/2-13.png"
+            alt="标记重捕法示意图"
+            class="max-w-full h-auto rounded-lg shadow-md"
+          />
+          <p class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
+            图2-13 标记重捕法示意图
+          </p>
+        </div>
+
+        <!-- 例3-10：第二次捕捉 -->
+        <div class="mb-6">
+          <h4 class="font-semibold mb-2 text-dark-200 dark:text-light-200">
+            例2-10：有放回地第二次捕捉
+          </h4>
+
+          <pre
+            class="p-4 overflow-x-auto"
+          ><code class="language-python line-numbers"># 有放回地第二次捕捉（需先运行第一次捕捉代码）
+
+xListA = []  # 重捕且被标记的个体
+yListA = []
+xListB = []  # 重捕且未被标记的个体
+yListB = []
+xListC = []  # 未重捕的个体
+yListC = []
+
+# 记录已标记的个体中再次被捕捉的情况
+for i in range(len(xList1)):
+    if random.uniform(0, 1) <= 0.2:
+        xListA.append(xList1[i])
+        yListA.append(yList1[i])
+    else:
+        xListC.append(xList1[i])
+        yListC.append(yList1[i])
+
+# 记录未标记的个体中再次被捕捉的情况
+for i in range(len(xList2)):
+    if random.uniform(0, 1) <= 0.2:
+        xListB.append(xList2[i])
+        yListB.append(yList2[i])
+    else:
+        xListC.append(xList2[i])
+        yListC.append(yList2[i])
+
+# 可视化显示种群位置
+plt.plot(xListA, yListA, 'ro')          # 重捕且被标记：红色圆点
+plt.plot(xListB, yListB, "b^")         # 重捕未被标记：蓝色三角形
+plt.plot(xListC, yListC, "g*")         # 未重捕：绿色星号
+plt.legend(['重捕且被标记','重捕未被标记','未重捕'])
+plt.title("第二次捕捉的结果")
+plt.show()</code></pre>
+        </div>
+        <p class="mb-4">重新捕捉后生物种群分布情况如图2-14所示。</p>
+        <div class="flex flex-col items-center my-6">
+          <img
+            src="image/2/2-14.png"
+            alt="重捕结果示意图"
+            class="max-w-full h-auto rounded-lg shadow-md"
+          />
+          <p class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
+            图2-14 重捕结果示意图
+          </p>
+        </div>
+
+        <h4
+          class="text-lg font-semibold mb-3 mt-8 text-dark-200 dark:text-light-200"
+        >
+          4. 计算种群数量
+        </h4>
+        <p class="mb-4">根据标记重捕法公式，种群数量N可以通过下面公式计算：</p>
+        <div
+          class="bg-light-200 dark:bg-dark-100 p-3 rounded-md mb-4 text-center"
+        >
+          <span class="text-lg"
+            >N = 第一次捕捉个数 × 第二次捕捉的个数 /
+            第二次捕捉到的带有标记的个数</span
+          >
+        </div>
+        <p class="mb-4">由上面的模拟过程可知:</p>
+        <ul class="list-disc pl-6 mb-4 space-y-1">
+          <li>第一次捕捉个数 = len(xList1)</li>
+          <li>第二次捕捉个数 = len(xListA) + len(xListB)</li>
+          <li>第二次捕捉到的带有标记的个数 = len(xListA)</li>
+        </ul>
+        <p class="mb-3">计算种群数量的代码如下：</p>
+        <pre
+          class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mb-4"
+        ><code class="language-python line-numbers"># 计算种群数量
+n = len(xList1) * (len(xListA) + len(xListB)) / len(xListA)
+print(n)</code></pre>
+        <p class="mb-4">
+          运行上述代码后，程序会输出一个1000
+          左右的数值。但是由于单次实验具有偶然性，为了使结果更具说服力，需要进行多次模拟实验，并将多次实验的结果取平均值。
+        </p>
+
+        <h4
+          class="text-lg font-semibold mb-3 mt-8 text-dark-200 dark:text-light-200"
+        >
+          5. 多次模拟实验并可视化
+        </h4>
+        <h5 class="font-medium mb-2 text-dark-100 dark:text-light-300">
+          （1）多次模拟实验
+        </h5>
+        <p class="mb-4">
+          将一次模拟实验的过程封装为一个函数，并通过循环多次调用该函数，将每次的结果存储在列表中。最后计算这些结果的平均值作为实验的预测结果。
+        </p>
+        <p class="mb-3">多次模拟实验的核心代码段：</p>
+        <pre
+          class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mb-4"
+        ><code class="language-python line-numbers">import random
+import matplotlib.pyplot as plt
+
+# 函数定义：
+def marking_recapture():
+    # 标记重捕法模拟过程（整合前面步骤）
+    N = 1000
+    xList = [random.uniform(-1, 1) for _ in range(N)]
+    yList = [random.uniform(-1, 1) for _ in range(N)]
+
+    # 第一次捕捉
+    xList1 = []
+    yList1 = []
+    xList2 = []
+    yList2 = []
+    for i in range(N):
+        if random.uniform(0, 1) <= 0.2:
+            xList1.append(xList[i])
+            yList1.append(yList[i])
+        else:
+            xList2.append(xList[i])
+            yList2.append(yList[i])
+
+    # 第二次捕捉
+    xListA = []
+    yListA = []
+    xListB = []
+    yListB = []
+    xListC = []
+    yListC = []
+    for i in range(len(xList1)):
+        if random.uniform(0, 1) <= 0.2:
+            xListA.append(xList1[i])
+            yListA.append(yList1[i])
+        else:
+            xListC.append(xList1[i])
+            yListC.append(yList1[i])
+    for i in range(len(xList2)):
+        if random.uniform(0, 1) <= 0.2:
+            xListB.append(xList2[i])
+            yListB.append(yList2[i])
+        else:
+            xListC.append(xList2[i])
+            yListC.append(yList2[i])
+
+    # 计算种群数量（避免除以零）
+    if len(xListA) == 0:
+        return marking_recapture()  # 重新模拟
+    n = len(xList1) * (len(xListA) + len(xListB)) / len(xListA)
+    return n
+
+# 用循环进行多次模拟：
+n_sim = int(input("请输入要模拟的次数:"))
+result = []
+for i in range(n_sim):
+    result.append(marking_recapture())
+
+average = sum(result) / n_sim
+print(f"经过 {n_sim} 次有效模拟，估计的种群数量平均值为: {average:.0f}")</code></pre>
+        <p class="mb-4">运行上述代码后，程序会输出多次模拟实验的平均值。</p>
+        <pre
+          class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mb-4 text-light-100"
+        >
+请输入要模拟的次数：1000
+经过 1000 次有效模拟，估计的种群数量平均值为: 1003
+                   </pre
+        >
+
+        <h5 class="font-medium mb-2 mt-4 text-dark-100 dark:text-light-300">
+          （2）可视化实验结果
+        </h5>
+        <p class="mb-4">
+          为了更直观地展示多次模拟实验的结果，将其绘制成折线图，并在图中标出实验结果的平均值。最终结果保存为
+          “multiple_simulations.png”。
+        </p>
+        <p class="mb-3">重点代码片段：</p>
+        <pre
+          class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mb-4"
+        ><code class="language-python line-numbers"># 可视化多次模拟结果
+plt.rcParams["font.sans-serif"] = "SimHei"
+plt.rcParams['axes.unicode_minus'] = False
+
+plt.plot(range(len(result)), result)
+plt.axhline(average, color='r', linestyle='--')  # 平均值横线
+plt.xlabel('模拟次数')
+plt.ylabel('估计的种群数量')
+plt.title(f'经过{n_sim}次模拟实验 其实验均值为{average:.0f}')
+plt.savefig('multiple_simulations.png')  # 保存多次模拟结果图
+plt.show()</code></pre>
+        <p class="mb-4">
+          例如：输入要模拟的次数:1000，其实验均值是1003。实验可视化结果如图2-15所示。从图中可以看出，大部分数据是集中在1000左右，与实验给出的数据接近，说明标记重捕法具有科学依据、可以推广使用。
+        </p>
+        <div class="flex flex-col items-center my-6">
+          <img
+            src="image/2/2-15.png"
+            alt="多次模拟实验结果"
+            class="max-w-full h-auto rounded-lg shadow-md"
+          />
+          <p class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
+            图2-15 多次模拟实验结果
+          </p>
+        </div>
+
+        <div class="mb-6">
+          <h4 class="font-semibold mb-2 text-dark-200 dark:text-light-200">
+            6. 案例完整代码
+          </h4>
+
+          <pre
+            class="p-4 overflow-x-auto"
+          ><code class="language-python line-numbers">import random
+import matplotlib.pyplot as plt
+
+# 指定中文字体
+plt.rcParams["font.sans-serif"] = "SimHei"  # 中文黑体
+plt.rcParams['axes.unicode_minus'] = False  # 解决保存图像时负号'-'显示为方块的问题
+
+def marking_recapture():
+    # 初始生物种群构造
+    N = 1000  # 种群数量
+    xList = []
+    yList = []
+
+    for i in range(N):
+        x = random.uniform(-1, 1)
+        y = random.uniform(-1, 1)
+        xList.append(x)
+        yList.append(y)
+
+    # 第一次捕捉过程
+    xList1 = []
+    yList1 = []
+    xList2 = []
+    yList2 = []
+
+    for i in range(N):
+        if random.uniform(0, 1) <= 0.2:
+            xList1.append(xList[i])
+            yList1.append(yList[i])
+        else:
+            xList2.append(xList[i])
+            yList2.append(yList[i])
+
+    # 第二次捕捉过程
+    xListA = []
+    yListA = []
+    xListB = []
+    yListB = []
+    xListC = []
+    yListC = []
+
+    for i in range(len(xList1)):
+        if random.uniform(0, 1) <= 0.2:
+            xListA.append(xList1[i])
+            yListA.append(yList1[i])
+        else:
+            xListC.append(xList1[i])
+            yListC.append(yList1[i])
+
+    for i in range(len(xList2)):
+        if random.uniform(0, 1) <= 0.2:
+            xListB.append(xList2[i])
+            yListB.append(yList2[i])
+        else:
+            xListC.append(xList2[i])
+            yListC.append(yList2[i])
+
+    # 避免除以零，重新模拟
+    if len(xListA) == 0:
+        return marking_recapture()
+
+    n = len(xList1) * (len(xListA) + len(xListB)) / len(xListA)
+    return n
+
+# 用循环进行多次模拟
+n_sim = int(input("请输入要模拟的次数:"))
+result = []
+
+for i in range(n_sim):
+    result.append(marking_recapture())
+
+average = sum(result) / n_sim
+print(f"经过 {n_sim} 次有效模拟，估计的种群数量平均值为: {average:.0f}")
+
+# 可视化多次模拟结果并保存图片
+plt.plot(range(len(result)), result)
+plt.axhline(average, color='r', linestyle='--')
+plt.xlabel('模拟次数')
+plt.ylabel('估计的种群数量')
+plt.title(f'经过{n_sim}次模拟实验 其实验均值为{average:.0f}')
+plt.savefig('multiple_simulations.png')  # 保存多次模拟结果图
+plt.show()</code></pre>
+        </div>
+
+        <!-- 1.7 案例总结与思考 -->
+
+        <h3
+          class="text-xl font-semibold mb-4 text-primary section-id"
+          id="section-2-7"
+        >
+          2.7 案例总结与思考
+        </h3>
+
+        <h4
+          class="text-lg font-semibold mb-3 text-dark-200 dark:text-light-200"
+        >
+          1. 案例总结
+        </h4>
+        <p class="mb-4">
+          计算思维进行问题求解是通过抽象、分解、模式识别、算法设计、自动化和泛化，将复杂问题转化为可计算、可执行的步骤。本案例通过标记重捕法模拟科学实验也遵循这样的过程。
+        </p>
+
+        <div class="bg-light-200 dark:bg-dark-100 p-4 rounded-lg mb-6">
+          <h5 class="font-medium mb-2">（1）抽象</h5>
+          <p class="mb-2">
+            本案例抽象的目标是将复杂的生态学问题简化为可计算的模型。
+          </p>
+          <ul class="list-disc pl-6 mb-3 space-y-1">
+            <li>
+              忽略现实世界中种群分布的复杂细节（如个体行为、环境变化等），将种群抽象为一个由个体组成的集合。
+            </li>
+            <li>每个个体用简单的属性表示，如坐标 (x, y) 和标记状态 marked。</li>
+            <li>捕捉过程抽象为随机事件，每个个体有固定的捕捉概率。</li>
+          </ul>
+          <p>
+            通过抽象，将复杂的生态学问题转化为一个可计算的数学模型，减少复杂性，使得问题更易于理解和解决。
+          </p>
+
+          <h5 class="font-medium mb-2 mt-4">（2）问题分解</h5>
+          <p class="mb-2">将问题分解为多个子问题。</p>
+          <ul class="list-disc pl-6 mb-3 space-y-1">
+            <li>初始化种群：生成一定数量的个体，并随机分布在一个区域内。</li>
+            <li>第一次捕捉并标记：随机捕捉部分个体，并标记它们。</li>
+            <li>重新捕捉：再次随机捕捉个体，统计其中被标记的个体数量。</li>
+            <li>估算种群数量：根据标记重捕法的公式计算种群规模。</li>
+          </ul>
+          <p>
+            每个子任务可以进一步分解为更小的步骤，例如：初始化种群 → 生成个体 →
+            分配坐标 → 设置标记状态；捕捉个体 → 随机选择 →
+            更新标记状态。通过分解，复杂的任务被拆解为多个简单的子任务，使得问题更容易逐步解决。
+          </p>
+
+          <h5 class="font-medium mb-2 mt-4">（3）模式识别</h5>
+          <p class="mb-2">模式识别的目的是识别问题中的规律和模式。</p>
+          <ul class="list-disc pl-6 mb-3 space-y-1">
+            <li>
+              识别标记重捕法中的关键模式：捕捉过程是独立事件，个体被捕捉的概率相同；被标记的个体在重新捕捉中的比例与整个种群中被标记个体的比例相同。
+            </li>
+            <li>
+              识别公式中的模式：种群数量 N与第一次标记的个体数量
+              X、第二次捕捉的个体数量 Y、第二次捕捉中被标记的个体数量
+              Z之间的关系为：N=X×Y/Z。
+            </li>
+          </ul>
+          <p>
+            模拟实验识别出标记个体与未标记个体的比例关系，并利用这一比例关系估算种群大小。通过模式识别，帮助理解问题的本质，并为算法设计提供依据。
+          </p>
+
+          <h5 class="font-medium mb-2 mt-4">（4）算法设计</h5>
+          <p class="mb-2">在标记重捕法模拟中，设计了算法来模拟捕捉过程。</p>
+          <ul class="list-disc pl-6 mb-3 space-y-1">
+            <li>
+              初始化种群：使用循环生成一定数量的个体，每个个体具有随机的坐标和初始标记状态。
+            </li>
+            <li>
+              第一次捕捉并标记：遍历种群中的每个个体，根据捕捉概率随机选择个体并标记。
+            </li>
+            <li>
+              重新捕捉：再次遍历种群，根据捕捉概率随机选择个体，并统计其中被标记的个体数量。
+            </li>
+            <li>估算种群数量：根据公式 N=X×Y/Z计算种群规模。</li>
+            <li>
+              使用随机数生成器（如
+              random.random()）模拟捕捉过程；多次模拟实验，验证公式的准确性。
+            </li>
+          </ul>
+          <p>
+            算法设计将抽象、分解和模式识别的结果转化为可执行的步骤，使得问题能够通过计算机程序高效解决。
+          </p>
+
+          <h5 class="font-medium mb-2 mt-4">（5）自动化</h5>
+          <p class="mb-2">
+            通过编写 Python
+            程序，自动模拟捕捉过程、计算种群大小，并进行多次实验。使用循环结构实现多次模拟实验，减少了人为操作，提高了效率。
+          </p>
+
+          <h5 class="font-medium mb-2 mt-4">（6）泛化</h5>
+          <p class="mb-2">
+            在标记重捕法模拟中，可以将模拟方法推广到其他生态学问题，如鱼类种群估计、鸟类迁徙研究等。通过调整参数（如捕捉概率、种群大小等），能够适应不同的实验场景。通过泛化，不仅能够解决当前问题，还能够为未来的类似问题提供解决方案。
+          </p>
+        </div>
+        <p class="mb-4">
+          通过“抽象、分解、模式识别、算法设计、自动化和泛化”，标记重捕法模拟科学实验的过程得以高效实现。这种思维方式不仅适用于标记重捕法，还可以应用于其他科学实验和工程问题的求解。
+        </p>
+
+        <h4
+          class="text-lg font-semibold mb-3 mt-6 text-dark-200 dark:text-light-200"
+        >
+          2. 案例思考
+        </h4>
+        <h5 class="font-medium mb-2 text-dark-100 dark:text-light-300">
+          （1）数据结构的选择
+        </h5>
+        <p class="mb-4">
+          列表是Python中非常灵活的数据结构，适合存储和操作有序的数据。本案例中原始种群、捕捉、未捕捉种群位置均是由循环生成的随机数列表存储。请思考：还可以用什么数据结构实现多个数据的存储？
+        </p>
+        <p class="mb-4">
+          提示：可以使用元组存储个体坐标（不可变特性适合固定数据）；使用字典存储个体完整信息（如{'x':
+          0.5, 'y': 0.3, 'marked':
+          True}）；使用集合存储已标记个体的唯一标识（如坐标哈希值，便于快速查询）。
+        </p>
+
+        <h5 class="font-medium mb-2 text-dark-100 dark:text-light-300">
+          （2）优化本案例程序
+        </h5>
+        <p class="mb-4">
+          代码的可读性和模块化是编程的重要原则。通过将功能封装为函数，可以提高代码的复用性和可维护性。
+        </p>
+        <p class="mb-4">
+          请思考优化本案例程序：在“主程序”中输入要模拟的实验次数，将“多次模拟实验”定义为一个函数，在主程序中调用该函数，完成模拟实验。
+        </p>
+
+        <!-- 1.8 举一反三 -->
+
+        <h3
+          class="text-xl font-semibold mb-4 text-primary section-id"
+          id="section-2-8"
+        >
+          2.8 举一反三
+        </h3>
+
+        <h4
+          class="text-lg font-semibold mb-3 text-dark-200 dark:text-light-200"
+        >
+          1. 模拟掷硬币实验
+        </h4>
+        <p class="mb-4">
+          利用Python程序模拟掷硬币实验，探索概率和统计的奥秘。假设要模拟一枚硬币连续抛掷1000次的结果。请完成模拟实验，并将实验结果进行可视化表示。
+        </p>
+        <p class="mb-3">实验步骤提示：</p>
+        <ol class="list-decimal pl-6 mb-4 space-y-2">
+          <li>
+            实验参数初始化：确定实验中掷硬币的次数，并设置正面和反面的计数器。
+          </li>
+          <li>模拟掷硬币过程：对于每次掷硬币，随机选择“正面”或“反面”。</li>
+          <li>统计结果：统计正面和反面的出现次数。</li>
+          <li>可视化结果：创建一个条形图来展示正面和反面的出现次数。</li>
+          <li>
+            分析结果：通过比较正面和反面的出现次数，可以分析硬币的公平性。
+          </li>
+        </ol>
+        <p class="mb-4">
+          如图 2-17所示，展示了在1000次掷硬币的过程中，正面和反面出现的次数。
+        </p>
+        <div class="flex flex-col items-center my-6">
+          <img
+            src="image/2/2-16.png"
+            alt="安装方式选择"
+            class="max-w-full h-auto rounded-lg shadow-md"
+          />
+          <p class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
+            图2-16 模拟抛硬币概率
+          </p>
+        </div>
+        <p class="mb-4">
+          从图中可以看到，每次得到正面或反面的概率相当。这个实验也印证了伯努利实验的特点，即“每次试验只有两种结果且概率固定、各次试验相互独立”。
+        </p>
+
+        <h4
+          class="text-lg font-semibold mb-3 mt-8 text-dark-200 dark:text-light-200"
+        >
+          2. 生日悖论
+        </h4>
+
+        <p class="mb-4">
+          根据直觉，班级中两个人生日相同的概率应该是很小的。但是实际上，如果某个班级里一共有23名学生，不考虑闰年，出现共享生日（生日相同）情况的概率超过了50%。并且，随着班级人数的增多，这个概率不断提高，当人数达到50人时，这个概率达到了97%。这种现象被称为“生日悖论”。
+        </p>
+        <p class="mb-4">
+          生日悖论是一个关于概率的经典问题，它提出了一个看似违反直觉的结论：在一个相对较小的群体中，两个人拥有相同生日的概率远高于人们的直觉预期。
+        </p>
+        <p class="mb-4">
+          使用 Python
+          进行生日悖论的科学实验，可以随机生成多个人的生日，然后计算在这些生日中至少有两个人生日相同的概率。
+        </p>
+        <p class="mb-3">实验步骤提示：</p>
+        <ol class="list-decimal pl-6 mb-4 space-y-2">
+          <li>
+            使用Python的random模块模拟随机生日，并使用数据结构（如集合或列表）来存储和比较这些生日是否相同。
+          </li>
+          <li>
+            在每次模拟中，生成指定数量的随机生日，并检查是否有重复的生日，记录在每次模拟中是否找到相同生日的情况。通过循环结构模拟多次实验。
+          </li>
+          <li>
+            计算在所有模拟中找到相同生日的频率。使用这个频率来估计在给定群体大小下，至少有两个人生日相同的概率，分析结果。
+          </li>
+          <li>
+            数据结果可视化，使用图表来直观地展示概率是如何随着群体大小的改变而变化的。实验效果如图2-17所示。
+          </li>
+        </ol>
+        <div class="flex flex-col items-center my-6">
+          <img
+            src="image/2/2-17.png"
+            alt="概率随样本大小而变化"
+            class="max-w-full h-auto rounded-lg shadow-md"
+          />
+          <p class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
+            图2-17 概率随样本大小而变化
+          </p>
+        </div>
+        <p class="mb-4">
+          可见，当实验人数是23人时，本次实验存在共享生日的情况占总实验次数的大约50.6%；当实验人数是50人时，共享生日的占比高达97.1%。
+        </p>
+        <p class="mb-4">
+          生日悖论揭示了概率分布的有趣特性，即在相对较小的样本中，某些事件发生的概率可能比预期的要高。这种现象不仅在生日问题中出现，在其他领域也有类似的应用，例如密码学中的碰撞概率等。通过生日悖论的验证，可以更好地理解概率和统计在实际生活中的应用和重要性。
+        </p>
+
+        <h4
+          class="text-lg font-semibold mb-3 mt-8 text-dark-200 dark:text-light-200"
+        >
+          3. 蒙特卡罗法求花格透光率
+        </h4>
+
+        <p class="mb-4">
+          “蒙特卡罗法”是一种统计模拟方法，是基于“随机数”的计算方法。例如，可以用蒙特卡罗法求圆的面积，可以想象，地面有一个正方形，内部有一个内切圆，拿了一袋豆子倒在正方形内，豆子的总数量为M，落入圆内的豆子数量为N，将正方形的面积记为Y，圆的面积记为X，可以得到如下公式：
+          X=N/M*Y
+        </p>
+        <p class="mb-4">
+          求花格透光率的思路与上面的一致，可以理解为，统计在镂空部分的豆子数量，推算出镂空部分与花格总面积的比例，进而求出花格的透光率。
+        </p>
+
+        <p class="mb-3">实验步骤提示：</p>
+        <ol class="list-decimal pl-6 mb-4 space-y-2">
+          <li>
+            定义模拟参数：确定圆形镂空部分的半径和模拟中使用的随机点的总数。
+          </li>
+          <li>
+            生成随机点：在花格的总面积范围内生成大量随机点，每个点代表一个豆子的随机出现位置。
+          </li>
+          <li>
+            判断点是否落在镂空部分：对于每个随机点，判断其是否落在圆形镂空圆内。（可以通过判断点到原点的距离是否小于或等于圆的半径来实现）
+          </li>
+          <li>
+            统计落在镂空部分的点数：统计所有落在圆镂空部分内的随机点的数量。
+          </li>
+          <li>
+            计算透光率：将落在镂空部分的点数除以总点数，得到的结果就是花格的透光率。
+          </li>
+          <li>可视化模拟过程：创建一个图形，展示随机点在花格上的分布情况。</li>
+          <li>显示结果：在执行模拟和可视化的同时，打印出估算的透光率。</li>
+          <li>
+            如图2-18所示，镂空部分用黑色圆形表示，落在圆形内的点用蓝色表示，而落在圆形外的点用红色表示。通过这种方法，可以直观地看到随机点的分布。
+          </li>
+        </ol>
+        <div class="flex flex-col items-center my-6">
+          <img
+            src="image/2/2-18.png"
+            alt="概率随样本大小而变化"
+            class="max-w-full h-auto rounded-lg shadow-md"
+          />
+          <p class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
+            图2-18 蒙特卡洛模拟实验
+          </p>
+        </div>
+        <p class="mb-4">
+          根据蒙特卡罗方法的模拟结果，对于这个假设的花格模型（其中包含一个半径为1的圆形镂空部分），估算的透光率大约为79.60%。这个结果是基于10000个随机点的模拟得出的，因此它是一个近似值。通过增加模拟点的数量，可以得到更精确的透光率估计。
+        </p>
+      </section>
+    </main>
+
+    <script>
+      // 页面加载完成后初始化
+      document.addEventListener("DOMContentLoaded", function () {
+        // 初始化Prism.js语法高亮
+        Prism.highlightAll();
+
+        // 主题切换
+        const themeToggle = document.getElementById("theme-toggle");
+
+        // 检查用户偏好
+        if (
+          localStorage.theme === "dark" ||
+          (!("theme" in localStorage) &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches)
+        ) {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+
+        themeToggle.addEventListener("click", function () {
+          document.documentElement.classList.toggle("dark");
+
+          // 保存用户偏好
+          if (document.documentElement.classList.contains("dark")) {
+            localStorage.theme = "dark";
+          } else {
+            localStorage.theme = "light";
+          }
+        });
+
+        // 代码复制功能
+        // 为每个代码块添加复制按钮
+        document.querySelectorAll("pre").forEach(block => {
+          // 检查是否已有复制按钮
+          if (!block.parentNode.querySelector(".copy-button")) {
+            const codeElement = block.querySelector("code");
+            if (codeElement) {
+              // 生成唯一ID
+              const id = "code-" + Math.random().toString(36).substr(2, 9);
+              codeElement.id = id;
+
+              // 创建复制按钮
+              const copyBtn = document.createElement("button");
+              copyBtn.className =
+                "copy-button absolute top-2 right-2 p-1 hover:bg-dark-100 dark:hover:bg-dark-200 rounded";
+              copyBtn.setAttribute("data-copy-target", id);
+              copyBtn.innerHTML = '<i class="fa fa-copy text-light-400"></i>';
+
+              // 将代码块容器设为相对定位
+              block.parentNode.style.position = "relative";
+
+              // 添加按钮
+              block.parentNode.appendChild(copyBtn);
+            }
+          }
+        });
+
+        // 复制按钮点击事件
+        document.addEventListener("click", function (event) {
+          if (event.target.closest(".copy-button")) {
+            const button = event.target.closest(".copy-button");
+            const targetId = button.getAttribute("data-copy-target");
+            const codeElement = document.getElementById(targetId);
+
+            if (codeElement) {
+              const textToCopy = codeElement.textContent;
+
+              navigator.clipboard.writeText(textToCopy).then(() => {
+                // 显示提示
+                const copyToast = document.getElementById("copy-toast");
+                copyToast.style.opacity = "1";
+                setTimeout(() => {
+                  copyToast.style.opacity = "0";
+                }, 2000);
+              });
+            }
+          }
+        });
+
+        // 为三角形和星形点添加样式
+        const style = document.createElement("style");
+        style.textContent = `
+        .clip-triangle {
+          clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        }
+        .clip-star {
+          clip-path: polygon(
+            50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%,
+            50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%
+          );
+        }
+        .dashed {
+          background-image: linear-gradient(to right, currentColor 50%, transparent 50%);
+          background-size: 8px 1px;
+          background-repeat: repeat-x;
+        }
+      `;
+        document.head.appendChild(style);
+      });
+    </script>
+  </body>
+</html>

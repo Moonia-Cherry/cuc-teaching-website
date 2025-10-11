@@ -63,6 +63,7 @@
     "js-cookie": "^3.0.5",
     "localforage": "^1.10.0",
     "lodash-es": "^4.17.21",
+    "mammoth": "^1.11.0",
     "markdown-it": "^14.1.0",
     "mitt": "^3.0.1",
     "nprogress": "^0.2.0",

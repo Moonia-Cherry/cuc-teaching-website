@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="zh-CN" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>计算思维之问题求解</title>
+    <!-- 外部资源引入 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/line-numbers/prism-line-numbers.min.css"
+      rel="stylesheet"
+    />
+    <!-- 引入 MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+    <!-- Tailwind 配置 -->
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#2563eb", // 主色调：蓝色
+              secondary: "#10b981", // 辅助色：绿色
+              dark: {
+                100: "#374151",
+                200: "#1F2937",
+                300: "#111827"
+              },
+              light: {
+                100: "#F9FAFB",
+                200: "#F3F4F6",
+                300: "#E5E7EB"
+              }
+            },
+            fontFamily: {
+              sans: ["Inter", "system-ui", "sans-serif"],
+              mono: ["Fira Code", "monospace"]
+            }
+          }
+        }
+      };
+    </script>
+
+    <style type="text/tailwindcss">
+      @layer utilities {
+        .content-auto {
+          content-visibility: auto;
+        }
+        .nav-active {
+          @apply bg-primary/10 text-primary border-l-4 border-primary font-medium;
+        }
+        .section-id {
+          @apply scroll-mt-20; /* 锚点跳转时避开顶部 */
+        }
+        /* 自定义有序列表样式 */
+        .custom-list {
+          counter-reset: list-counter;
+        }
+        .custom-list > li {
+          counter-increment: list-counter;
+          list-style: none;
+        }
+        .custom-list > li::before {
+          content: "(" counter(list-counter) ")";
+          @apply inline-block mr-2;
+        }
+        .sidebar-fixed {
+          position: fixed;
+          top: 61px;
+          height: calc(100vh - 61px);
+          overflow-y: auto;
+          left: 0;
+        }
+      }
+    </style>
+  </head>
+
+  <body
+    class="bg-light-100 text-dark-300 dark:bg-dark-300 dark:text-light-100 min-h-screen flex flex-col"
+  >
+    <!-- 顶部标题栏 -->
+    <header class="sticky top-0 z-40 bg-white dark:bg-dark-200 shadow-sm">
+      <div
+        class="container mx-auto px-4 py-3 flex items-center justify-between"
+      >
+        <div class="flex items-center space-x-2">
+          <!-- 移动端导航切换按钮 -->
+          <button
+            id="sidebar-toggle"
+            class="lg:hidden p-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+          >
+            <i class="fa fa-bars text-xl"></i>
+          </button>
+          <!-- 标题 -->
+          <h1 class="text-xl md:text-2xl font-bold text-primary">
+            <i class="fa fa-book mr-2"></i>计算思维之问题求解
+          </h1>
+        </div>
+        <!-- 主题切换按钮 -->
+        <button
+          id="theme-toggle"
+          class="p-2 rounded-full hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+        >
+          <i class="fa fa-moon-o dark:hidden text-xl"></i>
+          <i class="fa fa-sun-o hidden dark:inline text-xl"></i>
+        </button>
+      </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden">
+      <!-- 左侧导航栏 -->
+      <aside
+        id="sidebar"
+        class="w-64 bg-white dark:bg-dark-200 shadow-md z-30 hidden lg:block overflow-y-auto sidebar-fixed"
+      >
+        <nav class="p-4">
+          <!-- 第1章导航 -->
+          <div class="mb-6">
+            <h3
+              class="text-lg font-semibold mb-2 text-dark-200 dark:text-light-200"
+            >
+              1. 工作环境搭建
+            </h3>
+            <ul class="space-y-1">
+              <li>
+                <a
+                  href="chapter1.html#section-2-2"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors nav-active"
+                  >1.1 搭建Python环境方案</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter1.html#section-2-3"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >1.2 安装Python解释器</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter1.html#section-2-4"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >1.3 搭建VS Code开发环境</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter1.html#section-2-5"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >1.4 搭建PyCharm开发环境</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter1.html#section-2-6"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >1.5 搭建Anaconda集成开发环境</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter1.html#section-2-7"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >1.6 AI辅助编程</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter1.html#section-2-summary"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >小结</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter1.html#section-2-exercise"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >思考与练习</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- 第2章导航 -->
+          <div class="mb-6">
+            <h3
+              class="text-lg font-semibold mb-2 text-dark-200 dark:text-light-200"
+            >
+              2.模拟科学实验
+            </h3>
+            <ul class="space-y-1">
+              <li>
+                <a
+                  href="chapter2.html#section-2-1"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >2.1 需求分析</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter2.html#section-2-2"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >2.2 学习目标</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter2.html#section-2-3"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >2.3 环境要求</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter2.html#section-2-4"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >2.4 相关知识</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter2.html#section-2-5"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >2.5 案例目标</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter2.html#section-2-6"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >2.6 案例实现</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter2.html#section-2-7"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >2.7 案例总结与思考</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter2.html#section-2-8"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >2.8 举一反三</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- 第3章导航 -->
+          <div class="mb-6">
+            <h3
+              class="text-lg font-semibold mb-2 text-dark-200 dark:text-light-200"
+            >
+              3.GUI图形化界面设计
+            </h3>
+            <ul class="space-y-1">
+              <li>
+                <a
+                  href="chapter3.html#section-3-1"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >3.1 需求分析</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter3.html#section-3-2"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >3.2 学习目标</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter3.html#section-3-3"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >3.3 环境要求</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter3.html#section-3-4"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >3.4 相关知识</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter3.html#section-3-5"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >3.5 案例实现</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter3.html#section-3-6"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >3.6 案例总结与反思</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter3.html#section-3-7"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >3.7 举一反三</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- 第4章导航 -->
+          <div class="mb-6">
+            <h3
+              class="text-lg font-semibold mb-2 text-dark-200 dark:text-light-200"
+            >
+              4.图像处理
+            </h3>
+            <ul class="space-y-1">
+              <li>
+                <a
+                  href="chapter4.html#section-4-1"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >4.1 需求分析</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter4.html#section-4-2"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >4.2 学习目标</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter4.html#section-4-3"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >4.3 环境要求</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter4.html#section-4-4"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >4.4 图像处理1——图像文件操作</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter4.html#section-4-5"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >4.5 图像处理2——图像合成</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter4.html#section-4-6"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >4.6 图像处理3——图像增强与滤镜</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter4.html#section-4-7"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >4.7 举一反三</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- 第5章导航 -->
+          <div class="mb-6">
+            <h3
+              class="text-lg font-semibold mb-2 text-dark-200 dark:text-light-200"
+            >
+              5.数据采集及文件读写
+            </h3>
+            <ul class="space-y-1">
+              <li>
+                <a
+                  href="chapter5.html#section-5-1"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >5.1 需求分析</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter5.html#section-5-2"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >5.2 学习目标</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter5.html#section-5-3"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >5.3 环境要求</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter5.html#section-5-4"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >5.4 相关知识</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter5.html#section-5-5"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >5.5 案例实现</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter5.html#section-5-6"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >5.6 案例总结与反思</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter5.html#section-5-7"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >5.7 举一反三</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- 第6章导航 -->
+          <div class="mb-6">
+            <h3
+              class="text-lg font-semibold mb-2 text-dark-200 dark:text-light-200"
+            >
+              6.自然语言处理
+            </h3>
+            <ul class="space-y-1">
+              <li>
+                <a
+                  href="chapter6.html#section-6-1"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >6.1 需求分析</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter6.html#section-6-2"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >6.2 学习目标</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter6.html#section-6-3"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >6.3 环境要求</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter6.html#section-6-4"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >6.4 相关知识</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter6.html#section-6-5"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >6.5 案例实现</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter6.html#section-6-6"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >6.6 案例总结及思考</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter6.html#section-6-7"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >6.7 举一反三</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- 第7章导航 -->
+          <div class="mb-6">
+            <h3
+              class="text-lg font-semibold mb-2 text-dark-200 dark:text-light-200"
+            >
+              7. 大数据分析
+            </h3>
+            <ul class="space-y-1">
+              <li>
+                <a
+                  href="chapter7.html#section-7-1"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >7.1 案例背景</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter7.html#section-7-2"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >7.2 学习目标</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter7.html#section-7-3"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >7.3 数据介绍</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter7.html#section-7-4"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >7.4 环境要求</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter7.html#section-7-5"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >7.5 相关知识</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter7.html#section-7-6"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >7.6 案例实现</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter7.html#section-7-7"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >7.7 案例总结与建议</a
+                >
+              </li>
+              <li>
+                <a
+                  href="chapter7.html#section-7-8"
+                  class="nav-link block px-3 py-2 rounded-md hover:bg-light-200 dark:hover:bg-dark-100 transition-colors"
+                  >7.8 举一反三</a
+                >
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </aside>
+
+      <!-- 主内容区 -->
+      <main
+        id="main-content"
+        class="flex-1 overflow-y-auto p-4 lg:p-8 lg:ml-64"
+      >
+        <div class="max-w-8xl mx-auto">
+          <!-- 默认加载第1章内容 -->
+          <div id="content-loader">
+            <!-- 这里将通过JavaScript加载第1章的内容 -->
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      // 页面加载完成后初始化
+      document.addEventListener("DOMContentLoaded", function () {
+        // 主题切换功能
+        const themeToggle = document.getElementById("theme-toggle");
+        const html = document.documentElement;
+
+        // 检查本地存储中的主题设置
+        if (localStorage.getItem("theme") === "dark") {
+          html.classList.add("dark");
+        }
+
+        themeToggle.addEventListener("click", function () {
+          html.classList.toggle("dark");
+          // 保存主题设置到本地存储
+          if (html.classList.contains("dark")) {
+            localStorage.setItem("theme", "dark");
+          } else {
+            localStorage.setItem("theme", "light");
+          }
+        });
+
+        // 移动端导航切换
+        const sidebarToggle = document.getElementById("sidebar-toggle");
+        const sidebar = document.getElementById("sidebar");
+
+        sidebarToggle.addEventListener("click", function () {
+          sidebar.classList.toggle("hidden");
+        });
+
+        // 导航链接点击事件
+        const navLinks = document.querySelectorAll(".nav-link");
+        navLinks.forEach(link => {
+          link.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            // 获取目标URL和锚点
+            const href = this.getAttribute("href");
+            const [page, anchor] = href.split("#");
+
+            // 更新活动导航项
+            navLinks.forEach(l => l.classList.remove("nav-active"));
+            this.classList.add("nav-active");
+
+            // 加载页面内容
+            loadContent(page, anchor);
+          });
+        });
+
+        // 检查localStorage中是否有保存的页面
+        const savedPage = localStorage.getItem("lastVisitedPage");
+        const savedAnchor = localStorage.getItem("lastVisitedAnchor");
+
+        // 初次打开加载chapter1，否则加载保存的页面
+        if (savedPage) {
+          loadContent(savedPage, savedAnchor);
+        } else {
+          loadContent("chapter1.html");
+        }
+
+        // 内容加载函数
+        function loadContent(page, anchor = null) {
+          const contentLoader = document.getElementById("content-loader");
+
+          // 保存当前页面到localStorage
+          localStorage.setItem("lastVisitedPage", page);
+          if (anchor) {
+            localStorage.setItem("lastVisitedAnchor", anchor);
+          } else {
+            localStorage.removeItem("lastVisitedAnchor");
+          }
+
+          // 显示加载动画
+          contentLoader.innerHTML = `
+                    <div class="flex justify-center items-center h-64">
+                        <div class="text-center">
+                            <i class="fa fa-spinner fa-spin text-3xl text-primary"></i>
+                            <p class="mt-2 text-dark-200 dark:text-light-200">加载中...</p>
+                        </div>
+                    </div>
+                `;
+
+          fetch(page)
+            .then(response => response.text())
+            .then(html => {
+              // 创建临时DOM元素来解析返回的HTML
+              const parser = new DOMParser();
+              const doc = parser.parseFromString(html, "text/html");
+
+              // 提取章节内容
+              const section = doc.querySelector("section");
+              if (section) {
+                contentLoader.innerHTML = section.outerHTML;
+
+                // 如果有锚点，滚动到指定位置
+                if (anchor) {
+                  setTimeout(() => {
+                    const targetElement = document.getElementById(anchor);
+                    if (targetElement) {
+                      targetElement.scrollIntoView({ behavior: "smooth" });
+                    }
+                  }, 100);
+                }
+
+                // 重新初始化代码高亮
+                if (typeof Prism !== "undefined") {
+                  Prism.highlightAll();
+                }
+
+                // 触发MathJax重新渲染数学公式
+                if (typeof MathJax !== "undefined") {
+                  MathJax.typesetPromise();
+                }
+              } else {
+                contentLoader.innerHTML = "<p>内容加载失败</p>";
+              }
+            })
+            .catch(error => {
+              console.error("加载内容时出错:", error);
+              contentLoader.innerHTML = "<p>内容加载失败</p>";
+            });
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,1489 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>7. 数据分析（广告投放效果分析）</title>
+    <!-- 引入MathJax支持公式渲染 -->
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+  </head>
+
+  <body>
+    <!-- 主内容区 -->
+    <section class="mb-16 w-full">
+      <h2
+        class="text-2xl md:text-3xl font-bold mb-6 text-dark-200 dark:text-light-200"
+      >
+        7. 数据分析
+      </h2>
+
+      <!-- 7.1 案例背景 -->
+      <h3
+        class="text-xl font-semibold mb-4 text-primary section-id"
+        id="section-7-1"
+      >
+        7.1 案例背景
+      </h3>
+      <p class="mb-4">
+        假设你创立了一家奶茶店，第一季度在某平台投放了3组广告，如何根据已投放广告的效果确定第二季度广告投放策略，以达到更好的效果？当今，广告已成为企业和品牌获取潜在客户、提升市场份额的重要手段。评估广告效果不仅能够帮助决策者了解广告的真正价值，还能为优化未来的营销策略提供数据支持。
+      </p>
+      <p class="mb-4">
+        本案例基于Kaggle上的一个社交媒体广告活动数据，分析广告投放效果及影响因素。
+      </p>
+
+      <!-- 7.2 学习目标 -->
+      <h3
+        class="text-xl font-semibold mb-4 text-primary section-id"
+        id="section-7-2"
+      >
+        7.2 学习目标
+      </h3>
+      <ol class="list-decimal pl-6 mb-4 space-y-2">
+        <li>通过案例实践，了解数据分析基本流程。</li>
+        <li>掌握利用Pandas库进行数据读写、清洗、统计分析的方法。</li>
+        <li>掌握利用Matplotlib库进行数据可视化的方法。</li>
+      </ol>
+
+      <!-- 7.3 数据介绍 -->
+      <h3
+        class="text-xl font-semibold mb-4 text-primary section-id"
+        id="section-7-3"
+      >
+        7.3 数据介绍
+      </h3>
+      <p class="mb-4">
+        案例中用到的数据改编自Kaggle网站（<a
+          href="https://www.kaggle.com/datasets/loveall/clicks-conversion-tracking"
+          target="_blank"
+          class="text-primary underline"
+          >https://www.kaggle.com/datasets/loveall/clicks-conversion-tracking</a
+        >）。为描述方便，将原始数据集中的字段名修改为了中文，字段信息分别为：
+      </p>
+      <ul class="list-disc pl-6 mb-4 space-y-1">
+        <li>
+          基础字段：广告ID、广告活动ID、Facebook追踪每个营销活动ID、年龄段、性别、兴趣ID
+        </li>
+        <li>效果字段：广告展示量、广告点击量、广告费、咨询量、购买量</li>
+      </ul>
+      <p class="mb-4">数据集中共有1145条记录，11个字段。</p>
+
+      <!-- 7.4 环境要求 -->
+      <h3
+        class="text-xl font-semibold mb-4 text-primary section-id"
+        id="section-7-4"
+      >
+        7.4 环境要求
+      </h3>
+      <ul class="list-disc pl-6 mb-4 space-y-1">
+        <li>Python环境（3.7及以上版本）</li>
+        <li>第三方库：Pandas（数据处理）、Matplotlib（数据可视化）</li>
+      </ul>
+      <p class="tip">
+        安装命令：<code class="language-python"
+          >pip install pandas matplotlib -i
+          https://pypi.tuna.tsinghua.edu.cn/simple</code
+        >
+      </p>
+
+      <!-- 7.5 相关知识 -->
+      <h3
+        class="text-xl font-semibold mb-4 text-primary section-id"
+        id="section-7-5"
+      >
+        7.5 相关知识
+      </h3>
+
+      <!-- 7.5.1 广告投放效果衡量指标 -->
+      <h4 class="text-lg font-semibold mb-3 text-dark-200 dark:text-light-200">
+        1. 广告投放效果衡量指标
+      </h4>
+      <p class="mb-4">
+        衡量广告投放效果的核心指标有流量指标、成本指标、收益指标、用户行为指标等，如图7-1所示。
+      </p>
+
+      <div class="flex flex-col items-center my-6">
+        <img
+          src="image/7/7-1.png"
+          alt="常用广告效果衡量指标"
+          title="常用广告效果衡量指标"
+          class="max-w-full h-auto rounded-lg shadow-md"
+        />
+        <p class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
+          图7-1 常用广告效果衡量指标
+        </p>
+      </div>
+
+      <p class="mb-4">
+        结合本案例的数据集，下面重点讨论流量指标、成本指标和收益指标。
+      </p>
+
+      <h5>（1）流量指标</h5>
+      <ul class="list-disc pl-6 mb-4 space-y-2">
+        <li>
+          <strong>展示量</strong
+          >：指广告在一定时间内被展示的次数。展示量越高，意味着有更多机会被潜在客户看到。
+        </li>
+        <li>
+          <strong>点击量</strong
+          >：用户点击广告的次数，体现广告吸引用户进一步了解的能力。
+        </li>
+        <li>
+          <strong>点击率（Click-Through Rate, CTR）</strong
+          >：指广告被点击的次数与广告展示量的比例，用于评估广告吸引力和用户兴趣度，公式如下：
+          <div class="math-container">
+            \[ CTR = \frac{点击次数}{广告展示次数} \]
+          </div>
+        </li>
+        <li>
+          <strong>转化率（CVR，Conversion Rate）</strong
+          >：指用户完成特定转化行为的次数与点击广告总次数之比，高转化率表明广告能有效引导用户，公式如下：
+          <div class="math-container">
+            \[咨询转化率 = \frac{咨询量}{点击量}\]
+            <br /><br />
+            \[购买转化率 = \frac{购买量}{点击量}\]
+          </div>
+        </li>
+      </ul>
+
+      <h5>（2）成本指标</h5>
+      <ul class="list-disc pl-6 mb-4 space-y-2">
+        <li>
+          <strong>每次点击成本（CPC，Cost Per Click）</strong
+          >：广告主为用户每一次有效点击支付的费用，反映流量获取成本效率，公式如下：
+          <div class="math-container">\[ CPC = \frac{广告费用}{点击量} \]</div>
+          <p class="tip">
+            示例：广告花费200元，获得500次点击，则 \( CPC = \frac{200}{500} =
+            0.4 \) 元/次。
+          </p>
+        </li>
+        <li>
+          <strong>每次行动成本（CPA，Cost Per Action）</strong
+          >：广告主为用户每一次特定转化行为支付的平均费用（如购买、注册），公式如下：
+          <div class="math-container">\[ CPA = \frac{广告费用}{转化量} \]</div>
+        </li>
+        <li>
+          <strong>每千次展示成本（CPM，Cost Per Mille）</strong
+          >：广告主为每千次广告展示支付的费用，适用于品牌展示类广告，公式如下：
+          <div class="math-container">
+            \[ CPM = \frac{广告费用}{展示量} \times 1000 \]
+          </div>
+        </li>
+      </ul>
+
+      <h5>（3）投资回报指标</h5>
+      <p class="mb-4">
+        投资回报指标衡量广告投入与收益的关系，帮助判断广告支出合理性，核心指标如下：
+      </p>
+      <ul class="list-disc pl-6 mb-4 space-y-2">
+        <li>
+          <strong>投资回报率（ROI，Return on Investment）</strong
+          >：衡量整体投资净回报率，扣除所有成本（广告+产品+运营等），公式如下：
+          <div class="math-container">
+            \[ ROI = \frac{广告收入 - 广告成本}{广告费用} \]
+          </div>
+        </li>
+        <li>
+          <strong>广告支出回报率（ROAS，Return on Advertising Spend）</strong
+          >：衡量广告支出的直接回报率，仅关注广告投入与收入，公式如下：
+          <div class="math-container">
+            \[ ROAS = \frac{广告收入}{广告费用} \]
+          </div>
+        </li>
+      </ul>
+
+      <!-- 7.5.2 数据分析基本流程 -->
+      <h4 class="text-lg font-semibold mb-3 text-dark-200 dark:text-light-200">
+        2. 数据分析基本流程
+      </h4>
+      <p class="mb-4">数据分析的基本流程分为5个步骤，具体如下：</p>
+      <ol class="custom-list pl-6 mb-4 space-y-3">
+        <li>
+          <strong>明确目的</strong
+          >：确定数据分析的核心问题和目标（如“哪组广告投放效果最好？”）。
+        </li>
+        <li>
+          <strong>获取数据</strong
+          >：通过客户提供、问卷调查、公开数据源下载或爬虫技术收集待分析数据。
+        </li>
+        <li>
+          <strong>数据处理</strong
+          >：包括数据清洗（处理缺失值、重复值、异常值）、数据转换（标准化、归一化）、特征选择等。
+        </li>
+        <li>
+          <strong>数据分析</strong
+          >：根据问题进行统计分析（求和、均值、分类汇总）或建模分析（相关性、回归等）。
+        </li>
+        <li>
+          <strong>结果展现</strong
+          >：通过可视化（图表）呈现分析结果，并解读结论以支持决策。
+        </li>
+      </ol>
+
+      <!-- 7.5.3 相关性分析 -->
+      <h4 class="text-lg font-semibold mb-3 text-dark-200 dark:text-light-200">
+        3. 相关性分析
+      </h4>
+      <p class="mb-4">
+        相关性分析用于研究两个或多个变量之间的关联程度，核心作用包括：
+      </p>
+      <ul class="list-disc pl-6 mb-4 space-y-2">
+        <li>
+          <strong>探索数据关系</strong
+          >：发现变量间内在联系（如广告展示量与点击量的关系），为进一步研究提供线索。
+        </li>
+        <li>
+          <strong>变量筛选和降维</strong
+          >：去除高度相关的冗余变量，避免多重共线性对分析结果的影响。
+        </li>
+        <li>
+          <strong>预测和决策支持</strong
+          >：基于变量相关性制定策略（如根据广告投入与销售额的正相关调整预算）。
+        </li>
+      </ul>
+
+      <p class="mb-4">
+        Pandas中用<code>DataFrame.corr()</code>计算各列间相关性，返回相关系数矩阵，语法如下：
+      </p>
+      <pre><code class="language-python">DataFrame.corr(method='pearson', min_periods=1)</code></pre>
+
+      <p class="mb-4">关键参数说明：</p>
+      <ul class="list-disc pl-6 mb-4 space-y-1">
+        <li>
+          <code>method</code
+          >：相关性计算方法，默认<code>'pearson'</code>（皮尔逊系数，衡量线性关系），可选<code>'kendall'</code>（肯德尔秩相关）、<code>'spearman'</code>（斯皮尔曼秩相关，适用于非线性关系）。
+        </li>
+        <li><code>min_periods</code>：每对列需满足的最小观测值数量，默认1。</li>
+      </ul>
+      <h4 class="font-semibold mb-2 text-dark-200 dark:text-light-200">
+        例7-1：相关性分析
+      </h4>
+
+      <pre><code class="language-python">import pandas as pd
+
+data = {
+    "广告投入": [1000, 1500, 800, 1200],
+    "销量": [4000, 7500, 3500, 6000],
+    "评分": [4.2, 4.5, 3.9, 4.1]
+}
+df = pd.DataFrame(data, index=["一月", "二月", "三月", "四月"])
+
+# 计算相关系数矩阵
+corr_matrix = df.corr()
+print(corr_matrix)</code></pre>
+
+      <p class="mb-4">输出结果如下所示：</p>
+      <div class="overflow-x-auto mb-6">
+        <p
+          class="text-center font-semibold mb-2 text-dark-200 dark:text-light-200"
+        >
+          相关性分析结果
+        </p>
+        <table
+          class="min-w-full bg-white dark:bg-dark-200 rounded-lg shadow-sm"
+        >
+          <thead>
+            <tr class="bg-light-200 dark:bg-dark-100">
+              <th class="px-4 py-2 text-left"></th>
+              <th class="px-4 py-2 text-left">广告投入</th>
+              <th class="px-4 py-2 text-left">销量</th>
+              <th class="px-4 py-2 text-left">评分</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">广告投入</td>
+              <td class="px-4 py-2">1.000000</td>
+              <td class="px-4 py-2">0.981363</td>
+              <td class="px-4 py-2">0.904196</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">销量</td>
+              <td class="px-4 py-2">0.981363</td>
+              <td class="px-4 py-2">1.000000</td>
+              <td class="px-4 py-2">0.811503</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">评分</td>
+              <td class="px-4 py-2">0.904196</td>
+              <td class="px-4 py-2">0.811503</td>
+              <td class="px-4 py-2">1.000000</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="mb-4">
+        结果解读：广告投入与销量、评分的相关系数分别约为0.98和0.90（强正相关），说明广告投入对销量和用户评分影响显著；销量与评分相关系数约0.81（强正相关），表明高评分可能促进销量提升。
+      </p>
+
+      <!-- 1.5.4 分类汇总 -->
+      <h4 class="text-lg font-semibold mb-3 text-dark-200 dark:text-light-200">
+        4. 分类汇总
+      </h4>
+      <p class="mb-4">
+        分类汇总是对同类数据进行统计汇总（求和、均值等），Pandas中用<code>groupby()</code>方法实现，核心是明确"<span
+          class="font-bold text-primary"
+          >分类字段</span
+        >、<span class="font-bold text-primary">汇总字段</span>、<span
+          class="font-bold text-primary"
+          >汇总方式</span
+        >"。
+      </p>
+
+      <p class="mb-4"><code>groupby()</code>方法语法：</p>
+      <pre><code class="language-python">df.groupby(by, axis, level, as_index, sort, ……)</code></pre>
+
+      <p class="mb-4">常用参数说明如表7-1所示：</p>
+      <div class="overflow-x-auto">
+        <p class="text-center font-semibold mb-2">表7-1 groupby()参数说明</p>
+        <table>
+          <thead>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <th class="px-4 py-2 text-left">参数</th>
+              <th class="px-4 py-2 text-left">含义</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">by</td>
+              <td class="px-4 py-2">
+                分组依据，可为列名、列名列表或返回分组值的函数
+              </td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">axis</td>
+              <td class="px-4 py-2">
+                分组轴向：axis=0（行方向，默认），axis=1（列方向）
+              </td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">level</td>
+              <td class="px-4 py-2">用于分组的索引级别（默认无）</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">as_index</td>
+              <td class="px-4 py-2">
+                是否将分组键作为行索引：True（默认），False（分组键为普通列）
+              </td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">sort</td>
+              <td class="px-4 py-2">
+                分组内数据是否按索引排序：True（默认），False（保留原始顺序）
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="mb-4">分类汇总常用的有两种方式：</p>
+      <ol class="list-decimal pl-6 mb-4 space-y-2">
+        <li>
+          <strong>方式1：直接对列运用汇总函数</strong>
+          <pre><code class="language-python">df.groupby(分类列)[汇总列].汇总函数()</code></pre>
+        </li>
+        <li>
+          <strong>方式2：用agg()函数多字段汇总</strong>
+          <pre><code class="language-python">df.groupby(分类列).agg({"列1":"汇总函数", "列2":"汇总函数", ……})</code></pre>
+        </li>
+      </ol>
+
+      <p class="mb-4">常用汇总函数如表7-2所示：</p>
+      <div class="overflow-x-auto mb-6">
+        <p
+          class="text-center font-semibold mb-2 text-dark-200 dark:text-light-200"
+        >
+          表7-2 常用汇总函数
+        </p>
+        <table
+          class="min-w-full bg-white dark:bg-dark-200 rounded-lg shadow-sm"
+        >
+          <thead>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <th class="px-4 py-2 text-left">函数</th>
+              <th class="px-4 py-2 text-left">功能</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">count()</td>
+              <td class="px-4 py-2">统计非空值个数</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">sum()</td>
+              <td class="px-4 py-2">求和</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">mean()</td>
+              <td class="px-4 py-2">求均值</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">max()</td>
+              <td class="px-4 py-2">求最大值</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">min()</td>
+              <td class="px-4 py-2">求最小值</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">median()</td>
+              <td class="px-4 py-2">求中位数</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">mode()</td>
+              <td class="px-4 py-2">求众数</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">var()</td>
+              <td class="px-4 py-2">求方差</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">std()</td>
+              <td class="px-4 py-2">求标准差</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">quantile()</td>
+              <td class="px-4 py-2">求分位数</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <h4 class="font-semibold mb-2 text-dark-200 dark:text-light-200">
+        例7-2：计算各公司总销售额
+      </h4>
+
+      <pre><code class="language-python">import pandas as pd
+
+# 读取数据
+salesData = pd.read_excel('data/sales.xlsx')
+
+# 分类字段：公司；汇总字段：销售额；汇总方式：求和
+# 方式1：返回Series（分类字段为索引）
+shopSale1 = salesData.groupby('公司')['销售额'].sum()
+print("方式1结果（Series）：")
+print(shopSale1)
+
+# 方式2：返回DataFrame（分类字段为行标签）
+shopSale2 = salesData.groupby('公司').agg({"销售额":"sum"})
+print("\n方式2结果（DataFrame）：")
+print(shopSale2)
+
+# 方式3：分类字段为普通列（as_index=False）
+shopSale3 = salesData.groupby('公司', as_index=False).agg({"销售额":"sum"})
+print("\n方式3结果（分类字段为列）：")
+print(shopSale3)</code></pre>
+
+      <div class="overflow-x-auto">
+        <p class="font-semibold">
+          方式1输出结果为Series类型，分类字段“公司”是结果Series的index
+        </p>
+        <table>
+          <thead>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <th class="px-4 py-2 text-left">公司</th>
+              <th class="px-4 py-2 text-left"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">京东</td>
+              <td class="px-4 py-2">886543</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">天猫</td>
+              <td class="px-4 py-2">515871</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">拼多多</td>
+              <td class="px-4 py-2">258077</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">苏宁易购</td>
+              <td class="px-4 py-2">386806</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p class="font-semibold mt-4">
+          方式2输出结果为DataFrame类型，分类字段“公司”为行标签
+        </p>
+        <table>
+          <thead>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <th class="px-4 py-2 text-left"></th>
+              <th class="px-4 py-2 text-left">销售额</th>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <th class="px-4 py-2 text-left">公司</th>
+              <th class="px-4 py-2 text-left"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">京东</td>
+              <td class="px-4 py-2">886543</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">天猫</td>
+              <td class="px-4 py-2">515871</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">拼多多</td>
+              <td class="px-4 py-2">258077</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">苏宁易购</td>
+              <td class="px-4 py-2">386806</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p class="font-semibold mt-4">
+          方式3输出结果为DataFrame类型，因为设置了as_index=False，分类字段“公司”为普通列
+        </p>
+        <table>
+          <thead>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <th class="px-4 py-2 text-left"></th>
+              <th class="px-4 py-2 text-left">公司</th>
+              <th class="px-4 py-2 text-left">销售额</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">0</td>
+              <td class="px-4 py-2">京东</td>
+              <td class="px-4 py-2">886543</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">1</td>
+              <td class="px-4 py-2">天猫</td>
+              <td class="px-4 py-2">515871</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">2</td>
+              <td class="px-4 py-2">拼多多</td>
+              <td class="px-4 py-2">258077</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">3</td>
+              <td class="px-4 py-2">苏宁易购</td>
+              <td class="px-4 py-2">386806</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="tip">
+        提示：若使用NumPy统计函数（如np.sum），agg()中无需加引号，示例：<code
+          >agg({"销售额": np.sum})</code
+        >。
+      </p>
+
+      <!-- 7.6 案例实现 -->
+      <h3
+        class="text-xl font-semibold mb-4 text-primary section-id"
+        id="section-7-6"
+      >
+        7.6 案例实现
+      </h3>
+      <p class="mb-4">
+        本案例从流量获取、成本、收益三方面分析广告的投放效果，为商家进行广告投放和优化提供参考。
+      </p>
+
+      <!-- 7.6.1 导入库与读取数据 -->
+      <h4 class="text-lg font-semibold mb-3 text-dark-200 dark:text-light-200">
+        1. 导入需要的库
+      </h4>
+      <pre><code class="language-python">import pandas as pd
+import matplotlib.pyplot as plt</code></pre>
+
+      <h4 class="text-lg font-semibold mb-3 text-dark-200 dark:text-light-200">
+        2. 读取数据
+      </h4>
+      <pre><code class="language-python"># 读入数据（encoding='gbk'适配中文）
+df = pd.read_csv('data/KAG_conversion_data.csv', encoding='gbk')</code></pre>
+
+      <!-- 1.6.2 数据处理 -->
+      <h4 class="text-lg font-semibold mb-3 text-dark-200 dark:text-light-200">
+        3. 数据处理
+      </h4>
+
+      <h5>（1）数据基本信息查看</h5>
+      <p class="mb-4">
+        读入数据后，需先了解数据结构、缺失值、数据类型等基本信息，常用方法如表7-3所示：
+      </p>
+      <div class="overflow-x-auto">
+        <p class="text-center font-semibold mb-2">
+          表7-3 DataFrame基本信息查看方法
+        </p>
+        <table>
+          <thead>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <th class="px-4 py-2 text-left">方法</th>
+              <th class="px-4 py-2 text-left">说明</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">df.head(n)</td>
+              <td class="px-4 py-2">读取前n行数据，默认n=5</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">df.tail(n)</td>
+              <td class="px-4 py-2">读取最后n行数据，默认n=5</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">df.info()</td>
+              <td class="px-4 py-2">
+                查看索引、列数、数据类型、非空值个数、内存使用情况
+              </td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">df.describe()</td>
+              <td class="px-4 py-2">
+                数字列：返回均值、标准差、分位数等；字符串列：返回值计数、唯一值等
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="mb-4">示例代码：</p>
+      <pre><code class="language-python"># 查看前2条记录
+print("数据前2行：")
+print(df.head(2))
+
+# 查看数据分布与缺失值
+print("\n数据信息：")
+print(df.info())</code></pre>
+
+      <p class="mb-4">输出结果（数据信息部分）：</p>
+      <pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
+RangeIndex: 1145 entries, 0 to 1144
+Data columns (total 11 columns):
+ #   Column  Non-Null Count  Dtype
+---  ------  --------------  -----
+ 0   广告ID    1145 non-null   int64
+ 1   广告活动ID  1145 non-null   int64
+ 2   fb追踪ID  1145 non-null   int64
+ 3   年龄段     1145 non-null   object
+ 4   性别      1145 non-null   object
+ 5   兴趣ID    1145 non-null   int64
+ 6   展示量     1144 non-null   float64
+ 7   点击量     1144 non-null   float64
+ 8   广告费     1145 non-null   float64
+ 9   咨询量     1145 non-null   int64
+ 10  购买量     1145 non-null   int64
+dtypes: float64(3), int64(6), object(2)
+memory usage: 98.5+ KB
+None</code></pre>
+
+      <p class="mb-4">
+        结果解读：数据集共1145条记录、11列，“展示量”“点击量”列各有1个缺失值（非空数1144），需后续清洗。
+      </p>
+
+      <h5>（2）数据清洗</h5>
+      <p class="mb-4">重点处理缺失值和重复值，确保数据质量：</p>
+      <pre><code class="language-python"># 1. 查看缺失值行数
+nanNum = df.isnull().any(axis=1).sum()
+print(f'Total number of NA lines is: {nanNum}')  # 输出：Total number of NA lines is: 1
+
+# 2. 查看重复值行数
+dupNum = df.duplicated().sum()
+print(f'Total number of duplicate lines is: {dupNum}')  # 若存在重复值，输出对应数量
+
+# 3. 删除缺失值和重复值（inplace=True：在原数据上操作）
+df.dropna(inplace=True)  # 删除含缺失值的记录
+df.drop_duplicates(inplace=True)  # 删除重复记录
+
+print(f'清洗后数据量：{len(df)} 条')  # 输出：清洗后数据量：1144 条（删除1条缺失值记录）</code></pre>
+
+      <h5>（3）相关性分析</h5>
+      <p class="mb-4">
+        分析广告效果关键指标（展示量、点击量、咨询量、购买量）的相关性，需先抽取目标列：
+      </p>
+      <pre><code class="language-python"># 1. 抽取目标列
+df_new = df[['展示量', '点击量', '咨询量', '购买量']]
+
+# 2. 解决中文列名对齐问题
+pd.set_option('display.unicode.ambiguous_as_wide', True)
+pd.set_option('display.unicode.east_asian_width', True)
+
+# 3. 计算相关系数矩阵
+corr_matrix = df_new.corr()
+print("相关性矩阵：")
+print(corr_matrix)</code></pre>
+
+      <p class="mb-4">输出结果：</p>
+      <div class="overflow-x-auto mb-6">
+        <p
+          class="text-center font-semibold mb-2 text-dark-200 dark:text-light-200"
+        >
+          广告数据相关性分析结果
+        </p>
+        <table
+          class="min-w-full bg-white dark:bg-dark-200 rounded-lg shadow-sm"
+        >
+          <thead>
+            <tr class="bg-light-200 dark:bg-dark-100">
+              <th class="px-4 py-2 text-left"></th>
+              <th class="px-4 py-2 text-left">展示量</th>
+              <th class="px-4 py-2 text-left">点击量</th>
+              <th class="px-4 py-2 text-left">咨询量</th>
+              <th class="px-4 py-2 text-left">购买量</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">展示量</td>
+              <td class="px-4 py-2">1.000000</td>
+              <td class="px-4 py-2">0.948514</td>
+              <td class="px-4 py-2">0.812838</td>
+              <td class="px-4 py-2">0.684249</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">点击量</td>
+              <td class="px-4 py-2">0.948514</td>
+              <td class="px-4 py-2">1.000000</td>
+              <td class="px-4 py-2">0.694632</td>
+              <td class="px-4 py-2">0.559526</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">咨询量</td>
+              <td class="px-4 py-2">0.812838</td>
+              <td class="px-4 py-2">0.694632</td>
+              <td class="px-4 py-2">1.000000</td>
+              <td class="px-4 py-2">0.864034</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">购买量</td>
+              <td class="px-4 py-2">0.684249</td>
+              <td class="px-4 py-2">0.559526</td>
+              <td class="px-4 py-2">0.864034</td>
+              <td class="px-4 py-2">1.000000</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="mb-4">结果解读：</p>
+      <ul class="list-disc pl-6 mb-4 space-y-1">
+        <li>
+          展示量与点击量（0.95）、咨询量（0.81）强正相关，提升展示量可带动点击和咨询。
+        </li>
+        <li>
+          咨询量与购买量强正相关（0.86），优化咨询环节（如及时响应）可提升购买转化。
+        </li>
+      </ul>
+
+      <!-- 1.6.3 广告投放效果分析 -->
+      <h4 class="text-lg font-semibold mb-3 text-dark-200 dark:text-light-200">
+        4. 广告投放效果分析
+      </h4>
+      <p class="mb-4">
+        数据集中含3组广告活动（ID：916、936、1178），从“量”“率”两维度对比分析。
+      </p>
+
+      <h5>（1）对比广告活动的“量”指标（展示量、点击量等）</h5>
+      <p class="mb-4">用分类汇总统计各广告活动的核心“量”指标：</p>
+      <pre><code class="language-python"># 分类字段：广告活动ID；汇总字段：展示量、点击量、咨询量、购买量；汇总方式：求和
+ad_statis = df.groupby('广告活动ID', as_index=False).agg({
+    '展示量': 'sum',
+    '点击量': 'sum',
+    '咨询量': 'sum',
+    '购买量': 'sum'
+})
+
+print("各广告活动核心量指标：")
+print(ad_statis)</code></pre>
+
+      <p class="mb-4">输出结果：</p>
+      <div class="overflow-x-auto mb-6">
+        <table
+          class="min-w-full bg-white dark:bg-dark-200 rounded-lg shadow-sm"
+        >
+          <thead>
+            <tr class="bg-light-200 dark:bg-dark-100">
+              <th class="px-4 py-2 text-left"></th>
+              <th class="px-4 py-2 text-left">广告活动ID</th>
+              <th class="px-4 py-2 text-left">展示量</th>
+              <th class="px-4 py-2 text-left">点击量</th>
+              <th class="px-4 py-2 text-left">咨询量</th>
+              <th class="px-4 py-2 text-left">购买量</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">0</td>
+              <td class="px-4 py-2">916</td>
+              <td class="px-4 py-2">482925.0</td>
+              <td class="px-4 py-2">113.0</td>
+              <td class="px-4 py-2">58</td>
+              <td class="px-4 py-2">24</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">1</td>
+              <td class="px-4 py-2">936</td>
+              <td class="px-4 py-2">8136219.0</td>
+              <td class="px-4 py-2">1985.0</td>
+              <td class="px-4 py-2">539</td>
+              <td class="px-4 py-2">183</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">2</td>
+              <td class="px-4 py-2">1178</td>
+              <td class="px-4 py-2">204823716.0</td>
+              <td class="px-4 py-2">36068.0</td>
+              <td class="px-4 py-2">2674</td>
+              <td class="px-4 py-2">874</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="mb-4">
+        结果解读：广告1178的展示量、点击量等“量”指标均最大（展示量约为广告916的424倍），但“量”大不代表效果好，需进一步分析“率”指标。
+      </p>
+
+      <h5>（2）对比广告活动的“率”指标（点击率、转化率）</h5>
+      <p class="mb-4">计算并对比点击率、咨询转化率、购买转化率：</p>
+      <pre><code class="language-python"># 计算率指标
+ad_statis['点击率'] = ad_statis['点击量'] / ad_statis['展示量']
+ad_statis['咨询转化率'] = ad_statis['咨询量'] / ad_statis['点击量']
+ad_statis['购买转化率'] = ad_statis['购买量'] / ad_statis['点击量']
+
+print("各广告活动率指标（保留6位小数）：")
+print(ad_statis[['广告活动ID', '点击率', '咨询转化率', '购买转化率']].round(6))</code></pre>
+
+      <p class="mb-4">输出结果：</p>
+      <div class="overflow-x-auto mb-6">
+        <table
+          class="min-w-full bg-white dark:bg-dark-200 rounded-lg shadow-sm"
+        >
+          <thead>
+            <tr class="bg-light-200 dark:bg-dark-100">
+              <th class="px-4 py-2 text-left"></th>
+              <th class="px-4 py-2 text-left">广告活动ID</th>
+              <th class="px-4 py-2 text-left">点击率</th>
+              <th class="px-4 py-2 text-left">咨询转化率</th>
+              <th class="px-4 py-2 text-left">购买转化率</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">0</td>
+              <td class="px-4 py-2">916</td>
+              <td class="px-4 py-2">0.000234</td>
+              <td class="px-4 py-2">0.513274</td>
+              <td class="px-4 py-2">0.212389</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">1</td>
+              <td class="px-4 py-2">936</td>
+              <td class="px-4 py-2">0.000244</td>
+              <td class="px-4 py-2">0.270665</td>
+              <td class="px-4 py-2">0.092238</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">2</td>
+              <td class="px-4 py-2">1178</td>
+              <td class="px-4 py-2">0.000176</td>
+              <td class="px-4 py-2">0.073999</td>
+              <td class="px-4 py-2">0.024177</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="mb-4">可视化点击率对比：</p>
+      <pre><code class="language-python"># 设置中文显示
+plt.rcParams['font.sans-serif'] = ['SimHei']
+plt.rcParams['axes.unicode_minus'] = False
+
+# 广告活动ID转为字符串（避免视为数值）
+ad_statis['广告活动ID'] = ad_statis['广告活动ID'].astype('str')
+
+# 绘制点击率柱形图
+plt.figure(figsize=(8, 5))
+plt.bar(ad_statis['广告活动ID'], ad_statis['点击率'], width=0.5, color='#4B96E9')
+plt.title('不同广告活动点击率')
+plt.xlabel('广告活动ID')
+plt.ylabel('点击率')
+plt.grid(axis='y', alpha=0.3)
+plt.savefig('image/7/ad_click_rate.png', dpi=300, bbox_inches='tight')
+plt.show()</code></pre>
+
+      <div class="flex flex-col items-center my-6">
+        <img
+          src="image/7/7-3.png"
+          alt="不同广告活动点击率"
+          title="不同广告活动点击率"
+          class="max-w-full h-auto rounded-lg shadow-md"
+        />
+        <p class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
+          图7-2 不同广告活动点击率
+        </p>
+      </div>
+
+      <p class="mb-4">可视化咨询转化率与购买转化率对比：</p>
+      <pre><code class="language-python">plt.figure(figsize=(10, 6))
+
+# 设置柱形图位置与宽度
+x1 = range(len(ad_statis['广告活动ID']))
+width = 0.4
+x2 = [x + width for x in x1]
+
+# 绘制双柱形图
+plt.bar(x1, ad_statis['咨询转化率'], width, label='咨询转化率', color='#3498DB')
+plt.bar(x2, ad_statis['购买转化率'], width, label='购买转化率', color='#E74C3C')
+
+# 设置标签与标题
+plt.xticks(x1, ad_statis['广告活动ID'])
+plt.xlabel('广告活动ID')
+plt.ylabel('转化率')
+plt.title('不同广告活动转化率对比')
+plt.legend()
+plt.grid(axis='y', alpha=0.3)
+plt.savefig('image/7/ad_conversion_rate.png', dpi=300, bbox_inches='tight')
+plt.show()</code></pre>
+
+      <div class="flex flex-col items-center my-6">
+        <img
+          src="image/7/7-4.png"
+          alt="不同广告活动转化率"
+          title="不同广告活动转化率"
+          class="max-w-full h-auto rounded-lg shadow-md"
+        />
+        <p class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
+          图7-2 不同广告活动转化率
+        </p>
+      </div>
+
+      <p class="mb-4">结果解读：</p>
+      <ul class="list-disc pl-6 mb-4 space-y-1">
+        <li>
+          点击率：广告936最高（0.000244），广告1178最低（0.000176），说明广告1178曝光虽多但吸引力不足。
+        </li>
+        <li>
+          转化率：广告916的咨询转化率（0.513）和购买转化率（0.212）均最高，广告1178最低，说明广告916的用户精准度更高。
+        </li>
+      </ul>
+
+      <!-- 1.6.4 成本指标分析 -->
+      <h4 class="text-lg font-semibold mb-3 text-dark-200 dark:text-light-200">
+        5. 成本指标分析
+      </h4>
+      <p class="mb-4">
+        计算并对比三组广告的单次点击成本、单次行动成本、千次展示成本：
+      </p>
+      <pre><code class="language-python"># 1. 分类汇总广告费及核心量指标
+ad_spend = df.groupby('广告活动ID', as_index=False).agg({
+    '广告费': 'sum',
+    '展示量': 'sum',
+    '点击量': 'sum',
+    '购买量': 'sum'
+})
+
+# 2. 计算成本指标
+ad_spend['单次点击成本'] = ad_spend['广告费'] / ad_spend['点击量']
+ad_spend['单次行动成本'] = ad_spend['广告费'] / ad_spend['购买量']
+ad_spend['千次展示成本'] = (ad_spend['广告费'] / ad_spend['展示量']) * 1000
+
+# 3. 广告活动ID转为字符串
+ad_spend['广告活动ID'] = ad_spend['广告活动ID'].astype('str')
+
+print("各广告活动成本指标（保留6位小数）：")
+print(ad_spend[['广告活动ID', '广告费', '单次点击成本', '单次行动成本', '千次展示成本']].round(6))</code></pre>
+
+      <p class="mb-4">输出结果：</p>
+      <div class="overflow-x-auto mb-6">
+        <table
+          class="min-w-full bg-white dark:bg-dark-200 rounded-lg shadow-sm"
+        >
+          <thead>
+            <tr class="bg-light-200 dark:bg-dark-100">
+              <th class="px-4 py-2 text-left">序号</th>
+              <th class="px-4 py-2 text-left">广告活动ID</th>
+              <th class="px-4 py-2 text-left">广告费</th>
+              <th class="px-4 py-2 text-left">单次点击成本</th>
+              <th class="px-4 py-2 text-left">单次行动成本</th>
+              <th class="px-4 py-2 text-left">千次展示成本</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">0</td>
+              <td class="px-4 py-2">916</td>
+              <td class="px-4 py-2">149.710001</td>
+              <td class="px-4 py-2">1.324867</td>
+              <td class="px-4 py-2">6.237917</td>
+              <td class="px-4 py-2">0.310007</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">1</td>
+              <td class="px-4 py-2">936</td>
+              <td class="px-4 py-2">2893.369999</td>
+              <td class="px-4 py-2">1.458352</td>
+              <td class="px-4 py-2">15.810765</td>
+              <td class="px-4 py-2">0.355967</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">2</td>
+              <td class="px-4 py-2">1178</td>
+              <td class="px-4 py-2">55662.149959</td>
+              <td class="px-4 py-2">1.543256</td>
+              <td class="px-4 py-2">63.832741</td>
+              <td class="px-4 py-2">0.271756</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="mb-4">可视化成本指标（2x2子图）：</p>
+      <pre><code class="language-python"># 创建2x2子图布局
+fig, ax = plt.subplots(2, 2, figsize=(12, 10))
+plt.rcParams['font.sans-serif'] = ['SimHei']
+
+# 子图1：广告费饼图
+ax[0, 0].pie(ad_spend['广告费'], labels=ad_spend['广告活动ID'], autopct='%1.1f%%', colors=['#4B96E9', '#F1C40F', '#E74C3C'])
+ax[0, 0].set_title('广告费占比')
+
+# 子图2：单次点击成本柱形图
+ax[0, 1].bar(ad_spend['广告活动ID'], ad_spend['单次点击成本'], color='#4B96E9')
+ax[0, 1].set_title('单次点击成本（元/次）')
+ax[0, 1].grid(axis='y', alpha=0.3)
+
+# 子图3：单次行动成本柱形图
+ax[1, 0].bar(ad_spend['广告活动ID'], ad_spend['单次行动成本'], color='#F1C40F')
+ax[1, 0].set_title('单次行动成本（元/次购买）')
+ax[1, 0].grid(axis='y', alpha=0.3)
+
+# 子图4：千次展示成本柱形图
+ax[1, 1].bar(ad_spend['广告活动ID'], ad_spend['千次展示成本'], color='#E74C3C')
+ax[1, 1].set_title('千次展示成本（元/千次）')
+ax[1, 1].grid(axis='y', alpha=0.3)
+
+# 调整子图间距
+plt.tight_layout()
+plt.savefig('image/7/ad_cost.png', dpi=300, bbox_inches='tight')
+plt.show()</code></pre>
+
+      <div class="flex flex-col items-center my-6">
+        <img
+          src="image/7/7-5.png"
+          alt="不同广告活动成本比较"
+          title="不同广告活动成本比较"
+          class="max-w-full h-auto rounded-lg shadow-md"
+        />
+        <p class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
+          图7-3 不同广告活动成本比较
+        </p>
+      </div>
+
+      <p class="mb-4">结果解读：</p>
+      <ul class="list-disc pl-6 mb-4 space-y-1">
+        <li>
+          广告费：广告1178占比94.8%，但单次行动成本（63.83元）是广告916（6.24元）的10倍，流量质量低。
+        </li>
+        <li>
+          千次展示成本：广告936最高（0.36元），广告1178最低（0.27元），但结合转化率，广告1178性价比仍最差。
+        </li>
+        <li>广告916：各项成本指标均最低，成本效率最优。</li>
+      </ul>
+
+      <!-- 1.6.5 收益指标分析 -->
+      <h4 class="text-lg font-semibold mb-3 text-dark-200 dark:text-light-200">
+        6. 收益指标分析
+      </h4>
+      <p class="mb-4">假设单次购买收入100元，计算广告支出回报率（ROAS）：</p>
+      <pre><code class="language-python"># 计算ROAS（保留2位小数）
+ad_spend['广告支出回报率'] = (ad_spend['购买量'] * 100 / ad_spend['广告费']).round(2)
+
+# 可视化ROAS并标注数值
+plt.figure(figsize=(8, 6))
+bars = plt.bar(ad_spend['广告活动ID'], ad_spend['广告支出回报率'], color='#2ECC71')
+
+# 为柱形图添加数值标签
+for bar in bars:
+    height = bar.get_height()
+    plt.text(bar.get_x() + bar.get_width()/2., height + 0.2,
+             str(height), ha='center', va='bottom', fontsize=12)
+
+plt.title('不同广告活动支出回报率（ROAS）')
+plt.xlabel('广告活动ID')
+plt.ylabel('ROAS（收入/广告费）')
+plt.grid(axis='y', alpha=0.3)
+plt.savefig('image/7/ad_spend_return_rate.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+print("各广告活动ROAS：")
+print(ad_spend[['广告活动ID', '广告支出回报率']])</code></pre>
+
+      <div class="flex flex-col items-center my-6">
+        <img
+          src="image/7/7-6.png"
+          alt="不同广告支出回报率"
+          title="不同广告支出回报率"
+          class="max-w-full h-auto rounded-lg shadow-md"
+        />
+        <p class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
+          图7-4 不同广告支出回报率
+        </p>
+      </div>
+
+      <p class="mb-4">输出结果：</p>
+      <div class="overflow-x-auto mb-6">
+        <table
+          class="min-w-full bg-white dark:bg-dark-200 rounded-lg shadow-sm"
+        >
+          <thead>
+            <tr class="bg-light-200 dark:bg-dark-100">
+              <th class="px-4 py-2 text-left"></th>
+              <th class="px-4 py-2 text-left">广告活动ID</th>
+              <th class="px-4 py-2 text-left">广告支出回报率</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">0</td>
+              <td class="px-4 py-2">916</td>
+              <td class="px-4 py-2">16.03</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">1</td>
+              <td class="px-4 py-2">936</td>
+              <td class="px-4 py-2">6.32</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">2</td>
+              <td class="px-4 py-2">1178</td>
+              <td class="px-4 py-2">1.57</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="mb-4">
+        结果解读：广告916的ROAS（16.03）是广告1178（1.57）的10倍，每投入1元广告可获得16.03元收入，投资回报最优。
+      </p>
+
+      <!-- 1.6.6 广告受众分析 -->
+      <h4 class="text-lg font-semibold mb-3 text-dark-200 dark:text-light-200">
+        7. 广告受众分析
+      </h4>
+      <p class="mb-4">
+        从性别、年龄段、兴趣ID维度分析受众对广告效果的影响，为精准投放提供依据。
+      </p>
+
+      <h5>（1）分类汇总受众数据</h5>
+      <pre><code class="language-python"># 1. 性别维度：广告活动ID + 性别的汇总
+ad_gender = df.groupby(['广告活动ID', '性别'], as_index=False).agg({
+    '展示量': 'sum', '点击量': 'sum', '咨询量': 'sum', '购买量': 'sum', '广告费': 'sum'
+})
+ad_gender['广告支出回报率'] = (ad_gender['购买量'] * 100 / ad_gender['广告费']).round(2)
+
+# 2. 年龄段维度：广告活动ID + 年龄段的汇总
+ad_age = df.groupby(['广告活动ID', '年龄段'], as_index=False).agg({
+    '展示量': 'sum', '点击量': 'sum', '咨询量': 'sum', '购买量': 'sum', '广告费': 'sum'
+})
+
+# 3. 兴趣ID维度：广告活动ID + 兴趣ID的汇总
+ad_interest = df.groupby(['广告活动ID', '兴趣ID'], as_index=False).agg({
+    '展示量': 'sum', '点击量': 'sum', '咨询量': 'sum', '购买量': 'sum', '广告费': 'sum'
+})
+ad_interest.sort_values(by='兴趣ID', ascending=True, inplace=True)</code></pre>
+
+      <h5>（2）不同性别广告支出回报率</h5>
+      <pre><code class="language-python"># 筛选各广告活动的男性、女性ROAS
+ad_916_gender = ad_gender[ad_gender['广告活动ID'] == 916]
+ad_936_gender = ad_gender[ad_gender['广告活动ID'] == 936]
+ad_1178_gender = ad_gender[ad_gender['广告活动ID'] == 1178]
+
+# 整理数据用于可视化
+gender_roas = pd.DataFrame({
+    '广告活动ID': ['916', '916', '936', '936', '1178', '1178'],
+    '性别': ['M', 'F', 'M', 'F', 'M', 'F'],
+    'ROAS': [
+        ad_916_gender[ad_916_gender['性别']=='M']['广告支出回报率'].values[0],
+        ad_916_gender[ad_916_gender['性别']=='F']['广告支出回报率'].values[0],
+        ad_936_gender[ad_936_gender['性别']=='M']['广告支出回报率'].values[0],
+        ad_936_gender[ad_936_gender['性别']=='F']['广告支出回报率'].values[0],
+        ad_1178_gender[ad_1178_gender['性别']=='M']['广告支出回报率'].values[0],
+        ad_1178_gender[ad_1178_gender['性别']=='F']['广告支出回报率'].values[0]
+    ]
+})
+
+# 可视化不同性别ROAS
+plt.figure(figsize=(10, 6))
+barwidth = 0.4
+x1 = [i for i in range(3)]
+x2 = [i + barwidth for i in x1]
+
+# 男性ROAS
+male_roas = gender_roas[gender_roas['性别']=='M']['ROAS'].values
+# 女性ROAS
+female_roas = gender_roas[gender_roas['性别']=='F']['ROAS'].values
+
+plt.bar(x1, male_roas, width=barwidth, label='男性', color='#3498DB')
+plt.bar(x2, female_roas, width=barwidth, label='女性', color='#E84393')
+
+plt.xticks(x1, ['916', '936', '1178'])
+plt.xlabel('广告活动ID')
+plt.ylabel('广告支出回报率（ROAS）')
+plt.title('不同性别广告支出回报率对比')
+plt.legend()
+plt.grid(axis='y', alpha=0.3)
+plt.savefig('image/7/ad_gender_roas.png', dpi=300, bbox_inches='tight')
+plt.show()</code></pre>
+
+      <div class="flex flex-col items-center my-6">
+        <img
+          src="image/7/7-7.png"
+          alt="不同性别广告支出回报率"
+          title="不同性别广告支出回报率"
+          class="max-w-full h-auto rounded-lg shadow-md"
+        />
+        <p class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
+          图7-5 不同性别广告支出回报率
+        </p>
+      </div>
+
+      <p class="mb-4">
+        结果解读：所有广告活动在男性中的ROAS均高于女性，男性是更优质的目标受众。
+      </p>
+
+      <h5>（3）广告916受众特点分析</h5>
+      <p class="mb-4">
+        广告916转化率最高但展示量最少，分析年龄段和性别对其展示量的影响：
+      </p>
+      <pre><code class="language-python"># 筛选广告916的年龄段、性别展示量数据
+ad_916_age = ad_age[ad_age['广告活动ID'] == 916][['年龄段', '展示量']]
+ad_916_gender_show = ad_gender[ad_gender['广告活动ID'] == 916][['性别', '展示量']]
+
+# 创建1x2子图
+fig, ax = plt.subplots(1, 2, figsize=(14, 6))
+plt.rcParams['font.sans-serif'] = ['SimHei']
+
+# 子图1：不同年龄段展示量
+ax[0].bar(ad_916_age['年龄段'], ad_916_age['展示量'], color='#9B59B6')
+ax[0].set_title('广告916不同年龄段展示量')
+ax[0].set_xlabel('年龄段')
+ax[0].set_ylabel('展示量')
+ax[0].grid(axis='y', alpha=0.3)
+
+# 子图2：不同性别展示量
+ax[1].bar(ad_916_gender_show['性别'], ad_916_gender_show['展示量'], color='#F39C12')
+ax[1].set_title('广告916不同性别展示量')
+ax[1].set_xlabel('性别')
+ax[1].set_ylabel('展示量')
+ax[1].grid(axis='y', alpha=0.3)
+
+plt.tight_layout()
+plt.savefig('image/7/ad_916_age_gender.png', dpi=300, bbox_inches='tight')
+plt.show()</code></pre>
+
+      <div class="flex flex-col items-center my-6">
+        <img
+          src="image/7/7-8.png"
+          alt="广告916受众展示量"
+          title="广告916受众展示量"
+          class="max-w-full h-auto rounded-lg shadow-md"
+        />
+        <p class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
+          图7-6 广告916不同年龄段、性别展示量
+        </p>
+      </div>
+
+      <p class="mb-4">
+        结果解读：广告916在35岁以上人群和女性中的展示量较少，若产品无性别/年龄限制，可调整投放定向以提升展示量。
+      </p>
+
+      <h5>（4）广告1178转化率低的因素分析</h5>
+      <p class="mb-4">分析年龄段、性别、兴趣ID对广告1178咨询转化率的影响：</p>
+      <pre><code class="language-python"># 计算广告1178各维度咨询转化率
+ad_1178_age = ad_age[ad_age['广告活动ID'] == 1178].copy()
+ad_1178_age['咨询转化率'] = ad_1178_age['咨询量'] / ad_1178_age['点击量']
+
+ad_1178_gender_conv = ad_gender[ad_gender['广告活动ID'] == 1178].copy()
+ad_1178_gender_conv['咨询转化率'] = ad_1178_gender_conv['咨询量'] / ad_1178_gender_conv['点击量']
+
+ad_1178_interest_conv = ad_interest[ad_interest['广告活动ID'] == 1178].copy()
+ad_1178_interest_conv['咨询转化率'] = ad_1178_interest_conv['咨询量'] / ad_1178_interest_conv['点击量']
+ad_1178_interest_conv['兴趣ID'] = ad_1178_interest_conv['兴趣ID'].astype('str')
+
+# 创建2x2子图布局
+fig = plt.figure(figsize=(14, 10))
+plt.rcParams['font.sans-serif'] = ['SimHei']
+
+# 子图1：不同年龄段咨询转化率（第0行第0列）
+ax1 = plt.subplot2grid((2, 2), (0, 0))
+ax1.bar(ad_1178_age['年龄段'], ad_1178_age['咨询转化率'], color='#1ABC9C')
+ax1.set_title('广告1178不同年龄段咨询转化率')
+ax1.set_xlabel('年龄段')
+ax1.set_ylabel('咨询转化率')
+ax1.grid(axis='y', alpha=0.3)
+
+# 子图2：不同性别咨询转化率（第0行第1列）
+ax2 = plt.subplot2grid((2, 2), (0, 1))
+ax2.bar(ad_1178_gender_conv['性别'], ad_1178_gender_conv['咨询转化率'], color='#E67E22')
+ax2.set_title('广告1178不同性别咨询转化率')
+ax2.set_xlabel('性别')
+ax2.set_ylabel('咨询转化率')
+ax2.grid(axis='y', alpha=0.3)
+
+# 子图3：不同兴趣咨询转化率（第1行跨2列）
+ax3 = plt.subplot2grid((2, 2), (1, 0), colspan=2)
+ax3.bar(ad_1178_interest_conv['兴趣ID'], ad_1178_interest_conv['咨询转化率'], color='#34495E')
+ax3.set_title('广告1178不同兴趣咨询转化率')
+ax3.set_xlabel('兴趣ID')
+ax3.set_ylabel('咨询转化率')
+ax3.tick_params(axis='x', rotation=90)  # x轴标签旋转避免重叠
+ax3.grid(axis='y', alpha=0.3)
+
+plt.tight_layout()
+plt.savefig('image/7/ad_1178_conversion.png', dpi=300, bbox_inches='tight')
+plt.show()</code></pre>
+
+      <div class="flex flex-col items-center my-6">
+        <img
+          src="image/7/7-9.png"
+          alt="广告1178转化率分析"
+          title="广告1178转化率分析"
+          class="max-w-full h-auto rounded-lg shadow-md"
+        />
+        <p class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
+          图7-7 广告1178转化率分析
+        </p>
+      </div>
+
+      <p class="mb-4">
+        结果解读：广告1178对35岁以上人群、女性吸引力差，兴趣ID为18、26、62的用户转化率极低，需优化定向或广告内容。
+      </p>
+
+      <!-- 7.7 案例总结与建议 -->
+      <h3
+        class="text-xl font-semibold mb-4 text-primary section-id"
+        id="section-7-7"
+      >
+        7.7 案例总结与建议
+      </h3>
+      <div class="overflow-x-auto">
+        <table class="bg-white shadow-sm">
+          <thead>
+            <tr class="bg-light-200">
+              <th class="px-4 py-2 text-left">核心结论</th>
+              <th class="px-4 py-2 text-left">具体建议</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">男性受众ROAS均高于女性</td>
+              <td class="px-4 py-2">
+                1. 将男性作为主要投放对象；<br />2.
+                优化广告素材（如突出“男性偏好口味”）提升男性点击率和转化率。
+              </td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">
+                广告916转化效果最优（点击率、转化率、ROAS均最高），广告1178效果最差
+              </td>
+              <td class="px-4 py-2">
+                1. 预算有限时，加大广告916投放，减少广告1178投放；<br />2.
+                分析广告916的高转化原因（如素材、定向），复用到其他广告。
+              </td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">广告1178定位不准确（受众匹配度低）</td>
+              <td class="px-4 py-2">
+                1. 缩小广告1178定向范围（如排除35岁以上人群、兴趣ID
+                18/26/62）；<br />2.
+                优化广告1178内容，突出用户需求（如“年轻群体专属优惠”）。
+              </td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">咨询量与购买量强相关（r=0.86）</td>
+              <td class="px-4 py-2">
+                1. 建立“5分钟咨询响应机制”；<br />2.
+                培训客服话术，提升“咨询→购买”转化效率。
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 7.8 举一反三 -->
+      <h3
+        class="text-xl font-semibold mb-4 text-primary section-id"
+        id="section-7-8"
+      >
+        7.8 举一反三
+      </h3>
+      <ol class="list-decimal pl-6 mb-4 space-y-3">
+        <li>
+          <strong>深度分析用户特征与点击率的关系</strong>
+          <p class="mt-1">
+            本案例仅分析了广告1178的用户特点，可进一步针对广告916、936，按“兴趣ID+年龄段+性别”多维度分组，统计不同组合的点击率、转化率，明确高价值受众群体。
+          </p>
+        </li>
+        <li>
+          <strong>探讨多种可视化方式</strong>
+          <p class="mt-1">
+            本案例主要使用柱形图和饼图，可进一步尝试折线图、散点图、雷达图等，适配不同分析场景。
+          </p>
+        </li>
+        <li>
+          <strong>不同量级或单位数据的可视化（双坐标轴）</strong>
+          <p class="mt-1">
+            当需要在同一图表中展示“点击量”（量级：百/千）与“点击率”（量级：0.0001-0.0003）时，可通过双坐标轴实现。
+          </p>
+        </li>
+      </ol>
+
+      <!-- 代码高亮与公式渲染脚本 -->
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css"
+      />
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+      <script>
+        // 初始化代码高亮
+        hljs.highlightAll();
+        // 图片加载失败处理
+        document.querySelectorAll("img").forEach(img => {
+          img.addEventListener("error", function () {
+            this.alt = this.alt || "图片加载失败";
+            this.style.border = "1px dashed #ff4444";
+            this.style.backgroundColor = "#fff0f0";
+            this.style.display = "flex";
+            this.style.alignItems = "center";
+            this.style.justifyContent = "center";
+            this.style.height = "200px";
+            this.style.content = `'${this.alt}'`;
+            this.style.fontSize = "14px";
+            this.style.color = "#ff4444";
+          });
+        });
+        // 平滑滚动（锚点导航）
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+          anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute("href");
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+              window.scrollTo({
+                top: targetElement.offsetTop - 20,
+                behavior: "smooth"
+              });
+            }
+          });
+        });
+      </script>
+    </section>
+  </body>
+</html>

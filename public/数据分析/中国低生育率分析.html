@@ -1,0 +1,1278 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>中国低生育率影响因素分析</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary-color: #4361ee;
+        --secondary-color: #3a0ca3;
+        --accent-color: #f72585;
+        --light-color: #f8f9fa;
+        --dark-color: #212529;
+        --success-color: #4cc9f0;
+        --warning-color: #f9c74f;
+        --danger-color: #f94144;
+        --text-color: #495057;
+        --background-color: #ffffff;
+        --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        --gradient: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Noto Sans SC", sans-serif;
+        background-color: #f5f7fa;
+        color: var(--text-color);
+        line-height: 1.6;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      header {
+        background: var(--gradient);
+        color: white;
+        padding: 40px 0;
+        text-align: center;
+        margin-bottom: 30px;
+        border-radius: 0 0 15px 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+        position: relative;
+        overflow: hidden;
+      }
+
+      header::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.1) 0%,
+          transparent 70%
+        );
+        transform: rotate(30deg);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 2.8rem;
+        font-weight: 700;
+        position: relative;
+        z-index: 2;
+      }
+
+      .subtitle {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        margin-top: 15px;
+        font-weight: 300;
+        position: relative;
+        z-index: 2;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .dashboard-intro {
+        background-color: var(--background-color);
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: var(--card-shadow);
+        margin-bottom: 30px;
+        line-height: 1.8;
+        font-size: 1.1rem;
+        position: relative;
+        overflow: hidden;
+        border-left: 5px solid var(--primary-color);
+      }
+
+      .dashboard-intro::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 200px;
+        height: 200px;
+        background: linear-gradient(
+          45deg,
+          rgba(67, 97, 238, 0.05) 0%,
+          transparent 70%
+        );
+        border-radius: 0 0 0 100%;
+      }
+
+      .chart-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(550px, 1fr));
+        gap: 30px;
+        margin-bottom: 50px;
+      }
+
+      .chart-container {
+        background-color: var(--background-color);
+        border-radius: 12px;
+        box-shadow: var(--card-shadow);
+        padding: 25px;
+        position: relative;
+        transition: all 0.3s ease;
+        overflow: hidden;
+      }
+
+      .chart-container:hover {
+        transform: translateY(-7px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      }
+
+      .chart-title {
+        font-size: 1.4rem;
+        color: var(--secondary-color);
+        margin-top: 0;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #e9ecef;
+        display: flex;
+        align-items: center;
+        font-weight: 600;
+      }
+
+      .chart-title i {
+        margin-right: 12px;
+        color: var(--primary-color);
+        font-size: 1.2rem;
+      }
+
+      .chart-wrapper {
+        position: relative;
+        height: 320px;
+        margin-bottom: 20px;
+      }
+
+      .chart-legend {
+        font-size: 0.95rem;
+        color: #6c757d;
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        border-left: 3px solid var(--primary-color);
+      }
+
+      .download-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        transition: all 0.2s;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        box-shadow: 0 3px 10px rgba(67, 97, 238, 0.3);
+      }
+
+      .download-btn i {
+        margin-right: 5px;
+      }
+
+      .download-btn:hover {
+        background-color: var(--secondary-color);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
+      }
+
+      .conclusion {
+        background-color: var(--background-color);
+        padding: 35px;
+        border-radius: 12px;
+        box-shadow: var(--card-shadow);
+        margin-top: 30px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .conclusion::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: var(--gradient);
+      }
+
+      .conclusion h2 {
+        color: var(--secondary-color);
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+      }
+
+      .conclusion h2 i {
+        margin-right: 12px;
+        color: var(--primary-color);
+      }
+
+      .highlight {
+        background: linear-gradient(
+          120deg,
+          rgba(67, 97, 238, 0.15) 0%,
+          transparent 80%
+        );
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-weight: 500;
+        color: var(--secondary-color);
+        border-left: 3px solid var(--primary-color);
+      }
+
+      .conclusion ul {
+        padding-left: 20px;
+        margin-bottom: 25px;
+      }
+
+      .conclusion li {
+        margin-bottom: 15px;
+        position: relative;
+      }
+
+      footer {
+        margin-top: 70px;
+        padding: 40px 0;
+        text-align: center;
+        background: var(--gradient);
+        color: white;
+        border-radius: 15px 15px 0 0;
+        box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.08);
+      }
+
+      .footer-content {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .footer-content h3 {
+        margin-bottom: 25px;
+        font-weight: 600;
+        font-size: 1.8rem;
+      }
+
+      .footer-content p {
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+        opacity: 0.9;
+      }
+
+      @media (max-width: 1200px) {
+        .chart-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .chart-container {
+          padding: 20px;
+        }
+
+        .chart-wrapper {
+          height: 280px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 2.2rem;
+        }
+
+        .subtitle {
+          font-size: 1rem;
+        }
+
+        .dashboard-intro {
+          padding: 20px;
+          font-size: 1rem;
+        }
+
+        .chart-title {
+          font-size: 1.2rem;
+        }
+
+        .chart-wrapper {
+          height: 240px;
+        }
+
+        .conclusion {
+          padding: 25px;
+        }
+      }
+
+      /* Animation for elements */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .animated {
+        animation: fadeIn 0.6s ease forwards;
+      }
+
+      .delay-1 {
+        animation-delay: 0.2s;
+      }
+      .delay-2 {
+        animation-delay: 0.4s;
+      }
+      .delay-3 {
+        animation-delay: 0.6s;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <h1>中国低生育率影响因素分析</h1>
+        <p class="subtitle">基于政策、经济、社会舆论的多维度数据分析与可视化</p>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="dashboard-intro animated">
+        <p>
+          近年来，中国的生育率持续走低，人口结构正在经历深刻转变。本分析通过多维度数据，探究影响当代人生育意愿的关键因素，包括婚姻观念转变、政策导向、经济压力以及社会舆论环境等。数据来源于国家统计局、微博话题分析及政策文本挖掘。
+        </p>
+      </div>
+
+      <div class="chart-grid">
+        <!-- 图表1: 结婚与离婚趋势 -->
+        <div class="chart-container animated">
+          <h3 class="chart-title">
+            <i class="fas fa-ring"></i>2014-2023年中国结婚与离婚登记数趋势
+          </h3>
+          <button
+            class="download-btn"
+            onclick="downloadChart('marriageChart', '结婚离婚趋势.png')"
+          >
+            <i class="fas fa-download"></i>导出图表
+          </button>
+          <div class="chart-wrapper">
+            <canvas id="marriageChart"></canvas>
+          </div>
+          <div class="chart-legend">
+            <p>
+              数据来源: 国家数据网站 | 说明:
+              结婚登记数整体持续下降，2023年虽小幅回升但仍处于低位；离婚登记数波动上升，近几年甚至达到结婚对数的一半。
+            </p>
+          </div>
+        </div>
+
+        <!-- 图表2: 人口出生率与死亡率 -->
+        <div class="chart-container animated delay-1">
+          <h3 class="chart-title">
+            <i class="fas fa-baby"></i>2014-2023年中国人口出生率与死亡率
+          </h3>
+          <button
+            class="download-btn"
+            onclick="downloadChart('birthRateChart', '人口出生率死亡率.png')"
+          >
+            <i class="fas fa-download"></i>导出图表
+          </button>
+          <div class="chart-wrapper">
+            <canvas id="birthRateChart"></canvas>
+          </div>
+          <div class="chart-legend">
+            <p>
+              数据来源: 国家数据网站 | 说明:
+              人口出生率持续下降，死亡率稳定在7‰左右，导致人口自然增长率趋近于零。
+            </p>
+          </div>
+        </div>
+
+        <!-- 图表3: 政策情感分析 -->
+        <div class="chart-container animated delay-1">
+          <h3 class="chart-title">
+            <i class="fas fa-comments"></i>生育政策标题语言情感分析
+          </h3>
+          <button
+            class="download-btn"
+            onclick="downloadChart('policyChart', '政策情感分析.png')"
+          >
+            <i class="fas fa-download"></i>导出图表
+          </button>
+          <div class="chart-wrapper">
+            <canvas id="policyChart"></canvas>
+          </div>
+          <div class="chart-legend">
+            <p>
+              数据来源: 中国政府网与发改委网站 | 说明:
+              政策标题的语言情感普遍呈现中性偏积极的特征，几乎没有表现出负面情感。
+            </p>
+          </div>
+        </div>
+
+        <!-- 图表4: 发改委网站访问分布 -->
+        <div class="chart-container animated delay-2">
+          <h3 class="chart-title">
+            <i class="fas fa-chart-pie"></i>发改委网站各栏目访问量占比
+          </h3>
+          <button
+            class="download-btn"
+            onclick="downloadChart('websiteChart', '网站访问分布.png')"
+          >
+            <i class="fas fa-download"></i>导出图表
+          </button>
+          <div class="chart-wrapper">
+            <canvas id="websiteChart"></canvas>
+          </div>
+          <div class="chart-legend">
+            <p>
+              数据来源: 中国发改委 | 说明:
+              绝大多数(56.9%)属于"新闻动态"类，政务公开占30.7%，而真正与改革部署、互动交流相关的内容较少。
+            </p>
+          </div>
+        </div>
+
+        <!-- 图表5: 财政支出结构 -->
+        <div class="chart-container animated delay-2">
+          <h3 class="chart-title">
+            <i class="fas fa-money-bill-wave"></i>2022年国家财政支出结构
+          </h3>
+          <button
+            class="download-btn"
+            onclick="downloadChart('financeChart', '财政支出结构.png')"
+          >
+            <i class="fas fa-download"></i>导出图表
+          </button>
+          <div class="chart-wrapper">
+            <canvas id="financeChart"></canvas>
+          </div>
+          <div class="chart-legend">
+            <p>
+              数据来源: 国家财政部 | 说明:
+              国家在社会保障和就业(24.9%)、教育(15.5%)上投入最多，而直接关联生育支持的卫生健康(8.5%)、住房保障(3.4%)占比明显偏低。
+            </p>
+          </div>
+        </div>
+
+        <!-- 图表6: 交通通信价格变化 -->
+        <div class="chart-container animated delay-3">
+          <h3 class="chart-title">
+            <i class="fas fa-gas-pump"></i>2021-2023年交通通信类居民消费价格变化
+          </h3>
+          <button
+            class="download-btn"
+            onclick="downloadChart('transportChart', '交通通信价格变化.png')"
+          >
+            <i class="fas fa-download"></i>导出图表
+          </button>
+          <div class="chart-wrapper">
+            <canvas id="transportChart"></canvas>
+          </div>
+          <div class="chart-legend">
+            <p>
+              数据来源: 国家统计局 | 说明:
+              交通燃料价格2022年涨幅高达19.3%，2023年又跌至-7.0%，反映居民通勤成本的不稳定性。
+            </p>
+          </div>
+        </div>
+
+        <!-- 图表7: 工资与房价对比 -->
+        <div class="chart-container animated delay-3">
+          <h3 class="chart-title">
+            <i class="fas fa-home"></i>2005-2023年职工平均工资与商品房均价变化
+          </h3>
+          <button
+            class="download-btn"
+            onclick="downloadChart('wageHousingChart', '工资房价对比.png')"
+          >
+            <i class="fas fa-download"></i>导出图表
+          </button>
+          <div class="chart-wrapper">
+            <canvas id="wageHousingChart"></canvas>
+          </div>
+          <div class="chart-legend">
+            <p>
+              数据来源: 国家统计局 | 说明:
+              职工年收入从约2万涨到了18万，但房价也从每平米4000元飙升至近1.45万元，房价上涨幅度快于工资增长。
+            </p>
+          </div>
+        </div>
+
+        <!-- 图表8: 收入与房价相关性 -->
+        <div class="chart-container animated">
+          <h3 class="chart-title">
+            <i class="fas fa-chart-line"></i>各地区收入水平与房价关系(2023年)
+          </h3>
+          <button
+            class="download-btn"
+            onclick="downloadChart('correlationChart', '收入房价相关性.png')"
+          >
+            <i class="fas fa-download"></i>导出图表
+          </button>
+          <div class="chart-wrapper">
+            <canvas id="correlationChart"></canvas>
+          </div>
+          <div class="chart-legend">
+            <p>
+              数据来源: 国家统计局 | 说明:
+              收入与房价呈现强烈的正相关：收入越高的地区，房价也越高，住房支付压力并未真正得到改善。
+            </p>
+          </div>
+        </div>
+
+        <!-- 图表9: 微博生育话题情感分析 -->
+        <div class="chart-container animated delay-1">
+          <h3 class="chart-title">
+            <i class="fab fa-weibo"></i>微博生育话题情感分析(2023-2025)
+          </h3>
+          <button
+            class="download-btn"
+            onclick="downloadChart('sentimentChart', '微博情感分析.png')"
+          >
+            <i class="fas fa-download"></i>导出图表
+          </button>
+          <div class="chart-wrapper">
+            <canvas id="sentimentChart"></canvas>
+          </div>
+          <div class="chart-legend">
+            <p>
+              数据来源: 微博话题爬取分析 | 说明:
+              将近一半(49.9%)的讨论充斥着负面情绪，积极态度仅占27%，中性占23.1%。
+            </p>
+          </div>
+        </div>
+
+        <!-- 图表10: 微博情感趋势 -->
+        <div class="chart-container animated delay-2">
+          <h3 class="chart-title">
+            <i class="fas fa-chart-area"></i>微博生育话题情感趋势变化(2023-2025)
+          </h3>
+          <button
+            class="download-btn"
+            onclick="downloadChart('trendChart', '情感趋势变化.png')"
+          >
+            <i class="fas fa-download"></i>导出图表
+          </button>
+          <div class="chart-wrapper">
+            <canvas id="trendChart"></canvas>
+          </div>
+          <div class="chart-legend">
+            <p>
+              数据来源: 微博话题爬取分析 | 说明:
+              消极情绪始终占据上风，2024年稍有回落，2025年却又反弹回升，大众对生育的焦虑和不满依然根深蒂固。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="conclusion animated delay-3">
+        <h2><i class="fas fa-lightbulb"></i>主要发现与结论</h2>
+        <p>
+          通过多维度数据分析，我们发现中国低生育率问题是一个系统性难题，受到多种因素的综合影响：
+        </p>
+
+        <ul>
+          <li>
+            <span class="highlight">婚姻观念转变</span
+            >：年轻人不再视婚姻为人生必选项，或因经济压力推迟婚姻
+          </li>
+          <li>
+            <span class="highlight">政策宣传保守</span
+            >：生育政策宣传以信息发布为主，缺乏互动与公众参与
+          </li>
+          <li>
+            <span class="highlight">财政投入结构</span
+            >：国家在卫生健康和住房保障方面的投入相对不足
+          </li>
+          <li>
+            <span class="highlight">经济压力巨大</span
+            >：收入增长跟不上房价上涨，住房成本挤压生育潜力
+          </li>
+          <li>
+            <span class="highlight">社会舆论环境</span
+            >：社交媒体上消极情绪占主流，进一步影响生育意愿
+          </li>
+        </ul>
+
+        <p>
+          提升生育意愿需要系统性的解决方案，包括更精准的政策支持、减轻住房压力、改善舆论环境等多方面努力。生育始终是个人选择与时代条件的共振，当年轻人说"不想生"，他们也许是在说"我还没有准备好"或"这个世界，还没准备好"。
+        </p>
+      </div>
+    </div>
+
+    <footer>
+      <div class="container footer-content">
+        <h3>项目信息</h3>
+        <p>名称：中国低生育率影响因素分析</p>
+        <p>课程：计算思维之问题求解</p>
+        <p>班级：2024新闻学</p>
+        <p>姓名：崔静初、梁心怡、秦鸣苑、刘雅婷、乔晓颖</p>
+        <p>类型：数据分析及可视化</p>
+        <p>授课教师：张伟娜</p>
+      </div>
+    </footer>
+
+    <script>
+      // 模拟数据 - 基于文档描述
+      const marriageData = {
+        labels: [
+          "2014",
+          "2015",
+          "2016",
+          "2017",
+          "2018",
+          "2019",
+          "2020",
+          "2021",
+          "2022",
+          "2023"
+        ],
+        datasets: [
+          {
+            label: "结婚登记数(万对)",
+            data: [
+              1306.7, 1224.7, 1142.8, 1063.1, 1013.9, 927.3, 813.1, 764.3,
+              683.5, 748.0
+            ],
+            borderColor: "#4361ee",
+            backgroundColor: "rgba(67, 97, 238, 0.1)",
+            tension: 0.3,
+            fill: true,
+            borderWidth: 2
+          },
+          {
+            label: "离婚登记数(万对)",
+            data: [
+              363.7, 384.1, 415.8, 437.4, 446.1, 470.1, 433.9, 373.6, 387.9,
+              405.3
+            ],
+            borderColor: "#f72585",
+            backgroundColor: "rgba(247, 37, 133, 0.1)",
+            tension: 0.3,
+            fill: true,
+            borderWidth: 2
+          }
+        ]
+      };
+
+      const birthRateData = {
+        labels: [
+          "2014",
+          "2015",
+          "2016",
+          "2017",
+          "2018",
+          "2019",
+          "2020",
+          "2021",
+          "2022",
+          "2023"
+        ],
+        datasets: [
+          {
+            label: "出生率(‰)",
+            data: [
+              12.37, 12.07, 12.95, 12.43, 10.94, 10.48, 8.52, 7.52, 6.77, 6.39
+            ],
+            borderColor: "#4cc9f0",
+            backgroundColor: "rgba(76, 201, 240, 0.1)",
+            tension: 0.3,
+            fill: true,
+            borderWidth: 2
+          },
+          {
+            label: "死亡率(‰)",
+            data: [7.16, 7.11, 7.09, 7.11, 7.13, 7.14, 7.07, 7.18, 7.37, 7.46],
+            borderColor: "#7209b7",
+            backgroundColor: "rgba(114, 9, 183, 0.1)",
+            tension: 0.3,
+            fill: true,
+            borderWidth: 2
+          }
+        ]
+      };
+
+      const policyData = {
+        labels: ["积极", "中性偏积极", "中性", "消极"],
+        datasets: [
+          {
+            data: [15, 45, 35, 5],
+            backgroundColor: ["#4cc9f0", "#4361ee", "#f9c74f", "#f94144"],
+            borderWidth: 0
+          }
+        ]
+      };
+
+      const websiteData = {
+        labels: ["新闻动态", "政务公开", "改革部署", "互动交流", "其他"],
+        datasets: [
+          {
+            data: [56.9, 30.7, 5.2, 3.5, 3.7],
+            backgroundColor: [
+              "#4361ee",
+              "#4cc9f0",
+              "#f9c74f",
+              "#f72585",
+              "#7209b7"
+            ],
+            borderWidth: 0
+          }
+        ]
+      };
+
+      const financeData = {
+        labels: ["社会保障和就业", "教育", "卫生健康", "住房保障", "其他支出"],
+        datasets: [
+          {
+            data: [24.9, 15.5, 8.5, 3.4, 47.7],
+            backgroundColor: [
+              "#4361ee",
+              "#4cc9f0",
+              "#7209b7",
+              "#f9c74f",
+              "#f94144"
+            ],
+            borderWidth: 0
+          }
+        ]
+      };
+
+      const transportData = {
+        labels: [
+          "2021-Q1",
+          "2021-Q2",
+          "2021-Q3",
+          "2021-Q4",
+          "2022-Q1",
+          "2022-Q2",
+          "2022-Q3",
+          "2022-Q4",
+          "2023-Q1",
+          "2023-Q2",
+          "2023-Q3",
+          "2023-Q4"
+        ],
+        datasets: [
+          {
+            label: "交通燃料价格变化(%)",
+            data: [
+              5.2, 7.8, 9.3, 11.5, 15.7, 18.2, 19.3, 17.6, 3.2, -2.5, -5.3, -7.0
+            ],
+            borderColor: "#f94144",
+            backgroundColor: "rgba(249, 65, 68, 0.1)",
+            tension: 0.3,
+            fill: true,
+            borderWidth: 2
+          },
+          {
+            label: "通信价格变化(%)",
+            data: [
+              -1.2, -1.5, -1.3, -1.0, -0.8, -0.7, -0.5, -0.3, -0.2, 0.1, 0.2,
+              0.3
+            ],
+            borderColor: "#4361ee",
+            backgroundColor: "rgba(67, 97, 238, 0.1)",
+            tension: 0.3,
+            fill: true,
+            borderWidth: 2
+          }
+        ]
+      };
+
+      const wageHousingData = {
+        labels: [
+          "2005",
+          "2007",
+          "2009",
+          "2011",
+          "2013",
+          "2015",
+          "2017",
+          "2019",
+          "2021",
+          "2023"
+        ],
+        datasets: [
+          {
+            label: "职工年平均工资(万元)",
+            data: [1.8, 2.5, 3.2, 4.2, 5.2, 6.3, 7.5, 9.1, 10.7, 11.5],
+            borderColor: "#4361ee",
+            backgroundColor: "rgba(67, 97, 238, 0.1)",
+            yAxisID: "y",
+            tension: 0.3,
+            fill: true,
+            borderWidth: 2
+          },
+          {
+            label: "商品房平均价格(元/平米)",
+            data: [
+              4000, 4800, 5700, 6800, 7900, 8700, 9600, 10800, 12500, 14500
+            ],
+            borderColor: "#f94144",
+            backgroundColor: "rgba(249, 65, 68, 0.1)",
+            yAxisID: "y1",
+            tension: 0.3,
+            fill: true,
+            borderWidth: 2
+          }
+        ]
+      };
+
+      const correlationData = {
+        labels: [
+          "北京",
+          "上海",
+          "广州",
+          "深圳",
+          "杭州",
+          "南京",
+          "成都",
+          "武汉",
+          "西安",
+          "郑州"
+        ],
+        datasets: [
+          {
+            label: "收入与房价关系",
+            data: [
+              { x: 18.7, y: 65000 },
+              { x: 17.9, y: 62000 },
+              { x: 14.3, y: 42000 },
+              { x: 15.8, y: 58000 },
+              { x: 13.5, y: 38000 },
+              { x: 12.8, y: 35000 },
+              { x: 11.2, y: 21000 },
+              { x: 10.5, y: 19000 },
+              { x: 9.8, y: 17000 },
+              { x: 9.2, y: 15000 }
+            ],
+            backgroundColor: "rgba(67, 97, 238, 0.7)",
+            borderColor: "#3a0ca3",
+            pointRadius: 8,
+            pointHoverRadius: 10,
+            pointBorderWidth: 2,
+            pointBorderColor: "#ffffff"
+          }
+        ]
+      };
+
+      const sentimentData = {
+        labels: ["负面情绪", "积极态度", "中立态度"],
+        datasets: [
+          {
+            data: [49.9, 27.0, 23.1],
+            backgroundColor: ["#f94144", "#4cc9f0", "#f9c74f"],
+            borderWidth: 0
+          }
+        ]
+      };
+
+      const trendData = {
+        labels: ["2023", "2024", "2025"],
+        datasets: [
+          {
+            label: "负面情绪(%)",
+            data: [48.5, 45.2, 49.9],
+            borderColor: "#f94144",
+            backgroundColor: "rgba(249, 65, 68, 0.1)",
+            tension: 0.3,
+            fill: true,
+            borderWidth: 2
+          },
+          {
+            label: "积极态度(%)",
+            data: [25.3, 29.7, 27.0],
+            borderColor: "#4cc9f0",
+            backgroundColor: "rgba(76, 201, 240, 0.1)",
+            tension: 0.3,
+            fill: true,
+            borderWidth: 2
+          },
+          {
+            label: "中立态度(%)",
+            data: [26.2, 25.1, 23.1],
+            borderColor: "#f9c74f",
+            backgroundColor: "rgba(249, 199, 79, 0.1)",
+            tension: 0.3,
+            fill: true,
+            borderWidth: 2
+          }
+        ]
+      };
+
+      // 图表配置和初始化
+      window.onload = function () {
+        // 结婚与离婚趋势图
+        new Chart(document.getElementById("marriageChart"), {
+          type: "line",
+          data: marriageData,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              tooltip: {
+                mode: "index",
+                intersect: false
+              },
+              legend: {
+                position: "top"
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: false,
+                title: {
+                  display: true,
+                  text: "登记数(万对)"
+                },
+                grid: {
+                  color: "rgba(0, 0, 0, 0.05)"
+                }
+              },
+              x: {
+                grid: {
+                  color: "rgba(0, 0, 0, 0.05)"
+                }
+              }
+            }
+          }
+        });
+
+        // 人口出生率与死亡率
+        new Chart(document.getElementById("birthRateChart"), {
+          type: "line",
+          data: birthRateData,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              tooltip: {
+                mode: "index",
+                intersect: false
+              },
+              legend: {
+                position: "top"
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: false,
+                title: {
+                  display: true,
+                  text: "比率(‰)"
+                },
+                grid: {
+                  color: "rgba(0, 0, 0, 0.05)"
+                }
+              },
+              x: {
+                grid: {
+                  color: "rgba(0, 0, 0, 0.05)"
+                }
+              }
+            }
+          }
+        });
+
+        // 政策情感分析
+        new Chart(document.getElementById("policyChart"), {
+          type: "pie",
+          data: policyData,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "right"
+              },
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    return context.label + ": " + context.raw + "%";
+                  }
+                }
+              }
+            }
+          }
+        });
+
+        // 发改委网站访问分布
+        new Chart(document.getElementById("websiteChart"), {
+          type: "doughnut",
+          data: websiteData,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "right"
+              },
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    return context.label + ": " + context.raw + "%";
+                  }
+                }
+              }
+            }
+          }
+        });
+
+        // 财政支出结构
+        new Chart(document.getElementById("financeChart"), {
+          type: "pie",
+          data: financeData,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "right"
+              },
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    return context.label + ": " + context.raw + "%";
+                  }
+                }
+              }
+            }
+          }
+        });
+
+        // 交通通信价格变化
+        new Chart(document.getElementById("transportChart"), {
+          type: "line",
+          data: transportData,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              tooltip: {
+                mode: "index",
+                intersect: false
+              },
+              legend: {
+                position: "top"
+              }
+            },
+            scales: {
+              y: {
+                title: {
+                  display: true,
+                  text: "价格变化(%)"
+                },
+                grid: {
+                  color: "rgba(0, 0, 0, 0.05)"
+                }
+              },
+              x: {
+                grid: {
+                  color: "rgba(0, 0, 0, 0.05)"
+                }
+              }
+            }
+          }
+        });
+
+        // 工资与房价对比
+        new Chart(document.getElementById("wageHousingChart"), {
+          type: "line",
+          data: wageHousingData,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              tooltip: {
+                mode: "index",
+                intersect: false
+              },
+              legend: {
+                position: "top"
+              }
+            },
+            scales: {
+              y: {
+                type: "linear",
+                display: true,
+                position: "left",
+                title: {
+                  display: true,
+                  text: "年平均工资(万元)"
+                },
+                grid: {
+                  color: "rgba(0, 0, 0, 0.05)"
+                }
+              },
+              y1: {
+                type: "linear",
+                display: true,
+                position: "right",
+                title: {
+                  display: true,
+                  text: "平均房价(元/平米)"
+                },
+                grid: {
+                  drawOnChartArea: false
+                }
+              },
+              x: {
+                grid: {
+                  color: "rgba(0, 0, 0, 0.05)"
+                }
+              }
+            }
+          }
+        });
+
+        // 收入与房价相关性
+        new Chart(document.getElementById("correlationChart"), {
+          type: "scatter",
+          data: correlationData,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    return (
+                      context.dataset.label +
+                      ": " +
+                      context.raw.x +
+                      "万元, " +
+                      context.raw.y +
+                      "元/平米"
+                    );
+                  }
+                }
+              },
+              legend: {
+                display: false
+              }
+            },
+            scales: {
+              x: {
+                title: {
+                  display: true,
+                  text: "年平均工资(万元)"
+                },
+                grid: {
+                  color: "rgba(0, 0, 0, 0.05)"
+                }
+              },
+              y: {
+                title: {
+                  display: true,
+                  text: "商品房平均价格(元/平米)"
+                },
+                grid: {
+                  color: "rgba(0, 0, 0, 0.05)"
+                }
+              }
+            }
+          }
+        });
+
+        // 微博情感分析
+        new Chart(document.getElementById("sentimentChart"), {
+          type: "pie",
+          data: sentimentData,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "right"
+              },
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    return context.label + ": " + context.raw + "%";
+                  }
+                }
+              }
+            }
+          }
+        });
+
+        // 微博情感趋势
+        new Chart(document.getElementById("trendChart"), {
+          type: "line",
+          data: trendData,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              tooltip: {
+                mode: "index",
+                intersect: false
+              },
+              legend: {
+                position: "top"
+              }
+            },
+            scales: {
+              y: {
+                min: 0,
+                max: 60,
+                title: {
+                  display: true,
+                  text: "占比(%)"
+                },
+                grid: {
+                  color: "rgba(0, 0, 0, 0.05)"
+                }
+              },
+              x: {
+                grid: {
+                  color: "rgba(0, 0, 0, 0.05)"
+                }
+              }
+            }
+          }
+        });
+      };
+
+      // 下载图表功能
+      function downloadChart(chartId, filename) {
+        html2canvas(document.getElementById(chartId)).then(canvas => {
+          const link = document.createElement("a");
+          link.download = filename;
+          link.href = canvas.toDataURL("image/png");
+          link.click();
+        });
+      }
+    </script>
+  </body>
+</html>

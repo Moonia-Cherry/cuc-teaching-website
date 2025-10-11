@@ -32,6 +32,22 @@
               <el-card class="year-selector-card"> {{ year }} </el-card>
             </router-link>
           </ElCol>
+          <!-- 数据分析按钮卡片 -->
+          <ElCol :xs="24" :sm="8" :lg="8" :xl="6">
+            <a
+              :href="encodeURI(`${publicPath}数据分析/index.html`)"
+              target="_blank"
+              rel="noopener noreferrer"
+              style="text-decoration: none"
+            >
+              <el-card
+                class="year-selector-card"
+                style="text-align: center; cursor: pointer"
+              >
+                2025
+              </el-card>
+            </a>
+          </ElCol>
         </ElRow>
       </div>
 
@@ -64,6 +80,9 @@ import {
   ElCol
 } from "element-plus";
 import { Upload } from "@element-plus/icons-vue";
+
+// 使用 Vite 运行时 base 路径
+const publicPath = import.meta.env.VITE_PUBLIC_PATH || "/";
 
 // 年份选项（生成最近5年）
 const currentYear = new Date().getFullYear();

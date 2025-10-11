@@ -1,0 +1,1133 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>B站《宋浩老师的高数课》评论分析看板</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary: #3498db;
+        --primary-dark: #2980b9;
+        --secondary: #2ecc71;
+        --accent: #e74c3c;
+        --light-bg: #f8f9fa;
+        --card-bg: #ffffff;
+        --text-primary: #2c3e50;
+        --text-secondary: #7f8c8d;
+        --border: #e0e0e0;
+        --success: #27ae60;
+        --warning: #f39c12;
+        --danger: #e74c3c;
+        --info: #3498db;
+        --gradient-start: #6a11cb;
+        --gradient-end: #2575fc;
+        --shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        --shadow-hover: 0 12px 25px rgba(0, 0, 0, 0.15);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      }
+
+      body {
+        background: linear-gradient(
+          135deg,
+          var(--gradient-start) 0%,
+          var(--gradient-end) 100%
+        );
+        color: var(--text-primary);
+        line-height: 1.6;
+        min-height: 100vh;
+        padding: 20px;
+        background-attachment: fixed;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding: 30px;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(10px);
+        animation: fadeIn 0.8s ease-out;
+      }
+
+      h1 {
+        color: var(--primary);
+        margin-bottom: 15px;
+        font-size: 2.5rem;
+        font-weight: 700;
+        background: linear-gradient(
+          135deg,
+          var(--gradient-start) 0%,
+          var(--gradient-end) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .dashboard-description {
+        max-width: 800px;
+        margin: 0 auto;
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+      }
+
+      .dashboard {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+        gap: 25px;
+        margin-bottom: 40px;
+      }
+
+      .card {
+        background: var(--card-bg);
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: var(--shadow);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 5px;
+        height: 100%;
+        background: linear-gradient(
+          to bottom,
+          var(--primary),
+          var(--secondary)
+        );
+      }
+
+      .card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-hover);
+      }
+
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .card-title {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .card-title i {
+        color: var(--secondary);
+        font-size: 1.2rem;
+      }
+
+      .download-btn {
+        background: linear-gradient(
+          135deg,
+          var(--primary) 0%,
+          var(--primary-dark) 100%
+        );
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 30px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+      }
+
+      .download-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(52, 152, 219, 0.4);
+      }
+
+      .chart-container {
+        width: 100%;
+        height: 400px;
+        margin-bottom: 15px;
+      }
+
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      .data-table th,
+      .data-table td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .data-table th {
+        background-color: #f8f9fa;
+        font-weight: 600;
+        color: var(--primary);
+      }
+
+      .data-table tr:hover {
+        background-color: #f1f9ff;
+      }
+
+      .insight-box {
+        background: linear-gradient(to right, #e3f2fd, #f0f7ff);
+        border-left: 4px solid var(--info);
+        padding: 18px;
+        margin-top: 20px;
+        border-radius: 0 8px 8px 0;
+        position: relative;
+      }
+
+      .insight-box::before {
+        content: "\f06a";
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--info);
+        font-size: 1.2rem;
+      }
+
+      .insight-content {
+        margin-left: 30px;
+      }
+
+      .insight-box strong {
+        color: var(--info);
+      }
+
+      footer {
+        text-align: center;
+        padding: 30px;
+        margin-top: 40px;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(10px);
+      }
+
+      .footer-info {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .footer-info p {
+        margin-bottom: 8px;
+        color: var(--text-primary);
+      }
+
+      .footer-info strong {
+        color: var(--primary);
+      }
+
+      .stats-highlight {
+        display: flex;
+        justify-content: space-around;
+        margin: 25px 0;
+        flex-wrap: wrap;
+        gap: 15px;
+      }
+
+      .stat-card {
+        background: var(--card-bg);
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        min-width: 200px;
+        box-shadow: var(--shadow);
+        transition: all 0.3s;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-hover);
+      }
+
+      .stat-value {
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 5px;
+        background: linear-gradient(
+          135deg,
+          var(--gradient-start) 0%,
+          var(--gradient-end) 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .stat-label {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+      }
+
+      .positive {
+        border-top: 4px solid var(--success);
+      }
+      .neutral {
+        border-top: 4px solid var(--warning);
+      }
+      .negative {
+        border-top: 4px solid var(--danger);
+      }
+      .users {
+        border-top: 4px solid var(--info);
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .card {
+        animation: fadeIn 0.6s ease-out;
+      }
+
+      @media (max-width: 768px) {
+        .dashboard {
+          grid-template-columns: 1fr;
+        }
+
+        .chart-container {
+          height: 300px;
+        }
+
+        .stats-highlight {
+          flex-direction: column;
+        }
+
+        h1 {
+          font-size: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>
+          <i class="fas fa-chart-line"></i> B站《宋浩老师的高数课》评论分析看板
+        </h1>
+        <p class="dashboard-description">
+          本看板基于B站《宋浩老师的高数课》评论数据，从情感倾向、关注焦点、用户属性、讨论主题、活跃时段及性别分布六个维度进行分析可视化。
+        </p>
+      </header>
+
+      <div class="stats-highlight">
+        <div class="stat-card positive">
+          <div class="stat-value">74.4%</div>
+          <div class="stat-label">积极评论</div>
+        </div>
+        <div class="stat-card neutral">
+          <div class="stat-value">8.4%</div>
+          <div class="stat-label">中性评论</div>
+        </div>
+        <div class="stat-card negative">
+          <div class="stat-value">17.2%</div>
+          <div class="stat-label">消极评论</div>
+        </div>
+        <div class="stat-card users">
+          <div class="stat-value">70%+</div>
+          <div class="stat-label">5-6级用户占比</div>
+        </div>
+      </div>
+
+      <div class="dashboard">
+        <!-- 情感倾向分析 -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <i class="fas fa-smile"></i> 评论情感倾向分析
+            </h2>
+            <button
+              class="download-btn"
+              onclick="downloadChart('sentimentPie')"
+            >
+              <i class="fas fa-download"></i> 下载图表
+            </button>
+          </div>
+          <div id="sentimentPie" class="chart-container"></div>
+          <div class="insight-box">
+            <div class="insight-content">
+              <p>
+                <strong>数据洞察：</strong
+                >约74.4%的评论表达了积极情绪，反映出学生对宋浩老师授课内容和讲解风格的认可与感激。17.2%的评论表现出消极情绪，可能与高数难度和复习焦虑有关。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 情感分数分布 -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <i class="fas fa-chart-bar"></i> 情感分数分布
+            </h2>
+            <button
+              class="download-btn"
+              onclick="downloadChart('sentimentDist')"
+            >
+              <i class="fas fa-download"></i> 下载图表
+            </button>
+          </div>
+          <div id="sentimentDist" class="chart-container"></div>
+          <div class="insight-box">
+            <div class="insight-content">
+              <p>
+                <strong>数据洞察：</strong
+                >情感分数呈现明显的右偏分布，大多数评论的情感分数集中在接近1的区域，表明评论者普遍对课程持积极态度。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 用户等级分布 -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <i class="fas fa-user-graduate"></i> 用户等级分布
+            </h2>
+            <button class="download-btn" onclick="downloadChart('userLevel')">
+              <i class="fas fa-download"></i> 下载图表
+            </button>
+          </div>
+          <div id="userLevel" class="chart-container"></div>
+          <div class="insight-box">
+            <div class="insight-content">
+              <p>
+                <strong>数据洞察：</strong
+                >等级5和6的用户占比超过70%，表明这些用户在B站上较为活跃，更频繁地使用平台并参与互动。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 评论活跃时间段 -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <i class="fas fa-clock"></i> 评论活跃时间段（按小时）
+            </h2>
+            <button class="download-btn" onclick="downloadChart('activeHours')">
+              <i class="fas fa-download"></i> 下载图表
+            </button>
+          </div>
+          <div id="activeHours" class="chart-container"></div>
+          <div class="insight-box">
+            <div class="insight-content">
+              <p>
+                <strong>数据洞察：</strong
+                >评论高峰集中在晚上20-22点，与大学生晚间自主学习时间吻合，表明学生多在晚上观看视频和参与讨论。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 性别分布 -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <i class="fas fa-venus-mars"></i> 评论用户性别比例
+            </h2>
+            <button class="download-btn" onclick="downloadChart('genderRatio')">
+              <i class="fas fa-download"></i> 下载图表
+            </button>
+          </div>
+          <div id="genderRatio" class="chart-container"></div>
+          <div class="insight-box">
+            <div class="insight-content">
+              <p>
+                <strong>数据洞察：</strong
+                >男性用户占比(28.1%)明显高于女性用户(14.3%)，可能与高等数学课程受众中理工科学生比例偏高有关。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 主题分布 -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <i class="fas fa-comments"></i> 评论主题分布
+            </h2>
+            <button class="download-btn" onclick="downloadChart('topicDist')">
+              <i class="fas fa-download"></i> 下载图表
+            </button>
+          </div>
+          <div id="topicDist" class="chart-container"></div>
+          <div class="insight-box">
+            <div class="insight-content">
+              <p>
+                <strong>数据洞察：</strong
+                >主题3（对老师的评价）的评论数量最多，表明用户对宋浩老师的高数课程内容或教学风格有较高的讨论热情和关注度。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 高频词汇展示 -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-font"></i> 评论高频词汇</h2>
+            <button
+              class="download-btn"
+              onclick="downloadChart('wordFrequency')"
+            >
+              <i class="fas fa-download"></i> 下载图表
+            </button>
+          </div>
+          <div id="wordFrequency" class="chart-container"></div>
+          <div class="insight-box">
+            <div class="insight-content">
+              <p>
+                <strong>数据洞察：</strong
+                >高频词汇如"老师"、"高数"、"学习"等反映了学生对课程内容、教学质量和学习过程的关注。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 评论示例表格 -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <i class="fas fa-table"></i> 评论情感分类示例
+            </h2>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>情感类型</th>
+                <th>用户</th>
+                <th>评论内容</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="badge positive">积极</span></td>
+                <td>桃子君kk</td>
+                <td>看了好一会发现是我们学校的老师哎！</td>
+              </tr>
+              <tr>
+                <td><span class="badge neutral">中性</span></td>
+                <td>月上泛云雾</td>
+                <td>用我单身换在座各位高数必过[doge]</td>
+              </tr>
+              <tr>
+                <td><span class="badge negative">消极</span></td>
+                <td>帅气退场</td>
+                <td>用我前任十年单身换在座的各位高数考过[OK]</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="insight-box">
+            <div class="insight-content">
+              <p>
+                <strong>数据洞察：</strong
+                >积极评论多表达对课程的认可和感谢；中性评论多为调侃；消极评论则反映考试压力和焦虑情绪。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="footer-info">
+          <p><strong>项目名称：</strong>B站《宋浩老师的高数课》评论分析</p>
+          <p><strong>课程：</strong>计算思维之问题求解</p>
+          <p><strong>班级：</strong>2024广告学</p>
+          <p>
+            <strong>小组成员：</strong
+            >陈雅雯、贺佳希、李若涵、马赵娇悦、王丽、吴佳蓓
+          </p>
+          <p><strong>类型：</strong>数据分析报告</p>
+          <p><strong>授课老师：</strong>张伟娜</p>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      // 初始化所有图表
+      function initCharts() {
+        // 情感倾向饼图
+        const sentimentPieChart = echarts.init(
+          document.getElementById("sentimentPie")
+        );
+        const sentimentPieOption = {
+          title: {
+            text: "评论情感倾向比例",
+            left: "center",
+            textStyle: {
+              fontSize: 16,
+              fontWeight: "bold"
+            }
+          },
+          tooltip: {
+            trigger: "item",
+            formatter: "{a} <br/>{b}: {c} ({d}%)",
+            backgroundColor: "rgba(255,255,255,0.9)",
+            borderColor: "#ddd",
+            textStyle: { color: "#333" }
+          },
+          legend: {
+            orient: "horizontal",
+            bottom: 10,
+            data: ["积极", "中性", "消极"]
+          },
+          color: ["#2ecc71", "#f39c12", "#e74c3c"],
+          series: [
+            {
+              name: "情感倾向",
+              type: "pie",
+              radius: ["40%", "70%"],
+              center: ["50%", "45%"],
+              data: [
+                { value: 74.4, name: "积极" },
+                { value: 8.4, name: "中性" },
+                { value: 17.2, name: "消极" }
+              ],
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: "rgba(0, 0, 0, 0.5)"
+                }
+              },
+              label: {
+                formatter: "{b}: {d}%",
+                fontSize: 14
+              },
+              itemStyle: {
+                borderRadius: 10,
+                borderColor: "#fff",
+                borderWidth: 2
+              }
+            }
+          ]
+        };
+        sentimentPieChart.setOption(sentimentPieOption);
+
+        // 情感分数分布
+        const sentimentDistChart = echarts.init(
+          document.getElementById("sentimentDist")
+        );
+        const sentimentDistOption = {
+          title: {
+            text: "情感分数分布",
+            left: "center",
+            textStyle: {
+              fontSize: 16,
+              fontWeight: "bold"
+            }
+          },
+          tooltip: {
+            trigger: "axis",
+            formatter: "分数区间: {b}<br/>评论数量: {c}",
+            backgroundColor: "rgba(255,255,255,0.9)",
+            borderColor: "#ddd",
+            textStyle: { color: "#333" }
+          },
+          grid: {
+            left: "3%",
+            right: "4%",
+            bottom: "3%",
+            containLabel: true
+          },
+          xAxis: {
+            type: "category",
+            data: [
+              "[0.0-0.2)",
+              "[0.2-0.4)",
+              "[0.4-0.6)",
+              "[0.6-0.8)",
+              "[0.8-1.0]"
+            ],
+            name: "情感分数区间",
+            axisLine: {
+              lineStyle: {
+                color: "#ddd"
+              }
+            }
+          },
+          yAxis: {
+            type: "value",
+            name: "评论数量",
+            axisLine: {
+              lineStyle: {
+                color: "#ddd"
+              }
+            },
+            splitLine: {
+              lineStyle: {
+                color: "#f0f0f0"
+              }
+            }
+          },
+          series: [
+            {
+              name: "评论数量",
+              type: "bar",
+              data: [25, 150, 85, 250, 490],
+              itemStyle: {
+                color: function (params) {
+                  const colors = [
+                    "#e74c3c",
+                    "#e67e22",
+                    "#f1c40f",
+                    "#2ecc71",
+                    "#27ae60"
+                  ];
+                  return colors[params.dataIndex];
+                },
+                borderRadius: [5, 5, 0, 0]
+              },
+              barWidth: "45%"
+            }
+          ]
+        };
+        sentimentDistChart.setOption(sentimentDistOption);
+
+        // 用户等级分布
+        const userLevelChart = echarts.init(
+          document.getElementById("userLevel")
+        );
+        const userLevelOption = {
+          title: {
+            text: "用户等级分布",
+            left: "center",
+            textStyle: {
+              fontSize: 16,
+              fontWeight: "bold"
+            }
+          },
+          tooltip: {
+            trigger: "axis",
+            formatter: "等级 {b}: {c}条评论",
+            backgroundColor: "rgba(255,255,255,0.9)",
+            borderColor: "#ddd",
+            textStyle: { color: "#333" }
+          },
+          grid: {
+            left: "3%",
+            right: "4%",
+            bottom: "3%",
+            containLabel: true
+          },
+          xAxis: {
+            type: "category",
+            data: ["0", "1", "2", "3", "4", "5", "6"],
+            name: "用户等级",
+            axisLine: {
+              lineStyle: {
+                color: "#ddd"
+              }
+            }
+          },
+          yAxis: {
+            type: "value",
+            name: "评论数量",
+            axisLine: {
+              lineStyle: {
+                color: "#ddd"
+              }
+            },
+            splitLine: {
+              lineStyle: {
+                color: "#f0f0f0"
+              }
+            }
+          },
+          series: [
+            {
+              name: "评论数量",
+              type: "bar",
+              data: [5, 30, 45, 60, 120, 420, 320],
+              itemStyle: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  { offset: 0, color: "#3498db" },
+                  { offset: 1, color: "#2980b9" }
+                ]),
+                borderRadius: [5, 5, 0, 0]
+              },
+              barWidth: "45%"
+            }
+          ]
+        };
+        userLevelChart.setOption(userLevelOption);
+
+        // 评论活跃时间段
+        const activeHoursChart = echarts.init(
+          document.getElementById("activeHours")
+        );
+        const activeHoursOption = {
+          title: {
+            text: "评论活跃时间段（按小时）",
+            left: "center",
+            textStyle: {
+              fontSize: 16,
+              fontWeight: "bold"
+            }
+          },
+          tooltip: {
+            trigger: "axis",
+            formatter: "时间: {b}:00<br/>评论数量: {c}",
+            backgroundColor: "rgba(255,255,255,0.9)",
+            borderColor: "#ddd",
+            textStyle: { color: "#333" }
+          },
+          grid: {
+            left: "3%",
+            right: "4%",
+            bottom: "3%",
+            containLabel: true
+          },
+          xAxis: {
+            type: "category",
+            data: Array.from({ length: 24 }, (_, i) => i),
+            name: "小时",
+            axisLine: {
+              lineStyle: {
+                color: "#ddd"
+              }
+            }
+          },
+          yAxis: {
+            type: "value",
+            name: "评论数量",
+            axisLine: {
+              lineStyle: {
+                color: "#ddd"
+              }
+            },
+            splitLine: {
+              lineStyle: {
+                color: "#f0f0f0"
+              }
+            }
+          },
+          series: [
+            {
+              name: "评论数量",
+              type: "line",
+              data: [
+                12, 8, 5, 3, 2, 5, 15, 35, 45, 50, 55, 60, 65, 70, 75, 80, 90,
+                120, 180, 210, 230, 190, 130, 80
+              ],
+              smooth: true,
+              lineStyle: {
+                width: 4,
+                color: "#9b59b6"
+              },
+              symbol: "circle",
+              symbolSize: 8,
+              itemStyle: {
+                color: "#9b59b6",
+                borderWidth: 2,
+                borderColor: "#fff"
+              },
+              areaStyle: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  { offset: 0, color: "rgba(155, 89, 182, 0.6)" },
+                  { offset: 1, color: "rgba(155, 89, 182, 0.1)" }
+                ])
+              }
+            }
+          ]
+        };
+        activeHoursChart.setOption(activeHoursOption);
+
+        // 性别分布
+        const genderRatioChart = echarts.init(
+          document.getElementById("genderRatio")
+        );
+        const genderRatioOption = {
+          title: {
+            text: "评论用户性别比例",
+            left: "center",
+            textStyle: {
+              fontSize: 16,
+              fontWeight: "bold"
+            }
+          },
+          tooltip: {
+            trigger: "item",
+            formatter: "{a} <br/>{b}: {c} ({d}%)",
+            backgroundColor: "rgba(255,255,255,0.9)",
+            borderColor: "#ddd",
+            textStyle: { color: "#333" }
+          },
+          legend: {
+            orient: "horizontal",
+            bottom: 10,
+            data: ["男", "女", "保密"]
+          },
+          color: ["#3498db", "#e74c3c", "#7f8c8d"],
+          series: [
+            {
+              name: "性别比例",
+              type: "pie",
+              radius: ["40%", "70%"],
+              center: ["50%", "45%"],
+              data: [
+                { value: 28.1, name: "男" },
+                { value: 14.3, name: "女" },
+                { value: 57.6, name: "保密" }
+              ],
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: "rgba(0, 0, 0, 0.5)"
+                }
+              },
+              label: {
+                formatter: "{b}: {d}%",
+                fontSize: 14
+              },
+              itemStyle: {
+                borderRadius: 10,
+                borderColor: "#fff",
+                borderWidth: 2
+              }
+            }
+          ]
+        };
+        genderRatioChart.setOption(genderRatioOption);
+
+        // 主题分布
+        const topicDistChart = echarts.init(
+          document.getElementById("topicDist")
+        );
+        const topicDistOption = {
+          title: {
+            text: "评论主题分布",
+            left: "center",
+            textStyle: {
+              fontSize: 16,
+              fontWeight: "bold"
+            }
+          },
+          tooltip: {
+            trigger: "axis",
+            formatter: "主题{b}: {c}条评论",
+            backgroundColor: "rgba(255,255,255,0.9)",
+            borderColor: "#ddd",
+            textStyle: { color: "#333" }
+          },
+          grid: {
+            left: "3%",
+            right: "4%",
+            bottom: "3%",
+            containLabel: true
+          },
+          xAxis: {
+            type: "category",
+            data: ["主题1", "主题2", "主题3", "主题4", "主题5"],
+            name: "主题",
+            axisLine: {
+              lineStyle: {
+                color: "#ddd"
+              }
+            }
+          },
+          yAxis: {
+            type: "value",
+            name: "评论数量",
+            axisLine: {
+              lineStyle: {
+                color: "#ddd"
+              }
+            },
+            splitLine: {
+              lineStyle: {
+                color: "#f0f0f0"
+              }
+            }
+          },
+          series: [
+            {
+              name: "评论数量",
+              type: "bar",
+              data: [220, 120, 320, 90, 250],
+              itemStyle: {
+                color: function (params) {
+                  const colors = [
+                    "#1abc9c",
+                    "#3498db",
+                    "#9b59b6",
+                    "#e74c3c",
+                    "#f39c12"
+                  ];
+                  return colors[params.dataIndex];
+                },
+                borderRadius: [5, 5, 0, 0]
+              },
+              barWidth: "45%"
+            }
+          ]
+        };
+        topicDistChart.setOption(topicDistOption);
+
+        // 高频词汇
+        const wordFrequencyChart = echarts.init(
+          document.getElementById("wordFrequency")
+        );
+        const wordFrequencyOption = {
+          title: {
+            text: "评论高频词汇TOP20",
+            left: "center",
+            textStyle: {
+              fontSize: 16,
+              fontWeight: "bold"
+            }
+          },
+          tooltip: {
+            trigger: "axis",
+            axisPointer: {
+              type: "shadow"
+            },
+            backgroundColor: "rgba(255,255,255,0.9)",
+            borderColor: "#ddd",
+            textStyle: { color: "#333" }
+          },
+          grid: {
+            left: "3%",
+            right: "4%",
+            bottom: "3%",
+            containLabel: true
+          },
+          xAxis: {
+            type: "value",
+            name: "出现次数",
+            axisLine: {
+              lineStyle: {
+                color: "#ddd"
+              }
+            },
+            splitLine: {
+              lineStyle: {
+                color: "#f0f0f0"
+              }
+            }
+          },
+          yAxis: {
+            type: "category",
+            data: [
+              "视频",
+              "学习",
+              "考试",
+              "老师",
+              "高数",
+              "大学",
+              "数学",
+              "积分",
+              "弹幕",
+              "时间",
+              "宋浩",
+              "真的",
+              "分钟",
+              "函数",
+              "小时",
+              "同学",
+              "感谢",
+              "期末",
+              "极限",
+              "预习"
+            ].reverse(),
+            name: "关键词",
+            axisLine: {
+              lineStyle: {
+                color: "#ddd"
+              }
+            }
+          },
+          series: [
+            {
+              name: "出现次数",
+              type: "bar",
+              data: [
+                320, 310, 290, 280, 270, 260, 250, 240, 230, 220, 210, 200, 190,
+                180, 170, 160, 150, 140, 130, 120
+              ].reverse(),
+              itemStyle: {
+                color: function (params) {
+                  return params.value > 250 ? "#c23531" : "#2f4554";
+                },
+                borderRadius: [0, 5, 5, 0]
+              },
+              barWidth: "60%"
+            }
+          ]
+        };
+        wordFrequencyChart.setOption(wordFrequencyOption);
+
+        // 窗口调整时重置图表大小
+        window.addEventListener("resize", function () {
+          sentimentPieChart.resize();
+          sentimentDistChart.resize();
+          userLevelChart.resize();
+          activeHoursChart.resize();
+          genderRatioChart.resize();
+          topicDistChart.resize();
+          wordFrequencyChart.resize();
+        });
+      }
+
+      // 下载图表功能
+      function downloadChart(chartId) {
+        const chartDiv = document.getElementById(chartId);
+        html2canvas(chartDiv).then(canvas => {
+          const link = document.createElement("a");
+          link.download = `${chartId}-chart.png`;
+          link.href = canvas.toDataURL("image/png");
+          link.click();
+        });
+      }
+
+      // 页面加载完成后初始化图表
+      document.addEventListener("DOMContentLoaded", initCharts);
+    </script>
+  </body>
+</html>

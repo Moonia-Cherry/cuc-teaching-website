@@ -1,0 +1,734 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>5. 数据采集与文件读写</title>
+  </head>
+
+  <body>
+    <!-- 主内容区 -->
+    <section class="mb-16 w-full">
+      <!-- 1. 数据采集及文件读写 -->
+      <h2
+        class="text-2xl md:text-3xl font-bold mb-6 text-dark-200 dark:text-light-200"
+      >
+        5. 数据采集及文件读写
+      </h2>
+
+      <!-- 5.1 需求分析 -->
+      <h3
+        class="text-xl font-semibold mb-4 text-primary section-id"
+        id="section-5-1"
+      >
+        5.1 需求分析
+      </h3>
+      <p class="mb-4">
+        你是否好奇过，为什么抖音能精准推荐你喜欢的视频？为什么淘宝知道你需要买什么？这一切都离不开数据！本案例将带你探索数据的获取与读写，解锁AI时代的秘密武器。数据与算法就如同工业时代的煤炭与蒸汽机的关系一样，数据是人工智能时代的新能源。
+      </p>
+      <p class="mb-4">
+        数据获取和读写是数据分析的第一步，数据的数量和质量直接影响后续的分析结果。本案例将介绍常用的数据获取方式及常见数据格式文件的读写。
+      </p>
+
+      <!-- 5.2 学习目标 -->
+      <h3
+        class="text-xl font-semibold mb-4 text-primary section-id"
+        id="section-5-2"
+      >
+        5.2 学习目标
+      </h3>
+      <ol class="list-decimal pl-6 mb-4 space-y-2">
+        <li>了解数据获取方式。</li>
+        <li>会利用爬虫工具获取数据。</li>
+        <li>理解数据伦理与法律风险。</li>
+        <li>
+          掌握 TXT、CSV、JSON、Excel
+          等常见格式文件的读写方法，能够根据实际需求灵活选择合适的文件格式进行数据存储。
+        </li>
+      </ol>
+
+      <!-- 5.3 环境要求 -->
+      <h3
+        class="text-xl font-semibold mb-4 text-primary section-id"
+        id="section-5-3"
+      >
+        5.3 环境要求
+      </h3>
+      <div class="card">
+        <p class="mb-2">Python环境、pandas库、openpyxl库。</p>
+        <p class="mb-2 font-medium">pandas及openpyxl的安装命令：</p>
+        <pre><code class="language-bash">pip install pandas openpyxl -i https://pypi.tuna.tsinghua.edu.cn/simple</code></pre>
+      </div>
+
+      <!-- 5.4 相关知识 -->
+      <h3
+        class="text-xl font-semibold mb-4 text-primary section-id"
+        id="section-5-4"
+      >
+        5.4 相关知识
+      </h3>
+
+      <!-- 5.4.1 数据获取方式 -->
+      <h4 class="font-semibold mb-2">1. 数据获取方式</h4>
+      <p class="mb-4">常见的数据获取方式如图5-1所示。</p>
+      <div class="flex flex-col items-center my-6">
+        <img
+          src="image/5/5-1.png"
+          alt="常用数据获取方式"
+          title="常用数据获取方式"
+          class="max-w-full h-auto rounded-lg shadow-md"
+        />
+        <p class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
+          图5-1 常用数据获取方式
+        </p>
+      </div>
+
+      <ol class="custom-list pl-6 mb-4 space-y-3">
+        <li>
+          <strong>客户提供</strong
+          >：在实际项目中，提出分析需求的客户会直接提供相关数据，这些数据通常与客户业务紧密相关。例如，企业委托数据分析团队优化营销策略时，会提供内部销售数据、客户信息等。
+        </li>
+        <li>
+          <strong>公开数据源</strong
+          >：网络上有大量公开数据源，适合用于学习和分析，常见平台如下：
+          <ul class="list-disc pl-6 mt-1 space-y-1">
+            <li>
+              国家数据网（<a
+                href="https://data.stats.gov.cn/"
+                target="_blank"
+                class="text-primary underline"
+                >https://data.stats.gov.cn/</a
+              >）：国家统计局提供的宏观经济数据平台，涵盖GDP、就业、物价等多维度数据。
+            </li>
+            <li>
+              和鲸社区（<a
+                href="https://www.heywhale.com/home"
+                target="_blank"
+                class="text-primary underline"
+                >https://www.heywhale.com/home</a
+              >）：专注数据科学领域，提供数据集、项目案例、竞赛资源。
+            </li>
+            <li>
+              Kaggle（<a
+                href="https://www.kaggle.com/datasets"
+                target="_blank"
+                class="text-primary underline"
+                >https://www.kaggle.com/datasets</a
+              >）：全球性数据科学竞赛平台，含大量公开数据集。
+            </li>
+            <li>
+              阿里云天池（<a
+                href="https://tianchi.aliyun.com/"
+                target="_blank"
+                class="text-primary underline"
+                >https://tianchi.aliyun.com/</a
+              >）：阿里巴巴旗下大数据平台，提供多行业数据集。
+            </li>
+          </ul>
+        </li>
+        <li>
+          <strong>爬虫工具</strong
+          >：当公开数据源无法满足需求时，可借助可视化爬虫工具（无需复杂代码），如：
+          <ul class="list-disc pl-6 mt-1">
+            <li>
+              八爪鱼采集器（<a
+                href="https://www.bazhuayu.com/"
+                target="_blank"
+                class="text-primary underline"
+                >https://www.bazhuayu.com/</a
+              >）
+            </li>
+            <li>
+              易采集（<a
+                href="https://easyspider.cn/"
+                target="_blank"
+                class="text-primary underline"
+                >https://easyspider.cn/</a
+              >）
+            </li>
+          </ul>
+        </li>
+        <li>
+          <strong>爬虫程序</strong
+          >：若工具无法满足特定需求，可编写爬虫程序，涉及网络请求（requests/selenium）、数据解析（re/BeautifulSoup/Xpath）等技术，复杂度较高。
+        </li>
+      </ol>
+
+      <!-- 5.4.2 数据采集规则 -->
+      <h4 class="font-semibold mb-2">2. 数据采集规则</h4>
+      <p class="mb-4">
+        从互联网自动获取数据需遵循法律法规、网站规则和道德伦理，具体规则如下：
+      </p>
+      <ul class="list-disc pl-6 mb-4 space-y-2">
+        <li>
+          <strong>遵守法律法规</strong
+          >：不爬取受版权保护的数据，不收集身份证号、银行卡号等个人敏感信息。
+        </li>
+        <li>
+          <strong>遵守网站使用规则</strong
+          >：尊重网站robots协议（声明可爬/禁爬页面），不违反服务条款中的禁止爬取规定。
+        </li>
+        <li>
+          <strong>遵守道德伦理</strong
+          >：不干扰网站正常运营，爬取数据仅用于合法目的（如学习、研究），不用于诈骗、网络攻击等恶意行为。
+        </li>
+      </ul>
+
+      <!-- 5.4.3 数据格式 -->
+      <h4 class="font-semibold mb-2">3. 数据格式</h4>
+      <p class="mb-4">常用数据文件格式及特点如下，详细对比见表5-1：</p>
+      <ul class="list-disc pl-6 mb-4 space-y-2">
+        <li>
+          <strong>TXT文件</strong
+          >：纯文本格式（.txt），无样式信息，体积小、兼容性强，适合日志记录、简单数据存储。
+        </li>
+        <li>
+          <strong>CSV文件</strong
+          >：逗号分隔值格式（.csv），纯文本存储表格数据，每行一条记录，列用逗号（或分号/制表符）分隔，适合数据交换。
+        </li>
+        <li>
+          <strong>JSON文件</strong
+          >：轻量级数据交换格式（.json），以键值对存储结构化数据，易读易解析，适合Web
+          API数据传输、配置文件。
+        </li>
+        <li>
+          <strong>Excel文件</strong
+          >：电子表格格式（.xlsx/.xls），支持表格、公式、格式设置，适合办公和数据分析。
+        </li>
+      </ul>
+
+      <div class="overflow-x-auto mb-6">
+        <p
+          class="text-center font-semibold mb-2 text-dark-200 dark:text-light-200"
+        >
+          表5-1 数据文件格式对比
+        </p>
+        <table
+          class="min-w-full bg-white dark:bg-dark-200 rounded-lg shadow-sm"
+        >
+          <thead>
+            <tr class="bg-light-200 dark:bg-dark-100">
+              <th class="px-4 py-2 text-left">格式</th>
+              <th class="px-4 py-2 text-left">扩展名</th>
+              <th class="px-4 py-2 text-left">特点</th>
+              <th class="px-4 py-2 text-left">适用场景</th>
+              <th class="px-4 py-2 text-left">编辑工具</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">TXT</td>
+              <td class="px-4 py-2">.txt</td>
+              <td class="px-4 py-2">纯文本，无结构</td>
+              <td class="px-4 py-2">日志记录、简单数据存储</td>
+              <td class="px-4 py-2">任何文本编辑器</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">CSV</td>
+              <td class="px-4 py-2">.csv</td>
+              <td class="px-4 py-2">表格数据，轻量级</td>
+              <td class="px-4 py-2">数据交换、Excel兼容</td>
+              <td class="px-4 py-2">文本编辑器/Excel/WPS</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">JSON</td>
+              <td class="px-4 py-2">.json</td>
+              <td class="px-4 py-2">键值对结构，易读</td>
+              <td class="px-4 py-2">Web数据传输、配置文件</td>
+              <td class="px-4 py-2">文本编辑器/专用工具</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">Excel</td>
+              <td class="px-4 py-2">.xlsx/.xls</td>
+              <td class="px-4 py-2">富文本表格，支持公式</td>
+              <td class="px-4 py-2">数据分析、可视化</td>
+              <td class="px-4 py-2">Excel/WPS</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 5.4.4 文件路径 -->
+      <h4 class="font-semibold mb-2">4. 文件路径</h4>
+      <p class="mb-4">
+        文件路径分为绝对路径和相对路径，项目开发中推荐使用相对路径（便于移植）：
+      </p>
+      <div class="card-grid">
+        <div class="card">
+          <h5 class="font-semibold mb-2">绝对路径</h5>
+          <p class="text-sm">
+            从文件系统根目录开始的完整路径，如：<br />D:\chapter6\data\c.txt（Windows）、/home/user/chapter6/data/c.txt（Linux/macOS）。<br /><strong
+              >特点</strong
+            >：唯一无歧义，但路径长、易失效。
+          </p>
+        </div>
+        <div class="card">
+          <h5 class="font-semibold mb-2">相对路径</h5>
+          <p class="text-sm">
+            以当前工作目录为参照的路径，如：<br />./file.txt（当前目录）、../images/photo.jpg（上级目录）。<br /><strong
+              >特点</strong
+            >：简洁灵活，依赖当前目录环境。
+          </p>
+        </div>
+      </div>
+
+      <p class="mb-4">如图5-2所示的Windows目录结构：</p>
+      <div class="flex flex-col items-center my-6">
+        <img
+          src="image/5/5-2.png"
+          alt="目录结构"
+          class="max-w-full h-auto rounded-lg shadow-md"
+        />
+        <p class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2">
+          图5-2 目录结构
+        </p>
+      </div>
+
+      <p class="mb-4">
+        当前目录为"chapter6"目录，在a.py文件中读取各文件的相对路径：
+      </p>
+      <ul class="list-disc pl-6 mb-4 space-y-1">
+        <li>读取b.txt（同目录）：<code>b.txt</code></li>
+        <li>读取c.txt（data子目录）：<code>data/c.txt</code></li>
+        <li>读取e.txt（上级目录）：<code>../e.txt</code></li>
+      </ul>
+
+      <!-- 5.5 案例实现 -->
+      <h3
+        class="text-xl font-semibold mb-4 text-primary section-id"
+        id="section-5-5"
+      >
+        5.5 案例实现
+      </h3>
+      <p class="mb-4">
+        利用八爪鱼采集器采集猫眼票房数据，将采集到的数据分别保存为.xlsx,.csv,.json格式。然后对对采集到的各格式数据进行读写操作。
+      </p>
+
+      <!-- 5.5.1 数据采集 -->
+      <h4 class="font-semibold mb-2">1. 数据采集（八爪鱼采集器）</h4>
+      <ol class="custom-list pl-6 mb-4 space-y-3">
+        <li>
+          打开八爪鱼采集器，输入目标网址“<a
+            href="https://piaofang.maoyan.com/dashboard"
+            target="_blank"
+            class="text-primary underline"
+            >https://piaofang.maoyan.com/dashboard</a
+          >”，点击“开始采集”，如图5-3所示。
+          <div class="flex flex-col items-center my-6">
+            <img
+              src="image/5/5-3.png"
+              alt="八爪鱼首页"
+              title="八爪鱼首页"
+              class="max-w-full h-auto rounded-lg shadow-md"
+            />
+            <p
+              class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2"
+            >
+              图5-3 八爪鱼首页
+            </p>
+          </div>
+        </li>
+        <li>
+          选择“自动识别网页内容”，八爪鱼会自动识别可采集的数据（如影片名、票房、排片场次），如图5-4所示。
+          <div class="flex flex-col items-center my-6">
+            <img
+              src="image/5/5-4.png"
+              alt="自动识别网页"
+              title="自动识别网页"
+              class="max-w-full h-auto rounded-lg shadow-md"
+            />
+            <p
+              class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2"
+            >
+              图5-4 自动识别网页
+            </p>
+          </div>
+        </li>
+        <li>
+          筛选所需数据（删除无用列、修改列名），点击“保存并开始采集”，如图5-5所示。
+          <div class="flex flex-col items-center my-6">
+            <img
+              src="image/5/5-5.png"
+              alt="保存采集设置"
+              title="保存采集设置"
+              class="max-w-full h-auto rounded-lg shadow-md"
+            />
+            <p
+              class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2"
+            >
+              图5-5 保存采集设置
+            </p>
+          </div>
+        </li>
+        <li>
+          选择“本地采集”→“普通模式”，启动采集，如图5-6所示。
+          <div class="flex flex-col items-center my-6">
+            <img
+              src="image/5/5-6.png"
+              alt="本地采集"
+              title="本地采集"
+              class="max-w-full h-auto rounded-lg shadow-md"
+            />
+            <p
+              class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2"
+            >
+              图5-6 本地采集
+            </p>
+          </div>
+        </li>
+        <li>
+          采集完成后，分别导出数据为Excel、CSV、JSON格式，假设保存路径为：
+          <ul class="list-disc pl-6 mt-1">
+            <li>Excel：<code>D:\chapter6\data\mypf.xlsx</code></li>
+            <li>CSV：<code>D:\chapter6\data\mypf.csv</code></li>
+            <li>JSON：<code>D:\chapter6\data\mypf.json</code></li>
+          </ul>
+          <div class="flex flex-col items-center my-6">
+            <img
+              src="image/5/5-7.png"
+              alt="文件类型选择"
+              title="文件类型选择"
+              class="max-w-full h-auto rounded-lg shadow-md"
+            />
+            <p
+              class="text-center text-sm text-gray-600 dark:text-gray-400 mt-2"
+            >
+              图5-7 文件类型选择
+            </p>
+          </div>
+        </li>
+      </ol>
+
+      <!-- 5.5.2 文件读写 -->
+      <h4 class="font-semibold mb-2">2. 文件读写</h4>
+
+      <!-- 5.5.2.1 TXT文件读写 -->
+      <h5 class="font-medium mb-2">（1）TXT文件读写</h5>
+      <p class="mb-4">
+        Python文件操作基本流程：<strong>打开→操作→关闭</strong>，推荐使用<code>with</code>上下文管理器（自动关闭文件，避免资源泄漏）。
+      </p>
+      <h4 class="font-semibold mb-2 text-dark-200 dark:text-light-200">
+        例5-1：读写txt文件
+      </h4>
+      <h6 class="font-medium mb-1">读TXT文件</h6>
+      <pre><code class="language-python"># 例5_1：读txt文件（使用with上下文管理器）
+with open('data/cucinfo.txt', 'r', encoding='utf-8') as file:
+    txt = file.read()  # 读取全部内容
+    # 其他读取方法：
+    # txt = file.readline()  # 读取一行
+    # txt = file.readlines()  # 读取所有行，返回列表
+print(txt)</code></pre>
+
+      <h6 class="font-medium mb-1">写TXT文件</h6>
+      <pre><code class="language-python"># 将读取的内容写入新文件
+with open('temp/cuc.txt', 'w', encoding='utf-8') as fp:
+    fp.write(txt)  # 写入字符串
+    # 写入列表（需手动加换行符）
+    # lines = ['第一行\n', '第二行\n']
+    # fp.writelines(lines)</code></pre>
+
+      <p class="mb-2">文件打开模式说明（表5-2）：</p>
+      <div class="overflow-x-auto mb-4">
+        <p class="text-center font-semibold mb-2">表5-2 文件打开模式</p>
+        <table
+          class="min-w-full bg-white dark:bg-dark-200 rounded-lg shadow-sm"
+        >
+          <thead>
+            <tr class="bg-light-200 dark:bg-dark-100">
+              <th class="px-4 py-2 text-left">模式</th>
+              <th class="px-4 py-2 text-left">含义</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">'r'</td>
+              <td class="px-4 py-2">
+                只读模式，文件不存在则报错（FileNotFoundError）
+              </td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">'w'</td>
+              <td class="px-4 py-2">
+                覆盖写模式，文件不存在则创建，存在则清空内容
+              </td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">'a'</td>
+              <td class="px-4 py-2">
+                追加写模式，文件不存在则创建，存在则在末尾追加
+              </td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">'x'</td>
+              <td class="px-4 py-2">
+                创建写模式，文件存在则报错（FileExistsError）
+              </td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">'b'</td>
+              <td class="px-4 py-2">
+                二进制模式（如读取图片、视频），需与r/w/a/x组合（如'rb'）
+              </td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">'+'</td>
+              <td class="px-4 py-2">读写模式，与r/w/a/x组合（如'r+'）</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 5.5.2.2 CSV文件读写 -->
+      <h5 class="font-medium mb-2">（2）CSV文件读写</h5>
+      <p class="mb-4">
+        使用Python标准库<code>csv</code>读写CSV文件，支持列表（reader）和字典（DictReader）两种读取方式。
+      </p>
+      <h4 class="font-semibold mb-2 text-dark-200 dark:text-light-200">
+        例5_2：读写csv文件
+      </h4>
+      <h6 class="font-medium mb-1">读CSV文件</h6>
+      <pre><code class="language-python"># 读mypf.csv文件
+import csv
+
+# 方式1：csv.reader() → 返回列表（适合无表头或自定义解析）
+with open(r'data/mypf.csv', 'r', encoding='utf-8-sig') as f:
+    reader = csv.reader(f)
+    for row in reader:
+        print(row)  # 每行是列表，如：['向阳·花', '上映8天', '1.14亿', ...]
+
+# 方式2：csv.DictReader() → 返回字典（适合带表头，键为列名）
+with open(r'data/mypf.csv', 'r', encoding='utf-8-sig') as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+        print(row)  # 每行是字典，如：{'影片':'向阳·花', '上映时间':'上映8天', ...}</code></pre>
+
+      <h6 class="font-medium mb-1">写CSV文件</h6>
+      <pre><code class="language-python">#将成绩数据写入cj.csv
+import csv
+
+# 待写入数据（表头+内容）
+data = [
+    ['学号', '姓名', '成绩'],
+    ['20230001', '张三', '89'],
+    ['20230002', '李四', '98'],
+    ['20230003', '王五', '75'],
+    ['20230004', '赵六', '100']
+]
+
+# 写入CSV（newline=''避免空行）
+with open(r'temp/cj.csv', 'w', newline='', encoding='utf-8') as file:
+    writer = csv.writer(file)
+    writer.writerows(data)  # 写入多行
+    # 写入单行：writerow(['20230005', '孙七', '92'])</code></pre>
+
+      <p class="mb-2">
+        注：若CSV文件使用非逗号分隔符（如制表符），可通过<code>delimiter</code>参数指定：
+      </p>
+      <pre><code class="language-python">with open(r'data/chipotle.csv', 'r', encoding='utf-8') as f:
+    reader = csv.reader(f, delimiter='\t')  # 制表符分隔</code></pre>
+
+      <!-- 1.5.2.3 JSON文件读写 -->
+      <h5 class="font-medium mb-2">（3）JSON文件读写</h5>
+      <p class="mb-4">
+        使用Python内置<code>json</code>模块，支持<code>load/dump</code>（文件操作）和<code>loads/dumps</code>（字符串操作）。
+      </p>
+      <h4 class="font-semibold mb-2 text-dark-200 dark:text-light-200">
+        例5_3：读写json文件
+      </h4>
+      <h6 class="font-medium mb-1">读JSON文件</h6>
+      <pre><code class="language-python">import json
+
+with open(r'data/mypf.json', 'r', encoding='utf-8') as f:
+    loaded_data = json.load(f)  # 读取JSON文件，返回Python对象（列表/字典）
+print(loaded_data)  # 输出：[{'影片':'向阳·花', ...}, ...]
+print(loaded_data[0]['影片'])  # 访问第一个影片名：向阳·花</code></pre>
+
+      <h6 class="font-medium mb-1">写JSON文件</h6>
+      <pre><code class="language-python"># 将读取的数据写入output.json
+with open('temp/output.json', 'w', encoding='utf-8') as f:
+    # ensure_ascii=False：保留中文（不转义为\uXXXX）
+    # indent=4：格式化缩进，增强可读性
+    json.dump(loaded_data, f, ensure_ascii=False, indent=4)</code></pre>
+
+      <!-- 5.5.2.4 Excel文件读写 -->
+      <h5 class="font-medium mb-2">（4）Excel文件读写</h5>
+      <p class="mb-4">
+        使用第三方库<code>pandas</code>读写Excel文件，需额外安装<code>openpyxl</code>（支持.xlsx格式）。
+      </p>
+      <h4 class="font-semibold mb-2 text-dark-200 dark:text-light-200">
+        例5_4：读写excel文件
+      </h4>
+      <h6 class="font-medium mb-1">读Excel文件</h6>
+      <pre><code class="language-python">import pandas as pd
+
+# 基础读取（读取第一个工作表）
+df = pd.read_excel('data/mypf.xlsx')
+
+# 解决中文列名对齐问题
+pd.set_option('display.unicode.ambiguous_as_wide', True)
+pd.set_option('display.unicode.east_asian_width', True)
+
+print(df)  # 输出DataFrame对象
+
+# 进阶读取（指定工作表、行索引、列名）
+# df = pd.read_excel(
+#     'data/cuclqx.xlsx',
+#     sheet_name='电子产品',  # 指定工作表（名称/索引）
+#     index_col=0,           # 第0列作为行索引
+#     header=0               # 第0行作为列名
+# )</code></pre>
+
+      <h6 class="font-medium mb-1">写Excel文件</h6>
+      <pre><code class="language-python"># 将DataFrame写入新Excel文件
+df.to_excel(
+    'temp/mypf_new.xlsx',
+    index=False,          # 不写入行索引
+    sheet_name='票房数据', # 工作表名称
+    engine='openpyxl'     # 写入引擎（支持.xlsx）
+)</code></pre>
+
+      <p class="mb-2">pandas读写常用文件方法（表5-4）：</p>
+      <div class="overflow-x-auto mb-4">
+        <p class="text-center font-semibold mb-2">
+          表5-4 Pandas读写常用文件方法
+        </p>
+        <table
+          class="min-w-full bg-white dark:bg-dark-200 rounded-lg shadow-sm"
+        >
+          <thead>
+            <tr class="bg-light-200 dark:bg-dark-100">
+              <th class="px-4 py-2 text-left">文件格式</th>
+              <th class="px-4 py-2 text-left">读操作</th>
+              <th class="px-4 py-2 text-left">写操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">CSV</td>
+              <td class="px-4 py-2">pd.read_csv()</td>
+              <td class="px-4 py-2">df.to_csv()</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">Excel</td>
+              <td class="px-4 py-2">pd.read_excel()</td>
+              <td class="px-4 py-2">df.to_excel()</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">JSON</td>
+              <td class="px-4 py-2">pd.read_json()</td>
+              <td class="px-4 py-2">df.to_json()</td>
+            </tr>
+            <tr class="border-b border-light-300 dark:border-dark-100">
+              <td class="px-4 py-2">HTML</td>
+              <td class="px-4 py-2">pd.read_html()</td>
+              <td class="px-4 py-2">df.to_html()</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 5.5.3 文件读写常见问题及解决方案 -->
+      <h5 class="font-medium mb-2">（5）文件读写常见问题及解决方案</h5>
+      <div class="card-grid">
+        <div class="card">
+          <h6 class="font-medium mb-1">问题1：找不到文件</h6>
+          <p class="text-sm">
+            错误提示：<code
+              >FileNotFoundError: [Errno 2] No such file or directory</code
+            ><br />解决方案：检查文件路径是否正确（推荐相对路径），确保文件存在于指定目录。
+          </p>
+        </div>
+        <div class="card">
+          <h6 class="font-medium mb-1">问题2：无效参数（Windows）</h6>
+          <p class="text-sm">
+            错误提示：<code>OSError: [Errno 22] Invalid argument</code
+            ><br />解决方案：路径中反斜杠“\”需转义：<br />(1) 加r前缀：<code
+              >r'data\ncuc.txt'</code
+            ><br />(2) 双反斜杠：<code>'data\\ncuc.txt'</code><br />(3)
+            正斜杠：<code>'data/ncuc.txt'</code>
+          </p>
+        </div>
+        <div class="card">
+          <h6 class="font-medium mb-1">问题3：乱码或解码错误</h6>
+          <p class="text-sm">
+            错误提示：<code
+              >UnicodeDecodeError: 'gbk' codec can't decode byte</code
+            ><br />解决方案：指定正确编码格式，中文常用<code>encoding='utf-8'</code>或<code>'utf-8-sig'</code>（含BOM的UTF-8）。
+          </p>
+        </div>
+      </div>
+
+      <!-- 5.6 案例总结与反思 -->
+      <h3
+        class="text-xl font-semibold mb-4 text-primary section-id"
+        id="section-5-6"
+      >
+        5.6 案例总结与反思
+      </h3>
+      <div class="card">
+        <p class="mb-2">本案例核心内容：</p>
+        <ul class="list-disc pl-6 mb-2 space-y-1">
+          <li>
+            数据采集：掌握八爪鱼等可视化工具的使用，理解爬虫伦理与法律风险。
+          </li>
+          <li>
+            文件读写：熟练使用Python处理TXT/CSV/JSON/Excel格式，掌握路径设置和常见问题解决。
+          </li>
+        </ul>
+        <p class="mb-2">反思：</p>
+        <ul class="list-disc pl-6 mb-2 space-y-1">
+          <li>
+            采集数据可能存在缺失值、重复值，需先清洗再分析（后续章节讲解数据清洗）。
+          </li>
+          <li>
+            不同文件格式各有优劣：TXT适合简单存储，CSV适合数据交换，JSON适合Web传输，Excel适合办公分析，需根据场景选择。
+          </li>
+        </ul>
+      </div>
+
+      <!-- 5.7 举一反三 -->
+      <h3
+        class="text-xl font-semibold mb-4 text-primary section-id"
+        id="section-5-7"
+      >
+        5.7 举一反三
+      </h3>
+      <ol class="list-decimal pl-6 mb-4 space-y-2">
+        <li>改进案例：利用八爪鱼采集器爬取多页票房数据（设置翻页规则）。</li>
+        <li>
+          挑战任务：使用爬虫工具爬取需登录的网站内容（如知乎、豆瓣），注意遵守网站规则。
+        </li>
+        <li>
+          数据实践：从Kaggle下载公开数据集（如泰坦尼克号数据集），用Python读写并查看数据结构。
+        </li>
+        <li>
+          格式转换：编写Python脚本，将CSV文件（如mypf.csv）转换为JSON格式并保存。
+        </li>
+      </ol>
+
+      <!-- 代码高亮插件（可选） -->
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css"
+      />
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+      <script>
+        // 初始化代码高亮
+        hljs.highlightAll();
+        // 图片加载失败处理
+        document.querySelectorAll("img").forEach(img => {
+          img.addEventListener("error", function () {
+            this.alt = this.alt || "图片加载失败";
+            this.style.border = "1px dashed #ff4444";
+            this.style.backgroundColor = "#fff0f0";
+            this.style.display = "flex";
+            this.style.alignItems = "center";
+            this.style.justifyContent = "center";
+            this.style.height = "200px";
+            this.style.content = `'${this.alt}'`;
+          });
+        });
+      </script>
+    </section>
+  </body>
+</html>

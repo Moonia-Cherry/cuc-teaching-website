@@ -1,0 +1,724 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>视频传播效果影响因素分析 - 巴黎夏季奥运会案例</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@1.2.1"></script>
+    <style>
+      :root {
+        --primary-color: #3498db;
+        --secondary-color: #2ecc71;
+        --accent-color: #e74c3c;
+        --background-color: #f8f9fa;
+        --card-color: #ffffff;
+        --text-color: #333333;
+        --border-color: #e0e0e0;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: var(--background-color);
+        color: var(--text-color);
+        line-height: 1.6;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      header {
+        text-align: center;
+        padding: 20px 0;
+        margin-bottom: 30px;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      h1 {
+        color: var(--primary-color);
+        margin-bottom: 10px;
+      }
+
+      .subtitle {
+        color: #666;
+        font-size: 1.2rem;
+      }
+
+      .dashboard {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+        gap: 25px;
+        margin-bottom: 40px;
+      }
+
+      .card {
+        background-color: var(--card-color);
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        transition: transform 0.3s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+      }
+
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .card-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin: 0;
+      }
+
+      .btn {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: background-color 0.3s;
+      }
+
+      .btn:hover {
+        background-color: #2980b9;
+      }
+
+      .chart-container {
+        position: relative;
+        height: 300px;
+        width: 100%;
+      }
+
+      .summary {
+        background-color: var(--card-color);
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-bottom: 40px;
+      }
+
+      .summary h2 {
+        color: var(--primary-color);
+        margin-top: 0;
+      }
+
+      .key-findings {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+      }
+
+      .finding {
+        background-color: rgba(52, 152, 219, 0.1);
+        padding: 15px;
+        border-radius: 6px;
+        border-left: 4px solid var(--primary-color);
+      }
+
+      .finding.positive {
+        background-color: rgba(46, 204, 113, 0.1);
+        border-left-color: var(--secondary-color);
+      }
+
+      .finding.negative {
+        background-color: rgba(231, 76, 60, 0.1);
+        border-left-color: var(--accent-color);
+      }
+
+      footer {
+        text-align: center;
+        padding: 30px 0;
+        margin-top: 50px;
+        border-top: 1px solid var(--border-color);
+        font-size: 0.9rem;
+        color: #666;
+      }
+
+      .project-info {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .project-info h3 {
+        margin-bottom: 15px;
+        color: var(--primary-color);
+      }
+
+      .project-members {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin: 15px 0;
+      }
+
+      .member {
+        background-color: rgba(52, 152, 219, 0.1);
+        padding: 5px 10px;
+        border-radius: 4px;
+      }
+
+      @media (max-width: 768px) {
+        .dashboard {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>基于用户评论的视频传播效果影响因素探究</h1>
+        <p class="subtitle">——以巴黎夏季奥运会为例</p>
+      </header>
+
+      <div class="summary">
+        <h2>研究概述</h2>
+        <p>
+          本研究以B站为研究平台，收集巴黎夏季奥运会期间发布的957部相关视频数据，累计播放量超亿次。从视频热度、评论情感倾向、观众关注点及视频时效性等多个维度展开分析，旨在揭示影响视频传播效果的关键因素。
+        </p>
+
+        <div class="key-findings">
+          <div class="finding positive">
+            <h3>正面评论主导</h3>
+            <p>
+              观众对巴黎夏季奥运会评价较高，正面情感评论占比50.89%，情感分数主要集中在0.6-1之间。
+            </p>
+          </div>
+          <div class="finding">
+            <h3>官媒内容领跑</h3>
+            <p>
+              共青团中央制作的赛事总结视频以23万热度断层登顶，收藏量达播放量6.2%，超均值4倍。
+            </p>
+          </div>
+          <div class="finding">
+            <h3>互动性极高</h3>
+            <p>
+              开幕式解析视频弹幕/播放比达1.37%(均值0.21%)，艺术表达争议(43%)与文化差异话题(29%)触发用户表达欲。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">视频热度指数分布</h3>
+            <button class="btn download-btn" data-chart="heatIndexChart">
+              下载图表
+            </button>
+          </div>
+          <div class="chart-container">
+            <canvas id="heatIndexChart"></canvas>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">评论情感倾向分布</h3>
+            <button class="btn download-btn" data-chart="sentimentChart">
+              下载图表
+            </button>
+          </div>
+          <div class="chart-container">
+            <canvas id="sentimentChart"></canvas>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">不同类型视频热度对比</h3>
+            <button class="btn download-btn" data-chart="videoTypeChart">
+              下载图表
+            </button>
+          </div>
+          <div class="chart-container">
+            <canvas id="videoTypeChart"></canvas>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">情感倾向与传播热度关系</h3>
+            <button class="btn download-btn" data-chart="correlationChart">
+              下载图表
+            </button>
+          </div>
+          <div class="chart-container">
+            <canvas id="correlationChart"></canvas>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">评论情感随时间变化趋势</h3>
+            <button class="btn download-btn" data-chart="timelineChart">
+              下载图表
+            </button>
+          </div>
+          <div class="chart-container">
+            <canvas id="timelineChart"></canvas>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">用户偏好随时间变化</h3>
+            <button class="btn download-btn" data-chart="preferenceChart">
+              下载图表
+            </button>
+          </div>
+          <div class="chart-container">
+            <canvas id="preferenceChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="project-info">
+          <h3>项目信息</h3>
+          <p>
+            <strong>名称：</strong
+            >基于用户评论的视频传播效果影响因素探究——以巴黎夏季奥运会为例
+          </p>
+          <p><strong>课程：</strong>计算思维之问题求解</p>
+          <p><strong>班级：</strong>2024新闻学</p>
+          <p>
+            <strong>姓名：</strong
+            >钟旗瑞，刘佩垚，任明轩，申洎菲，贾墨浛，龙湘蜀
+          </p>
+
+          <p><strong>类型：</strong>数据分析及可视化</p>
+          <p><strong>授课教师：</strong>张伟娜</p>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      // 模拟数据 - 基于文档描述
+      const heatIndexData = {
+        labels: ["0-10k", "10k-50k", "50k-100k", "100k-500k", "500k-1M", "1M+"],
+        datasets: [
+          {
+            label: "视频数量",
+            data: [320, 280, 180, 120, 40, 17],
+            backgroundColor: "rgba(52, 152, 219, 0.7)",
+            borderColor: "rgba(52, 152, 219, 1)",
+            borderWidth: 1
+          }
+        ]
+      };
+
+      const sentimentData = {
+        labels: ["正面情感 (50.89%)", "负面情感 (28.67%)", "中性情感 (20.44%)"],
+        datasets: [
+          {
+            data: [50.89, 28.67, 20.44],
+            backgroundColor: [
+              "rgba(46, 204, 113, 0.7)",
+              "rgba(231, 76, 60, 0.7)",
+              "rgba(241, 196, 15, 0.7)"
+            ],
+            borderColor: [
+              "rgba(46, 204, 113, 1)",
+              "rgba(231, 76, 60, 1)",
+              "rgba(241, 196, 15, 1)"
+            ],
+            borderWidth: 1
+          }
+        ]
+      };
+
+      const videoTypeData = {
+        labels: [
+          "官媒内容",
+          "开幕式解析",
+          "赛事直播",
+          "运动员特写",
+          "趣味二创"
+        ],
+        datasets: [
+          {
+            label: "平均热度指数",
+            data: [230000, 150000, 92115, 44387, 85000],
+            backgroundColor: "rgba(155, 89, 182, 0.7)",
+            borderColor: "rgba(155, 89, 182, 1)",
+            borderWidth: 1
+          }
+        ]
+      };
+
+      const correlationData = {
+        datasets: [
+          {
+            label: "视频数据点",
+            data: [
+              { x: 0.2, y: 20000, r: 5 },
+              { x: 0.8, y: 150000, r: 10 },
+              { x: 0.4, y: 50000, r: 7 },
+              { x: 0.9, y: 230000, r: 15 },
+              { x: 0.3, y: 30000, r: 5 },
+              { x: 0.7, y: 120000, r: 8 },
+              { x: 0.6, y: 90000, r: 7 },
+              { x: 0.85, y: 180000, r: 12 },
+              { x: 0.5, y: 60000, r: 6 },
+              { x: 0.75, y: 110000, r: 9 }
+            ],
+            backgroundColor: "rgba(52, 152, 219, 0.7)",
+            borderColor: "rgba(52, 152, 219, 1)",
+            borderWidth: 1
+          }
+        ]
+      };
+
+      const timelineData = {
+        labels: [
+          "8月1日",
+          "8月2日",
+          "8月3日",
+          "8月4日",
+          "8月5日",
+          "8月6日",
+          "8月7日",
+          "8月8日",
+          "8月9日",
+          "8月10日"
+        ],
+        datasets: [
+          {
+            label: "正面评论",
+            data: [1200, 1350, 1500, 1650, 1800, 1950, 2100, 1900, 1700, 1600],
+            borderColor: "rgba(46, 204, 113, 1)",
+            backgroundColor: "rgba(46, 204, 113, 0.1)",
+            fill: true,
+            tension: 0.4
+          },
+          {
+            label: "负面评论",
+            data: [800, 750, 700, 650, 600, 550, 500, 600, 700, 750],
+            borderColor: "rgba(231, 76, 60, 1)",
+            backgroundColor: "rgba(231, 76, 60, 0.1)",
+            fill: true,
+            tension: 0.4
+          }
+        ]
+      };
+
+      const preferenceData = {
+        labels: ["赛时", "赛后3小时", "赛后1天", "赛后3天", "赛后7天"],
+        datasets: [
+          {
+            label: "赛事速报",
+            data: [85, 95, 60, 30, 10],
+            borderColor: "rgba(52, 152, 219, 1)",
+            backgroundColor: "rgba(52, 152, 219, 0.1)",
+            fill: false,
+            tension: 0.4
+          },
+          {
+            label: "技术分析",
+            data: [40, 60, 75, 90, 65],
+            borderColor: "rgba(155, 89, 182, 1)",
+            backgroundColor: "rgba(155, 89, 182, 0.1)",
+            fill: false,
+            tension: 0.4
+          },
+          {
+            label: "情怀纪录片",
+            data: [20, 30, 45, 60, 85],
+            borderColor: "rgba(46, 204, 113, 1)",
+            backgroundColor: "rgba(46, 204, 113, 0.1)",
+            fill: false,
+            tension: 0.4
+          }
+        ]
+      };
+
+      // 初始化图表
+      window.onload = function () {
+        // 热度指数分布图表
+        const heatIndexChart = new Chart(
+          document.getElementById("heatIndexChart"),
+          {
+            type: "bar",
+            data: heatIndexData,
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  title: {
+                    display: true,
+                    text: "视频数量"
+                  }
+                },
+                x: {
+                  title: {
+                    display: true,
+                    text: "热度指数区间"
+                  }
+                }
+              },
+              plugins: {
+                title: {
+                  display: true,
+                  text: "视频热度指数分布（对数刻度）",
+                  font: {
+                    size: 16
+                  }
+                },
+                tooltip: {
+                  mode: "index",
+                  intersect: false
+                },
+                legend: {
+                  position: "top"
+                }
+              }
+            }
+          }
+        );
+
+        // 情感倾向分布图表
+        const sentimentChart = new Chart(
+          document.getElementById("sentimentChart"),
+          {
+            type: "pie",
+            data: sentimentData,
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                title: {
+                  display: true,
+                  text: "评论情感倾向分布",
+                  font: {
+                    size: 16
+                  }
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function (context) {
+                      return context.label + ": " + context.raw + "%";
+                    }
+                  }
+                },
+                legend: {
+                  position: "bottom"
+                }
+              }
+            }
+          }
+        );
+
+        // 视频类型热度对比图表
+        const videoTypeChart = new Chart(
+          document.getElementById("videoTypeChart"),
+          {
+            type: "bar",
+            data: videoTypeData,
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  title: {
+                    display: true,
+                    text: "热度指数"
+                  }
+                }
+              },
+              plugins: {
+                title: {
+                  display: true,
+                  text: "不同类型视频热度对比",
+                  font: {
+                    size: 16
+                  }
+                },
+                tooltip: {
+                  mode: "index",
+                  intersect: false
+                },
+                legend: {
+                  position: "top"
+                }
+              }
+            }
+          }
+        );
+
+        // 情感与热度关系图表
+        const correlationChart = new Chart(
+          document.getElementById("correlationChart"),
+          {
+            type: "bubble",
+            data: correlationData,
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                x: {
+                  min: 0,
+                  max: 1,
+                  title: {
+                    display: true,
+                    text: "情感指数 (0-1)"
+                  }
+                },
+                y: {
+                  beginAtZero: true,
+                  title: {
+                    display: true,
+                    text: "热度指数"
+                  }
+                }
+              },
+              plugins: {
+                title: {
+                  display: true,
+                  text: "情感倾向与传播热度关系",
+                  font: {
+                    size: 16
+                  }
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function (context) {
+                      return `情感指数: ${context.raw.x}, 热度: ${context.raw.y}`;
+                    }
+                  }
+                },
+                legend: {
+                  position: "top"
+                }
+              }
+            }
+          }
+        );
+
+        // 时间序列图表
+        const timelineChart = new Chart(
+          document.getElementById("timelineChart"),
+          {
+            type: "line",
+            data: timelineData,
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  title: {
+                    display: true,
+                    text: "评论数量"
+                  }
+                }
+              },
+              plugins: {
+                title: {
+                  display: true,
+                  text: "评论情感随时间变化趋势",
+                  font: {
+                    size: 16
+                  }
+                },
+                tooltip: {
+                  mode: "index",
+                  intersect: false
+                },
+                legend: {
+                  position: "top"
+                }
+              }
+            }
+          }
+        );
+
+        // 用户偏好变化图表
+        const preferenceChart = new Chart(
+          document.getElementById("preferenceChart"),
+          {
+            type: "line",
+            data: preferenceData,
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                y: {
+                  min: 0,
+                  max: 100,
+                  title: {
+                    display: true,
+                    text: "用户偏好指数"
+                  }
+                }
+              },
+              plugins: {
+                title: {
+                  display: true,
+                  text: "用户偏好随时间变化",
+                  font: {
+                    size: 16
+                  }
+                },
+                tooltip: {
+                  mode: "index",
+                  intersect: false
+                },
+                legend: {
+                  position: "top"
+                }
+              }
+            }
+          }
+        );
+
+        // 存储图表引用以便下载
+        const charts = {
+          heatIndexChart,
+          sentimentChart,
+          videoTypeChart,
+          correlationChart,
+          timelineChart,
+          preferenceChart
+        };
+
+        // 添加下载功能
+        document.querySelectorAll(".download-btn").forEach(btn => {
+          btn.addEventListener("click", function () {
+            const chartId = this.getAttribute("data-chart");
+            const chart = charts[chartId];
+
+            if (chart) {
+              const link = document.createElement("a");
+              link.href = chart.toBase64Image();
+              link.download = `${chartId}.png`;
+              link.click();
+            }
+          });
+        });
+      };
+    </script>
+  </body>
+</html>

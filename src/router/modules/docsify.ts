@@ -19,7 +19,7 @@ export default {
     {
       path: "/docs/qiujie",
       name: "DocsifyQiujie",
-      component: () => import("@/views/DocsView.vue"),
+      component: () => import("@/views/QiujieCaseView.vue"),
       meta: {
         title: "求解案例"
       }

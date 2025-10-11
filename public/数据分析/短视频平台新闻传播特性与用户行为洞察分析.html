@@ -1,0 +1,758 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>短视频平台新闻传播特性与用户行为洞察分析</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+      :root {
+        --primary-color: #3498db;
+        --secondary-color: #2c3e50;
+        --accent-color: #e74c3c;
+        --light-color: #ecf0f1;
+        --dark-color: #2c3e50;
+        --success-color: #27ae60;
+        --warning-color: #f39c12;
+        --gray-color: #95a5a6;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background-color: #f5f7fa;
+        color: #333;
+        line-height: 1.6;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      header {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        color: white;
+        padding: 30px 20px;
+        text-align: center;
+        margin-bottom: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        font-size: 2.2rem;
+        margin-bottom: 10px;
+      }
+
+      .subtitle {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .dashboard {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+        gap: 25px;
+        margin-bottom: 40px;
+      }
+
+      .chart-container {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease;
+      }
+
+      .chart-container:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+      }
+
+      .chart-title {
+        font-size: 1.4rem;
+        color: var(--secondary-color);
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--light-color);
+      }
+
+      .chart-description-title {
+        font-weight: bold;
+      }
+
+      .chart {
+        height: 400px;
+        width: 100%;
+      }
+
+      .summary {
+        background: white;
+        border-radius: 10px;
+        padding: 25px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      }
+
+      .summary-title {
+        font-size: 1.6rem;
+        color: var(--secondary-color);
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .summary-content {
+        display: block;
+      }
+
+      .summary-item {
+        margin-bottom: 20px;
+        padding: 15px;
+        border-left: 4px solid var(--primary-color);
+        background-color: #f8f9fa;
+        border-radius: 4px;
+      }
+
+      .summary-item h3 {
+        color: var(--secondary-color);
+        margin-bottom: 10px;
+      }
+
+      footer {
+        background-color: var(--secondary-color);
+        color: white;
+        padding: 30px 20px;
+        text-align: center;
+        border-radius: 8px;
+        margin-top: 40px;
+      }
+
+      .footer-content {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .footer-title {
+        font-size: 1.4rem;
+        margin-bottom: 15px;
+      }
+
+      .footer-info {
+        margin-bottom: 10px;
+        opacity: 0.9;
+      }
+
+      @media (max-width: 768px) {
+        .dashboard {
+          grid-template-columns: 1fr;
+        }
+
+        .chart {
+          height: 300px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>短视频平台新闻传播特性与用户行为洞察分析</h1>
+        <p class="subtitle">
+          基于抖音、快手平台的新闻传播特性与用户行为深度数据分析报告
+        </p>
+      </header>
+
+      <div class="summary">
+        <p>
+          在移动互联网高速发展的当下，短视频平台凭借碎片化、可视化的传播优势，已成为新闻信息扩散的核心渠道之一。为精准把握新闻在短视频平台的传播规律、用户偏好及行为特征，本报告以抖音、快手两大主流平台为研究对象，围绕
+          "新闻类短视频发布者影响力对比"、"内容标签与热门话题"、"发布时间与完播率关联"、"受众地域分布"、"不同平台内容类型偏好"、"评论情感倾向"
+          六大维度展开深度分析，最终形成的数据结论，可为本领域新闻内容创作优化、平台运营策略调整及传播效果提升提供科学支撑。
+        </p>
+      </div>
+
+      <div class="dashboard">
+        <div class="chart-container">
+          <h2 class="chart-title">官方媒体与自媒体传播指标对比</h2>
+          <div id="chart1" class="chart"></div>
+          <div class="chart-description">
+            <ul class="chart-description-list">
+              <li>
+                <span class="chart-description-title">传播能力分化明显</span>
+                <span class="chart-description-content">
+                  自媒体账号的平均播放量显著高于部分官方媒体账号，在话题扩散与内容触达方面更具优势；而官方媒体账号的评论互动率略高，说明其发布的新闻内容更易引发公众深度讨论，公信力背书效应突出。
+                </span>
+              </li>
+              <li>
+                <span class="chart-description-title">点赞率特征差异显著</span>
+                <span class="chart-description-content">
+                  自媒体账号更易产出 "爆款"
+                  内容，点赞率整体高于官方媒体，核心原因在于其内容选题更贴近用户兴趣，表达方式也更具情绪共鸣感。
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <h2 class="chart-title">新闻类短视频热门标签分析</h2>
+          <div id="chart2" class="chart"></div>
+          <div class="chart-description">
+            <ul class="chart-description-list">
+              <li>
+                <span class="chart-description-title">用户关注焦点集中</span>
+                <span class="chart-description-content">
+                  高频标签主要集中在民生与国际两大领域，# 民生保障、#
+                  就业民生、# 教育民生等民生类标签，以及 #国际灾害、#
+                  国际能源、#
+                  国际环保等国际类标签出现频次最高，这表明用户对社会保障、权益保护、国际重大事件的关注度显著高于其他领域。
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <h2 class="chart-title">发布时间与完播率关联分析</h2>
+          <div id="chart3" class="chart"></div>
+          <div class="chart-description">
+            <ul class="chart-description-list">
+              <li>
+                <span class="chart-description-title"
+                  >时段内容分布符合用户习惯</span
+                >
+                <span class="chart-description-content">
+                  晚上 19:00 时段，国际、财经类新闻集中发布，共 120 条；早上
+                  7:00 时段，民生、本地、健康类新闻占比最高，共 180
+                  条（占全天发布量的
+                  37.5%），这一分布特征符合用户早间关注身边事、晚间关注宏观议题的习惯。
+                </span>
+              </li>
+              <li>
+                <span class="chart-description-title">完播率时段特征显著</span>
+                <span class="chart-description-content">
+                  19:00 时段完播率最高，达 28%-30%，其中国际新闻完播率稳定在
+                  30%，财经新闻完播率波动于 25%-30%；7:00
+                  时段虽发布量最高，但完播率仅
+                  25%，且民生、本地、健康类新闻完播率均维持这一水平。
+                </span>
+              </li>
+              <li>
+                <span class="chart-description-title"
+                  >高发布量不等于高完播率</span
+                >
+                <span class="chart-description-content">
+                  高发布量不等于高完播率，19:00
+                  时段用户注意力更集中，是提升完播率的黄金时段，建议将深度国际报道、重要财经解读等核心新闻内容安排在该时段发布；7:00
+                  时段用户多处于通勤途中，注意力易分散，适合发布短平快的民生资讯，以平衡发布量与完播率。
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <h2 class="chart-title">新闻类短视频受众地域分布</h2>
+          <div id="chart4" class="chart"></div>
+          <div class="chart-description">
+            <p>
+              广东、河南、河北、云南、陕西、浙江、山东、江苏八省用户对新闻类短视频的互动热情最高，评论占比合计超
+              60%。这一特征与各省人口基数、互联网普及率及用户对公共事务的关注度密切相关，基于此，建议针对这些省份的用户偏好，优化区域化新闻内容（如增加本地民生事件、地域文化相关报道），以进一步提升用户互动率。
+            </p>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <h2 class="chart-title">不同平台内容类型偏好对比</h2>
+          <div id="chart5" class="chart"></div>
+          <div class="chart-description">
+            <ul class="chart-description-list">
+              <li>
+                <span class="chart-description-title"
+                  >内容分布存在明显差异</span
+                >
+                <span class="chart-description-content">
+                  <p>
+                    抖音平台：娱乐类新闻占比最高（约 45%），社会新闻次之（约
+                    30%），时政新闻占比最低（约 25%）；
+                  </p>
+                  <p>
+                    快手平台：社会新闻占比居首（约 40%），娱乐新闻紧随其后（约
+                    35%），时政新闻占比同样最低（约 25%）
+                  </p>
+                  <p>
+                    两大平台时政新闻占比基本持平，核心差异在于抖音更偏向娱乐化内容，快手更侧重社会化内容。
+                  </p>
+                </span>
+              </li>
+              <li>
+                <span class="chart-description-title"
+                  >用户互动偏好差异显著</span
+                >
+                <span class="chart-description-content">
+                  <p>
+                    抖音用户：对娱乐类新闻的互动意愿最强，互动指数高达
+                    105000，远超社会类（69031）与时政类（26488）；
+                  </p>
+                  <p>
+                    快手用户：对社会类新闻的互动热情最高，互动指数约
+                    75000，高于娱乐类（47887）与时政类（31022）。
+                  </p>
+                  <p>
+                    值得注意的是，两大平台时政新闻的互动指数均处于最低水平，但抖音时政新闻互动指数略高于快手，这反映出抖音用户对时政内容的接受度相对更高。
+                  </p>
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <h2 class="chart-title">评论情感倾向分析</h2>
+          <div id="chart6" class="chart"></div>
+          <div class="chart-description">
+            <ul class="chart-description-list">
+              <li>
+                <span class="chart-description-title"
+                  >情感倾向本质与用户需求相关</span
+                >
+                <span class="chart-description-content">
+                  户评论的情感倾向是其核心需求的外显 —— 积极情感对应
+                  "追求愉悦与价值认同"（如对励志新闻的点赞、对正能量事件的肯定）；消极情感对应
+                  "渴望问题解决"（如对民生痛点的吐槽、对负面事件的质疑）；中性情感对应
+                  "信息辅助决策"（如追问事件细节、咨询相关信息）
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="summary">
+        <h2 class="summary-title">核心研究发现</h2>
+        <div class="summary-content">
+          <div class="summary-item">
+            <h3>传播能力分化明显</h3>
+            <p>
+              自媒体账号平均播放量显著高于官方媒体，但官方媒体评论互动率更高，公信力背书效应突出。
+            </p>
+          </div>
+          <div class="summary-item">
+            <h3>用户关注焦点集中</h3>
+            <p>
+              高频标签主要集中在民生与国际两大领域，地域事件、时政反腐、民生安全三大热点方向最受关注。
+            </p>
+          </div>
+          <div class="summary-item">
+            <h3>发布时间影响完播率</h3>
+            <p>
+              19:00时段完播率最高(28%-30%)，7:00时段发布量最高但完播率仅25%，高发布量不等于高完播率。
+            </p>
+          </div>
+          <div class="summary-item">
+            <h3>地域互动差异显著</h3>
+            <p>
+              广东、河南、河北等八省用户对新闻类短视频的互动热情最高，评论占比合计超60%。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="summary">
+        <h2 class="summary-title">实践应用建议</h2>
+        <div class="summary-content">
+          <div class="summary-item">
+            <h3>内容创作端</h3>
+            <p>
+              聚焦民生、国际、社会热点，采用 "高频标签 + 区域化选题"
+              策略，针对抖音平台增加娱乐化表达，针对快手平台强化社会化内容深度。
+            </p>
+          </div>
+          <div class="summary-item">
+            <h3>平台运营端</h3>
+            <p>
+              针对 18:00~21:00
+              黄金时段优化流量分配，同时对广东、河南等互动高热度省份提供区域化内容推荐，提升用户触达精准度
+            </p>
+          </div>
+          <div class="summary-item">
+            <h3>传播效果端</h3>
+            <p>
+              官方媒体可借鉴自媒体的内容表达方式，增强内容吸引力；自媒体可强化公信力建设，提升用户信任度，两类账号共同发力，提升新闻内容的传播力与影响力。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="footer-content">
+          <h2 class="footer-title">报告编制信息</h2>
+          <p class="footer-info">
+            名称：短视频新闻分析专家 | 课程：计算思维之问题求解 | 班级：2024
+            网络与新媒体 | 作者：汪希、陈柏雅、张雅涵、苏昱彤、魏中钰、苑美翊 |
+            类型：数据分析及可视化 | 指导老师：张伟娜
+          </p>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      // 初始化所有图表
+      document.addEventListener("DOMContentLoaded", function () {
+        // 图表1：官方媒体与自媒体传播指标对比
+        const chart1 = echarts.init(document.getElementById("chart1"));
+        chart1.setOption({
+          tooltip: {
+            trigger: "axis",
+            axisPointer: { type: "shadow" }
+          },
+          legend: {
+            data: ["官方媒体", "自媒体"],
+            top: 10
+          },
+          grid: {
+            left: "3%",
+            right: "4%",
+            bottom: "3%",
+            containLabel: true
+          },
+          xAxis: {
+            type: "category",
+            data: ["平均播放量", "平均点赞数", "平均评论数", "互动率"]
+          },
+          yAxis: {
+            type: "value",
+            name: "数值"
+          },
+          series: [
+            {
+              name: "官方媒体",
+              type: "bar",
+              data: [125000, 8500, 1200, 9.6],
+              itemStyle: { color: "#3498db" }
+            },
+            {
+              name: "自媒体",
+              type: "bar",
+              data: [185000, 12500, 950, 6.8],
+              itemStyle: { color: "#e74c3c" }
+            }
+          ]
+        });
+
+        // 图表2：新闻类短视频热门标签分析
+        const chart2 = echarts.init(document.getElementById("chart2"));
+        chart2.setOption({
+          tooltip: {
+            trigger: "item",
+            formatter: "{a} <br/>{b}: {c} ({d}%)"
+          },
+          legend: {
+            orient: "vertical",
+            right: 10,
+            top: "center",
+            data: [
+              "民生保障",
+              "就业民生",
+              "教育民生",
+              "国际灾害",
+              "国际能源",
+              "国际环保",
+              "其他"
+            ]
+          },
+          series: [
+            {
+              name: "热门标签",
+              type: "pie",
+              radius: ["40%", "70%"],
+              avoidLabelOverlap: false,
+              itemStyle: {
+                borderRadius: 10,
+                borderColor: "#fff",
+                borderWidth: 2
+              },
+              label: {
+                show: false,
+                position: "center"
+              },
+              emphasis: {
+                label: {
+                  show: true,
+                  fontSize: "18",
+                  fontWeight: "bold"
+                }
+              },
+              labelLine: {
+                show: false
+              },
+              data: [
+                {
+                  value: 22,
+                  name: "民生保障",
+                  itemStyle: { color: "#3498db" }
+                },
+                {
+                  value: 18,
+                  name: "就业民生",
+                  itemStyle: { color: "#2ecc71" }
+                },
+                {
+                  value: 15,
+                  name: "教育民生",
+                  itemStyle: { color: "#e74c3c" }
+                },
+                {
+                  value: 14,
+                  name: "国际灾害",
+                  itemStyle: { color: "#f39c12" }
+                },
+                {
+                  value: 12,
+                  name: "国际能源",
+                  itemStyle: { color: "#9b59b6" }
+                },
+                {
+                  value: 10,
+                  name: "国际环保",
+                  itemStyle: { color: "#1abc9c" }
+                },
+                { value: 9, name: "其他", itemStyle: { color: "#95a5a6" } }
+              ]
+            }
+          ]
+        });
+
+        // 图表3：发布时间与完播率关联分析
+        const chart3 = echarts.init(document.getElementById("chart3"));
+        chart3.setOption({
+          tooltip: {
+            trigger: "axis",
+            axisPointer: { type: "cross" }
+          },
+          legend: {
+            data: ["发布数量", "完播率"],
+            top: 10
+          },
+          grid: {
+            left: "3%",
+            right: "4%",
+            bottom: "3%",
+            containLabel: true
+          },
+          xAxis: {
+            type: "category",
+            data: ["7:00", "9:00", "12:00", "15:00", "18:00", "19:00", "21:00"]
+          },
+          yAxis: [
+            {
+              type: "value",
+              name: "发布数量",
+              position: "left",
+              axisLine: {
+                show: true,
+                lineStyle: { color: "#3498db" }
+              },
+              axisLabel: {
+                formatter: "{value} 条"
+              }
+            },
+            {
+              type: "value",
+              name: "完播率",
+              position: "right",
+              min: 0,
+              max: 35,
+              axisLine: {
+                show: true,
+                lineStyle: { color: "#e74c3c" }
+              },
+              axisLabel: {
+                formatter: "{value}%"
+              }
+            }
+          ],
+          series: [
+            {
+              name: "发布数量",
+              type: "bar",
+              data: [180, 95, 70, 60, 110, 120, 100],
+              itemStyle: { color: "#3498db" }
+            },
+            {
+              name: "完播率",
+              type: "line",
+              yAxisIndex: 1,
+              data: [25, 22, 20, 18, 27, 29, 26],
+              itemStyle: { color: "#e74c3c" },
+              lineStyle: { width: 3 },
+              symbol: "circle",
+              symbolSize: 8
+            }
+          ]
+        });
+
+        // 图表4：新闻类短视频受众地域分布
+        const chart4 = echarts.init(document.getElementById("chart4"));
+        chart4.setOption({
+          tooltip: {
+            trigger: "axis",
+            axisPointer: { type: "shadow" }
+          },
+          grid: {
+            left: "3%",
+            right: "4%",
+            bottom: "3%",
+            containLabel: true
+          },
+          xAxis: {
+            type: "value",
+            name: "评论占比(%)"
+          },
+          yAxis: {
+            type: "category",
+            data: [
+              "广东",
+              "河南",
+              "河北",
+              "云南",
+              "陕西",
+              "浙江",
+              "山东",
+              "江苏",
+              "其他"
+            ],
+            name: "省份"
+          },
+          series: [
+            {
+              name: "评论占比",
+              type: "bar",
+              data: [20, 12, 11, 8, 7, 6, 5, 5, 26],
+              itemStyle: {
+                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                  { offset: 0, color: "#2980b9" },
+                  { offset: 1, color: "#3498db" }
+                ])
+              },
+              label: {
+                show: true,
+                position: "right",
+                formatter: "{c}%"
+              }
+            }
+          ]
+        });
+
+        // 图表5：不同平台内容类型偏好对比
+        const chart5 = echarts.init(document.getElementById("chart5"));
+        chart5.setOption({
+          tooltip: {
+            trigger: "axis",
+            axisPointer: { type: "shadow" }
+          },
+          legend: {
+            data: ["抖音", "快手"],
+            top: 10
+          },
+          grid: {
+            left: "3%",
+            right: "4%",
+            bottom: "3%",
+            containLabel: true
+          },
+          xAxis: {
+            type: "category",
+            data: ["时政新闻", "社会新闻", "娱乐新闻"]
+          },
+          yAxis: {
+            type: "value",
+            name: "互动指数"
+          },
+          series: [
+            {
+              name: "抖音",
+              type: "bar",
+              data: [26488, 69031, 105000],
+              itemStyle: { color: "#e74c3c" }
+            },
+            {
+              name: "快手",
+              type: "bar",
+              data: [31022, 75000, 47887],
+              itemStyle: { color: "#3498db" }
+            }
+          ]
+        });
+
+        // 图表6：评论情感倾向分析
+        const chart6 = echarts.init(document.getElementById("chart6"));
+        chart6.setOption({
+          tooltip: {
+            trigger: "item",
+            formatter: "{a} <br/>{b}: {c}%"
+          },
+          legend: {
+            orient: "vertical",
+            right: 10,
+            top: "center",
+            data: ["积极情感", "消极情感", "中性情感"]
+          },
+          series: [
+            {
+              name: "情感分布",
+              type: "pie",
+              radius: "70%",
+              center: ["40%", "50%"],
+              data: [
+                {
+                  value: 55,
+                  name: "积极情感",
+                  itemStyle: { color: "#2ecc71" }
+                },
+                {
+                  value: 25,
+                  name: "消极情感",
+                  itemStyle: { color: "#e74c3c" }
+                },
+                { value: 20, name: "中性情感", itemStyle: { color: "#f39c12" } }
+              ],
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 10,
+                  shadowOffsetX: 0,
+                  shadowColor: "rgba(0, 0, 0, 0.5)"
+                }
+              },
+              label: {
+                formatter: "{b}: {c}%"
+              }
+            }
+          ]
+        });
+
+        // 窗口调整时重置图表大小
+        window.addEventListener("resize", function () {
+          chart1.resize();
+          chart2.resize();
+          chart3.resize();
+          chart4.resize();
+          chart5.resize();
+          chart6.resize();
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,743 @@
+<!doctype html>
+<html lang="zh-CN" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3 GUI图形化界面设计</title>
+    <!-- 外部资源引入 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/line-numbers/prism-line-numbers.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind 配置 -->
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#2563eb", // 主色调：蓝色
+              secondary: "#10b981", // 辅助色：绿色
+              dark: {
+                100: "#374151",
+                200: "#1F2937",
+                300: "#111827"
+              },
+              light: {
+                100: "#F9FAFB",
+                200: "#F3F4F6",
+                300: "#E5E7EB"
+              }
+            },
+            fontFamily: {
+              sans: ["Inter", "system-ui", "sans-serif"],
+              mono: ["Fira Code", "monospace"]
+            }
+          }
+        }
+      };
+    </script>
+
+    <style type="text/tailwindcss">
+      @layer utilities {
+        .content-auto {
+          content-visibility: auto;
+        }
+        .section-id {
+          @apply scroll-mt-20; /* 锚点跳转时避开顶部 */
+        }
+        .code-block {
+          @apply bg-dark-300 dark:bg-dark-400 rounded-lg overflow-hidden my-6;
+        }
+        .code-header {
+          @apply flex items-center justify-between px-4 py-2 bg-dark-200 dark:bg-dark-300 border-b border-dark-100 dark:border-dark-200;
+        }
+        .table-responsive {
+          @apply overflow-x-auto my-6;
+        }
+        .doc-table {
+          @apply min-w-full bg-white dark:bg-dark-200 rounded-lg shadow-sm;
+        }
+        .doc-table th {
+          @apply px-4 py-3 text-left bg-light-200 dark:bg-dark-100;
+        }
+        .doc-table td {
+          @apply px-4 py-3 border-b border-light-300 dark:border-dark-100;
+        }
+        .figure-placeholder {
+          @apply bg-white dark:bg-dark-200 p-6 rounded-lg shadow-sm my-6 text-center;
+        }
+        .figure-caption {
+          @apply text-sm text-dark-100 dark:text-light-400 mt-2;
+        }
+        .custom-list {
+          list-style-type: none;
+        }
+        .custom-list li {
+          position: relative;
+        }
+        .custom-list li:before {
+          content: "▸";
+          position: absolute;
+          left: -1.5em;
+          color: #2563eb;
+        }
+      }
+    </style>
+  </head>
+
+  <body
+    class="bg-light-100 text-dark-300 dark:bg-dark-300 dark:text-light-100 min-h-screen flex flex-col"
+  >
+    <!-- 主内容区 -->
+    <main class="flex-1 overflow-y-auto p-4 lg:p-8">
+      <!-- 3. GUI图形化界面设计 -->
+      <section class="mb-16 w-full">
+        <h2
+          class="text-2xl md:text-3xl font-bold mb-6 text-dark-200 dark:text-light-200"
+        >
+          <i class="fa fa-desktop mr-2"></i>3. GUI图形化界面设计
+        </h2>
+
+        <!-- 3.1 需求分析 -->
+        <h3
+          class="text-xl font-semibold mb-4 text-primary section-id"
+          id="section-3-1"
+        >
+          3.1 需求分析
+        </h3>
+        <p class="mb-4">
+          现在人们越来越关注自己的身心健康。饮食健康是健康生活的重要组成部分。以正常成年人（60公斤标准体重）为参照，每天需要的热量在1500~2500千卡之间。我们每天吃的食物有多少热量，是否满足需求？
+        </p>
+        <p class="mb-4">
+          本案例以水果热量计算为例，利用Python的GUI标准库tkinter制作<em>水果卡路里计算器</em>，包含两个界面，功能如下：
+        </p>
+        <ul class="list-disc pl-6 mb-4 space-y-2">
+          <li>
+            第一个界面（卡路里计算）：用户可浏览各种水果每100g的热量，输入对应水果名称和重量，单击“计算”按钮获取该水果的热量。
+          </li>
+          <li>
+            第二个界面（食谱推荐）：展示健康食谱，通过“上一页”“下一页”按钮实现食谱切换。
+          </li>
+        </ul>
+        <div class="flex flex-col items-center my-6">
+          <div class="figure-placeholder">
+            <i class="fa fa-picture-o text-4xl text-gray-400 mb-2"></i>
+            <p>水果卡路里计算界面示意图</p>
+          </div>
+          <p class="figure-caption">图3-1 水果卡路里计算界面</p>
+        </div>
+
+        <!-- 3.2 学习目标 -->
+        <h3
+          class="text-xl font-semibold mb-4 text-primary section-id"
+          id="section-3-2"
+        >
+          3.2 学习目标
+        </h3>
+        <ol class="list-decimal pl-6 mb-4 space-y-2">
+          <li>理解图形化界面（GUI）的基本框架和各种组件。</li>
+          <li>掌握简单图形化界面的设计与创建。</li>
+          <li>掌握GUI中的事件处理和布局管理。</li>
+          <li>学会程序打包的方法。</li>
+        </ol>
+
+        <!-- 3.3 环境要求 -->
+        <h3
+          class="text-xl font-semibold mb-4 text-primary section-id"
+          id="section-3-3"
+        >
+          3.3 环境要求
+        </h3>
+        <div class="bg-white dark:bg-dark-200 p-4 rounded-lg shadow-sm mb-6">
+          <ul class="list-disc pl-6 space-y-2">
+            <li>开发工具：VS Code + 通义灵码（TONGYI Lingma）</li>
+            <li>
+              Python库：
+              <ul class="list-circle pl-6 mt-1">
+                <li>tkinter库（Python标准库，无需额外安装）</li>
+                <li>
+                  pillow库（处理图片，安装命令：<code
+                    class="bg-light-200 dark:bg-dark-100 px-1 py-0.5 rounded"
+                    >pip install pillow</code
+                  >）
+                </li>
+                <li>os库（Python标准库，用于文件路径处理）</li>
+                <li>csv库（Python标准库，用于读取CSV格式数据）</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 3.4 相关知识 -->
+        <h3
+          class="text-xl font-semibold mb-4 text-primary section-id"
+          id="section-3-4"
+        >
+          3.4 相关知识
+        </h3>
+
+        <!-- 3.4.1 GUI简介 -->
+        <h4
+          class="text-lg font-semibold mb-3 text-dark-200 dark:text-light-200"
+        >
+          1. GUI简介
+        </h4>
+        <h5 class="font-medium mb-2">（1）什么是GUI？</h5>
+        <p class="mb-4">
+          日常使用计算机时，启动应用程序后屏幕会呈现图形化窗口（如QQ登录窗口、记事本窗口等），窗口中包含文本框、按钮、菜单等交互元素，这些元素统称为<em
+            >GUI（图形用户界面，Graphical User Interface）</em
+          >。
+        </p>
+        <p class="mb-4">
+          GUI开发的核心：在窗口中合理组织组件（标签、按钮等），通过组件调用程序功能。设计良好的GUI可降低用户操作门槛，提升使用体验。
+        </p>
+        <div class="flex flex-col items-center my-6">
+          <div class="figure-placeholder">
+            <i class="fa fa-window-maximize text-4xl text-gray-400 mb-2"></i>
+            <p>图形化窗口示意图</p>
+          </div>
+          <p class="figure-caption">图3-2 图形化窗口示意</p>
+        </div>
+
+        <h5 class="font-medium mb-2">（2）Python中的GUI库</h5>
+        <p class="mb-4">Python常用GUI库对比如下：</p>
+        <p class="mb-4">
+          Tkinter：Python标准库，内置GUI库，无需额外安装，适合小型项目。
+        </p>
+        <p class="mb-4">
+          PyQt：跨平台GUI库，功能强大，需安装（<code
+            class="bg-light-200 dark:bg-dark-100 px-1 py-0.5 rounded"
+            >pip install PyQt5</code
+          >），支持Qt Designer可视化设计。
+        </p>
+        <p class="mb-4">
+          wxPython：另一个跨平台GUI库，基于wxWidgets，需安装（<code
+            class="bg-light-200 dark:bg-dark-100 px-1 py-0.5 rounded"
+            >pip install wxPython</code
+          >），提供丰富组件。
+        </p>
+        <p class="mb-4">
+          Kivy：跨平台GUI库，基于Python，需安装（<code
+            class="bg-light-200 dark:bg-dark-100 px-1 py-0.5 rounded"
+            >pip install kivy</code
+          >），支持多点触控。
+        </p>
+        <p class="mb-4">
+          PySide2：Qt公司的Python绑定库，需安装（<code
+            class="bg-light-200 dark:bg-dark-100 px-1 py-0.5 rounded"
+            >pip install PySide2</code
+          >），提供与Qt Designer的集成。
+        </p>
+
+        <!-- 3.4.2 tkinter中的组件Widget -->
+        <h4
+          class="text-lg font-semibold mb-3 text-dark-200 dark:text-light-200"
+        >
+          2. tkinter中的组件Widget
+        </h4>
+        <p class="mb-4">
+          组件是构成界面的元素（如标签、按钮、画布），控件是可交互的组件（如按钮、文本框）。tkinter包含丰富组件，还提供对话框子模块（messagebox/filedialog等）。
+        </p>
+        <div class="flex flex-col items-center my-6">
+          <div class="figure-placeholder">
+            <i class="fa fa-th-large text-4xl text-gray-400 mb-2"></i>
+            <p>tkinter组件示意图</p>
+          </div>
+          <p class="figure-caption">图3-3 tkinter中的组件</p>
+        </div>
+        <p class="mb-2">
+          ttk是tkinter8.5引入的新特性，提供现代化外观，分离控制代码与样式代码，包含12种原有组件+6种新组件，如图3-4所示：
+        </p>
+        <div class="flex flex-col items-center my-6">
+          <div class="figure-placeholder">
+            <i class="fa fa-th text-4xl text-gray-400 mb-2"></i>
+            <p>ttk子模块新增组件示意图</p>
+          </div>
+          <p class="figure-caption">图3-4 ttk子模块新增组件</p>
+        </div>
+
+        <!-- 3.4.3 图形化界面编程的基本流程 -->
+        <h4
+          class="text-lg font-semibold mb-3 text-dark-200 dark:text-light-200"
+        >
+          3. 图形化界面编程的基本流程
+        </h4>
+        <p class="mb-2">使用tkinter创建GUI的5个步骤：</p>
+        <ol class="custom-list pl-6 mb-4 space-y-3">
+          <li>
+            导入tkinter模块（如<code
+              class="bg-light-200 dark:bg-dark-100 px-1 py-0.5 rounded"
+              >import tkinter as tk</code
+            >）
+          </li>
+          <li>
+            创建主窗口（根窗口）：<code
+              class="bg-light-200 dark:bg-dark-100 px-1 py-0.5 rounded"
+              >root_window = tk.Tk()</code
+            >
+          </li>
+          <li>添加交互控件，并编写事件函数</li>
+          <li>窗口布局：设置控件在窗口中的位置</li>
+          <li>
+            启动主循环：<code
+              class="bg-light-200 dark:bg-dark-100 px-1 py-0.5 rounded"
+              >root_window.mainloop()</code
+            >（窗口持续显示，直到关闭）
+          </li>
+        </ol>
+
+        <!-- 3.4.4 事件处理 -->
+        <h4
+          class="text-lg font-semibold mb-3 text-dark-200 dark:text-light-200"
+        >
+          4. 事件处理
+        </h4>
+        <p class="mb-4">
+          事件（event）：界面中发生的操作（如鼠标单击、键盘按键），tkinter常见事件类型如表3-1所示。
+        </p>
+        <div class="table-responsive mb-6">
+          <p
+            class="text-center font-semibold mb-2 text-dark-200 dark:text-light-200"
+          >
+            表3-1 tkinter中的常见事件
+          </p>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th class="px-4 py-2 text-left">事件</th>
+                <th class="px-4 py-2 text-left">描述</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">&lt;B1-Motion&gt;</td>
+                <td class="px-4 py-2">按住鼠标左键移动（B2=中键，B3=右键）</td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">&lt;Button-i&gt;</td>
+                <td class="px-4 py-2">
+                  按下鼠标左键（i=1/2/3，对应左/中/右键）
+                </td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">&lt;ButtonRelease-i&gt;</td>
+                <td class="px-4 py-2">
+                  释放鼠标左键（i=1/2/3，对应左/中/右键）
+                </td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">&lt;Double-Button-i&gt;</td>
+                <td class="px-4 py-2">
+                  双击鼠标左键（i=1/2/3，对应左/中/右键）
+                </td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">&lt;MouseWheel&gt;</td>
+                <td class="px-4 py-2">滚动鼠标滚轮</td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">&lt;Enter&gt;</td>
+                <td class="px-4 py-2">鼠标进入组件区域</td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">&lt;Leave&gt;</td>
+                <td class="px-4 py-2">鼠标离开组件区域</td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">&lt;Key&gt;</td>
+                <td class="px-4 py-2">按下键盘任意键</td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">&lt;Return&gt;</td>
+                <td class="px-4 py-2">按下“Enter”回车键</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2">&lt;BackSpace&gt;</td>
+                <td class="px-4 py-2">按下“BackSpace”退格键</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="mb-4">
+          事件处理：事件发生时程序的响应操作（如单击“计算”按钮触发热量计算）。绑定方式有两种：
+        </p>
+        <ol class="custom-list pl-6 mb-4 space-y-3">
+          <li>
+            创建组件时，通过<code
+              class="bg-light-200 dark:bg-dark-100 px-1 py-0.5 rounded"
+              >command</code
+            >属性绑定函数（适用于简单单击事件）。
+          </li>
+          <li>
+            通过<code class="bg-light-200 dark:bg-dark-100 px-1 py-0.5 rounded"
+              >bind</code
+            >方法绑定事件（支持更多事件类型），语法：
+            <pre
+              class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mt-2"
+            ><code class="language-python line-numbers">widget.bind(event, func)
+# widget：组件对象；event：事件类型（如表3-1）；func：事件处理函数</code></pre>
+          </li>
+        </ol>
+
+        <!-- 3.4.5 布局管理 -->
+        <h4
+          class="text-lg font-semibold mb-3 text-dark-200 dark:text-light-200"
+        >
+          5. 布局管理
+        </h4>
+        <p class="mb-4">
+          布局管理用于设置组件在窗口中的位置，tkinter提供三种布局方式，组件需布局后才能显示：
+        </p>
+        <div class="bg-white dark:bg-dark-200 p-4 rounded-lg shadow-sm mb-6">
+          <ul class="space-y-4">
+            <li>
+              <strong class="text-primary">pack布局：</strong>
+              <p class="text-sm text-dark-100 dark:text-light-400">
+                相对布局，按添加顺序线性排列，支持垂直/水平方向，适合简单界面。
+              </p>
+              <p class="text-sm font-medium mt-1">
+                常用参数：side（方向）、fill（填充方式）、expand（是否扩展）
+              </p>
+            </li>
+            <li>
+              <strong class="text-primary">grid布局：</strong>
+              <p class="text-sm text-dark-100 dark:text-light-400">
+                网格布局，将窗口划分为行列表格，组件放入单元格，适合复杂界面。
+              </p>
+              <p class="text-sm font-medium mt-1">
+                常用参数：row（行）、column（列）、columnspan（跨列）、rowspan（跨行）
+              </p>
+            </li>
+            <li>
+              <strong class="text-primary">place布局：</strong>
+              <p class="text-sm text-dark-100 dark:text-light-400">
+                精确布局，通过X/Y坐标指定组件位置，适合需固定位置的场景。
+              </p>
+              <p class="text-sm font-medium mt-1">
+                常用参数：x（X轴坐标）、y（Y轴坐标）、width（宽度）、height（高度）
+              </p>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 3.5 案例实现 -->
+        <h3
+          class="text-xl font-semibold mb-4 text-primary section-id"
+          id="section-3-5"
+        >
+          3.5 案例实现
+        </h3>
+
+        <!-- 3.5.1 创建主窗口和选项卡 -->
+        <h4
+          class="text-lg font-semibold mb-3 text-dark-200 dark:text-light-200"
+        >
+          1. 创建主窗口和选项卡
+        </h4>
+        <h5 class="font-medium mb-2">（1）主窗口</h5>
+        <p class="mb-4">
+          每个GUI程序需一个主窗口，通过<code
+            class="bg-light-200 dark:bg-dark-100 px-1 py-0.5 rounded"
+            >tk.Tk()</code
+          >创建，<code class="bg-light-200 dark:bg-dark-100 px-1 py-0.5 rounded"
+            >mainloop()</code
+          >启动窗口循环。基础代码如下：
+        </p>
+        <pre
+          class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md mb-4"
+        ><code class="language-python line-numbers">import tkinter as tk
+
+# 创建主窗口
+root_window = tk.Tk()
+# 启动主循环（窗口持续显示）
+root_window.mainloop()</code></pre>
+
+        <div class="flex flex-col items-center my-6">
+          <div class="figure-placeholder">
+            <i class="fa fa-window-minimize text-4xl text-gray-400 mb-2"></i>
+            <p>tk空窗口示意图</p>
+          </div>
+          <p class="figure-caption">图3-6 tk空窗口</p>
+        </div>
+
+        <p class="mb-2">主窗口常用设置表3-2所示：</p>
+        <div class="table-responsive mb-6">
+          <p
+            class="text-center font-semibold mb-2 text-dark-200 dark:text-light-200"
+          >
+            表3-2 常用窗口设置
+          </p>
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th class="px-4 py-2 text-left">函数</th>
+                <th class="px-4 py-2 text-left">说明</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">
+                  <code>root_window.title("my title")</code>
+                </td>
+                <td class="px-4 py-2">设置窗口标题</td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">
+                  <code>root_window.geometry("400x200+150+200")</code>
+                </td>
+                <td class="px-4 py-2">
+                  设置窗口大小（400x200像素）和位置（距左上角水平150、垂直200像素）；参数为空时自动适配组件
+                </td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">
+                  <code>root_window.resizable(0,0)</code>
+                </td>
+                <td class="px-4 py-2">
+                  设置是否允许调整窗口大小（0/False表示禁止）
+                </td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">
+                  <code>root_window.iconbitmap("icon.ico")</code>
+                </td>
+                <td class="px-4 py-2">设置窗口左上角图标（需.ico格式文件）</td>
+              </tr>
+              <tr class="border-b border-light-300 dark:border-dark-100">
+                <td class="px-4 py-2">
+                  <code>root_window.config(background="pink")</code>
+                </td>
+                <td class="px-4 py-2">
+                  设置窗口背景颜色（支持颜色名或16进制值）
+                </td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2">
+                  <code>root_window.attributes("-alpha",0.5)</code>
+                </td>
+                <td class="px-4 py-2">
+                  设置窗口属性（-alpha：透明度；-topmost：是否置顶；-fullscreen：是否全屏）
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 3.6 举一反三 -->
+        <h3
+          class="text-xl font-semibold mb-4 text-primary section-id"
+          id="section-3-6"
+        >
+          3.6 举一反三
+        </h3>
+        <ol class="list-decimal pl-6 mb-4 space-y-2">
+          <li>
+            <strong>BMI计算器：</strong
+            >根据身高、体重计算BMI指数，并给出健康建议。
+          </li>
+          <li>
+            <strong>简易记事本：</strong>实现文件的新建、打开、保存等基本功能。
+          </li>
+          <li>
+            <strong>银行利息计算器：</strong>根据本金、利率、存期计算利息。
+          </li>
+        </ol>
+
+        <!-- BMI计算器案例 -->
+        <div class="bg-light-200 dark:bg-dark-100 p-6 rounded-lg my-6">
+          <h4 class="text-lg font-semibold mb-3">BMI计算器案例</h4>
+          <p class="mb-3">
+            BMI（Body Mass
+            Index）即身体质量指数，是评估人体肥胖程度和健康状况的常用指标。计算公式为：BMI
+            = 体重(kg) / 身高(m)²。
+          </p>
+
+          <h5 class="font-medium mb-2">核心实现思路</h5>
+          <ul class="list-disc pl-6 mb-3">
+            <li>创建主窗口和必要的标签、输入框、按钮等组件</li>
+            <li>编写计算BMI的函数，并根据计算结果给出健康建议</li>
+            <li>设置组件的布局，使其美观易用</li>
+          </ul>
+
+          <h5 class="font-medium mb-2">参考代码</h5>
+          <pre
+            class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md"
+          ><code class="language-python line-numbers">import tkinter as tk
+from tkinter import messagebox
+
+# 创建主窗口
+root = tk.Tk()
+root.title("BMI计算器")
+root.geometry("400x300")
+
+# 函数：计算BMI并显示结果
+def calculate_bmi():
+    try:
+        # 获取用户输入的身高和体重
+        weight = float(weight_entry.get())
+        height = float(height_entry.get()) / 100  # 转换为米
+
+        # 计算BMI
+        bmi = weight / (height ** 2)
+
+        # 判断BMI范围并给出建议
+        if bmi < 18.5:
+            advice = "偏瘦，建议增加营养摄入。"
+        elif 18.5 <= bmi < 24:
+            advice = "正常，继续保持健康生活方式。"
+        elif 24 <= bmi < 28:
+            advice = "偏胖，建议控制饮食并加强运动。"
+        else:
+            advice = "肥胖，建议咨询医生并制定减肥计划。"
+
+        # 显示结果
+        result_label.config(text=f"您的BMI指数为：{bmi:.2f}\n{advice}")
+    except:
+        messagebox.showerror("输入错误", "请输入有效的身高和体重数值！")
+
+# 创建标签和输入框
+weight_label = tk.Label(root, text="体重（kg）：", font=("微软雅黑", 12))
+weight_label.pack(pady=10)
+weight_entry = tk.Entry(root, font=("微软雅黑", 12), width=20)
+weight_entry.pack(pady=5)
+
+height_label = tk.Label(root, text="身高（cm）：", font=("微软雅黑", 12))
+height_label.pack(pady=10)
+height_entry = tk.Entry(root, font=("微软雅黑", 12), width=20)
+height_entry.pack(pady=5)
+
+# 创建计算按钮
+calculate_button = tk.Button(root, text="计算BMI", font=("微软雅黑", 12), command=calculate_bmi)
+calculate_button.pack(pady=20)
+
+# 创建结果标签
+result_label = tk.Label(root, text="", font=("微软雅黑", 12), justify="left")
+result_label.pack(pady=10)
+
+# 启动主循环
+root.mainloop()</code></pre>
+        </div>
+
+        <!-- 银行利息计算器案例 -->
+        <div class="bg-light-200 dark:bg-dark-100 p-6 rounded-lg my-6">
+          <h4 class="text-lg font-semibold mb-3">银行利息计算器案例</h4>
+          <p class="mb-3">
+            本案例实现一个简单的银行利息计算器，根据用户输入的本金、年利率和存款期限，计算到期后的本息和。
+          </p>
+
+          <h5 class="font-medium mb-2">核心实现思路</h5>
+          <ul class="list-disc pl-6 mb-3">
+            <li>创建主窗口和必要的组件</li>
+            <li>编写计算利息的函数</li>
+            <li>设置合理的布局</li>
+          </ul>
+
+          <h5 class="font-medium mb-2">参考代码</h5>
+          <pre
+            class="p-3 bg-dark-300 dark:bg-dark-400 rounded-md"
+          ><code class="language-python line-numbers">import tkinter as tk
+from tkinter import ttk, messagebox
+
+# 创建主窗口
+root = tk.Tk()
+root.title("银行利息计算器")
+root.geometry("450x350")
+
+# 函数：计算利息
+
+def calculate_interest():
+    try:
+        # 获取用户输入
+        principal = float(principal_entry.get())
+        rate = float(rate_entry.get())
+        years = float(years_entry.get())
+
+        # 计算利息和本息和
+        interest = principal * rate * years / 100
+        total = principal + interest
+
+        # 显示结果
+        result_var.set(f"利息：{interest:.2f}元\n本息和：{total:.2f}元")
+    except:
+        messagebox.showerror("输入错误", "请输入有效的数值！")
+
+# 创建标签和输入框
+
+# 本金
+principal_frame = ttk.Frame(root)
+principal_frame.pack(fill="x", padx=20, pady=10)
+
+principal_label = ttk.Label(principal_frame, text="本金（元）：", font=("微软雅黑", 12))
+principal_label.pack(side="left", padx=5)
+
+principal_entry = ttk.Entry(principal_frame, font=("微软雅黑", 12), width=20)
+principal_entry.pack(side="left", padx=5)
+
+# 年利率
+rate_frame = ttk.Frame(root)
+rate_frame.pack(fill="x", padx=20, pady=10)
+
+rate_label = ttk.Label(rate_frame, text="年利率（%）：", font=("微软雅黑", 12))
+rate_label.pack(side="left", padx=5)
+
+rate_entry = ttk.Entry(rate_frame, font=("微软雅黑", 12), width=20)
+rate_entry.pack(side="left", padx=5)
+
+# 存款期限
+years_frame = ttk.Frame(root)
+years_frame.pack(fill="x", padx=20, pady=10)
+
+years_label = ttk.Label(years_frame, text="存款期限（年）：", font=("微软雅黑", 12))
+years_label.pack(side="left", padx=5)
+
+years_entry = ttk.Entry(years_frame, font=("微软雅黑", 12), width=20)
+years_entry.pack(side="left", padx=5)
+
+# 创建计算按钮
+calculate_button = ttk.Button(root, text="计算利息", command=calculate_interest)
+calculate_button.pack(pady=20)
+
+# 创建结果显示区域
+result_var = tk.StringVar()
+result_label = ttk.Label(root, textvariable=result_var, font=("微软雅黑", 12), justify="left")
+result_label.pack(pady=10)
+
+# 启动主循环
+root.mainloop()</code></pre>
+        </div>
+      </section>
+    </main>
+
+    <!-- 代码高亮插件初始化 -->
+    <script>
+      // 初始化代码高亮
+      hljs.highlightAll();
+      // 图片加载失败时显示默认文本
+      document.querySelectorAll("img").forEach(img => {
+        img.addEventListener("error", function () {
+          this.alt = this.alt || "图片加载失败";
+          this.style.border = "1px dashed #ff4444";
+          this.style.backgroundColor = "#fff0f0";
+          this.style.display = "flex";
+          this.style.alignItems = "center";
+          this.style.justifyContent = "center";
+          this.style.height = "200px";
+        });
+      });
+    </script>
+  </body>
+</html>

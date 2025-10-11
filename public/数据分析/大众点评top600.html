@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>大众点评北京TOP600餐厅分析看板</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <style>
+      :root {
+        --primary-color: #e74c3c;
+        --secondary-color: #3498db;
+        --accent-color: #2ecc71;
+        --text-color: #333;
+        --light-bg: #f9f9f9;
+        --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f5f5f5;
+        color: var(--text-color);
+        line-height: 1.6;
+      }
+
+      header {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        color: white;
+        padding: 2rem;
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 2.2rem;
+      }
+
+      .subtitle {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        max-width: 800px;
+        margin: 1rem auto;
+      }
+
+      .dashboard {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+
+      .summary {
+        background-color: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: var(--card-shadow);
+        margin-bottom: 2rem;
+      }
+
+      .summary-points {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+
+      .summary-point {
+        background-color: var(--light-bg);
+        padding: 1rem;
+        border-radius: 6px;
+        border-left: 4px solid var(--primary-color);
+      }
+
+      .chart-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+        gap: 2rem;
+        margin-bottom: 3rem;
+      }
+
+      .chart-card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: var(--card-shadow);
+        padding: 1.5rem;
+        position: relative;
+      }
+
+      .chart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .chart-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin: 0;
+      }
+
+      .download-btn {
+        background-color: var(--secondary-color);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: background-color 0.3s;
+      }
+
+      .download-btn:hover {
+        background-color: #2980b9;
+      }
+
+      .chart-container {
+        position: relative;
+        height: 300px;
+        width: 100%;
+      }
+
+      .chart-description {
+        margin-top: 1rem;
+        font-size: 0.9rem;
+        color: #666;
+        line-height: 1.5;
+      }
+
+      footer {
+        background-color: #333;
+        color: white;
+        padding: 2rem;
+        text-align: center;
+        margin-top: 3rem;
+      }
+
+      .project-info {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .project-info h3 {
+        color: var(--accent-color);
+        margin-bottom: 1rem;
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        text-align: left;
+      }
+      .info-grid1 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1rem;
+        text-align: left;
+      }
+      .info-item {
+        margin-bottom: 0.5rem;
+      }
+
+      .info-label {
+        font-weight: bold;
+        margin-right: 0.5rem;
+      }
+
+      @media (max-width: 768px) {
+        .chart-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .summary-points {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>大众点评北京TOP600餐厅分析</h1>
+      <p class="subtitle">
+        在消费分级、健康意识升级与数字化浪潮的交织作用下，美食消费从单一味觉满足转向多元化价值追求。本分析揭示北京美食消费趋势，为餐饮从业者优化定价、选址和产品提供实操依据。
+      </p>
+    </header>
+
+    <div class="dashboard">
+      <section class="summary">
+        <h2>主要发现</h2>
+        <div class="summary-points">
+          <div class="summary-point">
+            商家命名暗藏消费密码，关键词直接挂钩价格定位
+          </div>
+          <div class="summary-point">
+            传统京味与多元菜系共存，健康食材成推荐菜焦点
+          </div>
+          <div class="summary-point">
+            中端消费成绝对主力，超低价位生存空间萎缩
+          </div>
+          <div class="summary-point">
+            餐饮资源高度向心聚集，城市副中心显现潜力
+          </div>
+          <div class="summary-point">
+            口碑传播呈断层分布，特色场景店引爆流量
+          </div>
+          <div class="summary-point">理性消费与品质升级的共生逻辑</div>
+        </div>
+      </section>
+
+      <div class="chart-grid">
+        <!-- 模块1：商家名关键词与价格关联分析 -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3 class="chart-title">商家名关键词与价格关联分析</h3>
+            <button
+              class="download-btn"
+              onclick="downloadChart('chart1', '关键词价格关联.png')"
+            >
+              下载图表
+            </button>
+          </div>
+          <div class="chart-container">
+            <canvas id="chart1"></canvas>
+          </div>
+          <div class="chart-description">
+            不同关键词对应的平均价格差异明显，反映出商家名中的关键词对价格有着重要影响。
+          </div>
+        </div>
+
+        <!-- 模块2：占比前二十名菜系分析 -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3 class="chart-title">占比前二十名菜系分析</h3>
+            <button
+              class="download-btn"
+              onclick="downloadChart('chart2', '菜系分布.png')"
+            >
+              下载图表
+            </button>
+          </div>
+          <div class="chart-container">
+            <canvas id="chart2"></canvas>
+          </div>
+          <div class="chart-description">
+            老北京火锅对应的餐厅数量相对较高，占据优势地位，表明在北京地区具有较高的市场接受度和普及度。
+          </div>
+        </div>
+
+        <!-- 模块3：食物元素在推荐菜中的提及频率分析 -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3 class="chart-title">食物元素在推荐菜中的提及频率</h3>
+            <button
+              class="download-btn"
+              onclick="downloadChart('chart3', '食物元素频率.png')"
+            >
+              下载图表
+            </button>
+          </div>
+          <div class="chart-container">
+            <canvas id="chart3"></canvas>
+          </div>
+          <div class="chart-description">
+            牛肉、牛排、豆腐等食物元素被提及的频率高，反映出含有这些食物元素的菜品更受顾客喜爱。
+          </div>
+        </div>
+
+        <!-- 模块4：人均消费价格分布区间分析 -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3 class="chart-title">人均消费价格分布区间</h3>
+            <button
+              class="download-btn"
+              onclick="downloadChart('chart4', '价格分布.png')"
+            >
+              下载图表
+            </button>
+          </div>
+          <div class="chart-container">
+            <canvas id="chart4"></canvas>
+          </div>
+          <div class="chart-description">
+            100-200元价格带占比高达43.3%，覆盖家庭聚餐与商务宴请的核心需求，是中端餐饮市场的主力。
+          </div>
+        </div>
+
+        <!-- 模块5：餐厅在各行政区分布状况分析 -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3 class="chart-title">餐厅在各行政区分布状况</h3>
+            <button
+              class="download-btn"
+              onclick="downloadChart('chart5', '行政区分布.png')"
+            >
+              下载图表
+            </button>
+          </div>
+          <div class="chart-container">
+            <canvas id="chart5"></canvas>
+          </div>
+          <div class="chart-description">
+            朝阳区与海淀区集中了56.2%的头部餐厅，CBD与中关村的商业辐射效应显著，呈现"核心极化、副中心崛起、远郊失衡"的格局。
+          </div>
+        </div>
+
+        <!-- 模块6：评论数最多的前二十名餐厅分析 -->
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3 class="chart-title">评论数最多的前二十名餐厅</h3>
+            <button
+              class="download-btn"
+              onclick="downloadChart('chart6', '评论数排名.png')"
+            >
+              下载图表
+            </button>
+          </div>
+          <div class="chart-container">
+            <canvas id="chart6"></canvas>
+          </div>
+          <div class="chart-description">
+            评论量呈明显梯队分化，头部效应显著。胡大饭馆以近6万条评论断层领先，网红效应突出。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="project-info">
+        <h3>项目信息</h3>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">课程：</span>计算思维之问题求解
+          </div>
+          <div class="info-item">
+            <span class="info-label">类型：</span>数据分析与可视化
+          </div>
+          <div class="info-item">
+            <span class="info-label">授课老师：</span>张伟娜
+          </div>
+        </div>
+        <div class="info-grid1">
+          <div class="info-item">
+            <span class="info-label">班级：</span>2024广告学
+          </div>
+          <div class="info-item">
+            <span class="info-label">姓名：</span>宋佳欣 李奕文 汤璐 牛家怡
+            冯语涵 王羽彤
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // 模拟数据 - 基于文档描述
+      const keywordPriceData = {
+        labels: ["国贸", "宴", "烤鸭", "火锅", "烧烤", "铁锅", "羊蝎子"],
+        datasets: [
+          {
+            label: "平均价格(元)",
+            data: [380, 350, 180, 160, 90, 85, 80],
+            backgroundColor: [
+              "rgba(231, 76, 60, 0.8)",
+              "rgba(230, 126, 34, 0.8)",
+              "rgba(241, 196, 15, 0.8)",
+              "rgba(46, 204, 113, 0.8)",
+              "rgba(52, 152, 219, 0.8)",
+              "rgba(155, 89, 182, 0.8)",
+              "rgba(149, 165, 166, 0.8)"
+            ],
+            borderColor: [
+              "rgb(231, 76, 60)",
+              "rgb(230, 126, 34)",
+              "rgb(241, 196, 15)",
+              "rgb(46, 204, 113)",
+              "rgb(52, 152, 219)",
+              "rgb(155, 89, 182)",
+              "rgb(149, 165, 166)"
+            ],
+            borderWidth: 1
+          }
+        ]
+      };
+
+      const cuisineData = {
+        labels: [
+          "老北京火锅",
+          "川菜",
+          "西餐",
+          "日本料理",
+          "烤肉",
+          "烤串",
+          "其他"
+        ],
+        datasets: [
+          {
+            data: [120, 85, 75, 70, 65, 60, 125],
+            backgroundColor: [
+              "rgba(231, 76, 60, 0.7)",
+              "rgba(230, 126, 34, 0.7)",
+              "rgba(241, 196, 15, 0.7)",
+              "rgba(46, 204, 113, 0.7)",
+              "rgba(52, 152, 219, 0.7)",
+              "rgba(155, 89, 182, 0.7)",
+              "rgba(149, 165, 166, 0.7)"
+            ],
+            borderColor: [
+              "rgb(231, 76, 60)",
+              "rgb(230, 126, 34)",
+              "rgb(241, 196, 15)",
+              "rgb(46, 204, 113)",
+              "rgb(52, 152, 219)",
+              "rgb(155, 89, 182)",
+              "rgb(149, 165, 166)"
+            ],
+            borderWidth: 1
+          }
+        ]
+      };
+
+      const foodMentionData = {
+        labels: ["牛肉", "牛排", "豆腐", "鸡肉", "猪肉", "海鲜", "蔬菜"],
+        datasets: [
+          {
+            label: "提及次数",
+            data: [320, 280, 250, 210, 190, 170, 150],
+            backgroundColor: "rgba(52, 152, 219, 0.7)",
+            borderColor: "rgb(52, 152, 219)",
+            borderWidth: 1
+          }
+        ]
+      };
+
+      const priceDistributionData = {
+        labels: ["50元以下", "50-100元", "100-200元", "200元以上"],
+        datasets: [
+          {
+            data: [2.2, 29.5, 43.3, 25.0],
+            backgroundColor: [
+              "rgba(149, 165, 166, 0.7)",
+              "rgba(46, 204, 113, 0.7)",
+              "rgba(52, 152, 219, 0.7)",
+              "rgba(231, 76, 60, 0.7)"
+            ],
+            borderColor: [
+              "rgb(149, 165, 166)",
+              "rgb(46, 204, 113)",
+              "rgb(52, 152, 219)",
+              "rgb(231, 76, 60)"
+            ],
+            borderWidth: 1
+          }
+        ]
+      };
+
+      const districtDistributionData = {
+        labels: [
+          "朝阳区",
+          "海淀区",
+          "西城区",
+          "东城区",
+          "丰台区",
+          "通州区",
+          "其他区"
+        ],
+        datasets: [
+          {
+            label: "餐厅数量",
+            data: [231, 106, 58, 52, 37, 31, 85],
+            backgroundColor: "rgba(231, 76, 60, 0.7)",
+            borderColor: "rgb(231, 76, 60)",
+            borderWidth: 1
+          }
+        ]
+      };
+
+      const topCommentsData = {
+        labels: [
+          "胡大饭馆",
+          "御仙都",
+          "花厨",
+          "餐厅4",
+          "餐厅5",
+          "餐厅6",
+          "其他"
+        ],
+        datasets: [
+          {
+            label: "评论数量",
+            data: [58000, 32000, 31000, 30500, 30200, 30000, 150000],
+            backgroundColor: "rgba(155, 89, 182, 0.7)",
+            borderColor: "rgb(155, 89, 182)",
+            borderWidth: 1
+          }
+        ]
+      };
+
+      // 初始化图表
+      window.onload = function () {
+        // 图表1：关键词价格关联
+        new Chart(document.getElementById("chart1"), {
+          type: "bar",
+          data: keywordPriceData,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "top"
+              },
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    return `平均价格: ${context.raw}元`;
+                  }
+                }
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: "平均价格(元)"
+                }
+              }
+            }
+          }
+        });
+
+        // 图表2：菜系分布
+        new Chart(document.getElementById("chart2"), {
+          type: "pie",
+          data: cuisineData,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "right"
+              },
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    const value = context.raw;
+                    const total = context.dataset.data.reduce(
+                      (a, b) => a + b,
+                      0
+                    );
+                    const percentage = Math.round((value / total) * 100);
+                    return `${context.label}: ${value}家 (${percentage}%)`;
+                  }
+                }
+              }
+            }
+          }
+        });
+
+        // 图表3：食物元素提及频率
+        new Chart(document.getElementById("chart3"), {
+          type: "bar",
+          data: foodMentionData,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "top"
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: "提及次数"
+                }
+              }
+            }
+          }
+        });
+
+        // 图表4：价格分布
+        new Chart(document.getElementById("chart4"), {
+          type: "doughnut",
+          data: priceDistributionData,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "right"
+              },
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    return `${context.label}: ${context.raw}%`;
+                  }
+                }
+              }
+            }
+          }
+        });
+
+        // 图表5：行政区分布
+        new Chart(document.getElementById("chart5"), {
+          type: "bar",
+          data: districtDistributionData,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: "y",
+            plugins: {
+              legend: {
+                position: "top"
+              }
+            },
+            scales: {
+              x: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: "餐厅数量"
+                }
+              }
+            }
+          }
+        });
+
+        // 图表6：评论数排名
+        new Chart(document.getElementById("chart6"), {
+          type: "bar",
+          data: topCommentsData,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "top"
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: "评论数量"
+                }
+              }
+            }
+          }
+        });
+      };
+
+      // 下载图表功能
+      function downloadChart(chartId, filename) {
+        html2canvas(document.getElementById(chartId)).then(canvas => {
+          const link = document.createElement("a");
+          link.download = filename;
+          link.href = canvas.toDataURL("image/png");
+          link.click();
+        });
+      }
+    </script>
+  </body>
+</html>

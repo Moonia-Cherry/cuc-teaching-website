@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>计算思维之问题求解期末优秀作品</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <style>
+      :root {
+        --primary-color: #4361ee;
+        --secondary-color: #3a0ca3;
+        --accent-color: #f72585;
+        --light-color: #f8f9fa;
+        --dark-color: #2b2d42;
+        --success-color: #4cc9f0;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background-color: #f5f7fa;
+        color: var(--dark-color);
+        line-height: 1.6;
+        background-image: linear-gradient(
+          120deg,
+          rgba(67, 97, 238, 0.05) 0%,
+          rgba(76, 201, 240, 0.05) 100%
+        );
+      }
+
+      header {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        color: white;
+        padding: 60px 20px;
+        text-align: center;
+        margin-bottom: 40px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(67, 97, 238, 0.2);
+      }
+
+      header::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+            circle at 20% 30%,
+            rgba(255, 255, 255, 0.1) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 70%,
+            rgba(255, 255, 255, 0.1) 0%,
+            transparent 50%
+          );
+      }
+
+      h1 {
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .subtitle {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        max-width: 700px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .projects-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 30px;
+        margin-bottom: 50px;
+      }
+
+      .project-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .project-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 30px rgba(67, 97, 238, 0.15);
+      }
+
+      .project-card:hover .card-icon {
+        transform: scale(1.1);
+        background-color: var(--accent-color);
+      }
+
+      .card-header {
+        padding: 30px 25px;
+        background: linear-gradient(
+          135deg,
+          rgba(67, 97, 238, 0.05),
+          rgba(76, 201, 240, 0.05)
+        );
+        border-bottom: 1px solid rgba(67, 97, 238, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .card-icon {
+        width: 60px;
+        height: 60px;
+        background-color: var(--primary-color);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.8rem;
+        transition: all 0.3s ease;
+      }
+
+      .card-title {
+        font-size: 1.4rem;
+        color: var(--dark-color);
+        font-weight: 600;
+        margin: 0;
+      }
+
+      .card-body {
+        padding: 25px;
+        flex-grow: 1;
+      }
+
+      .card-description {
+        color: #666;
+        margin-bottom: 20px;
+        line-height: 1.7;
+      }
+
+      .card-link {
+        display: inline-block;
+        padding: 12px 24px;
+        background-color: var(--primary-color);
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        text-align: center;
+        width: 100%;
+      }
+
+      .card-link:hover {
+        background-color: var(--secondary-color);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+      }
+
+      footer {
+        background-color: var(--dark-color);
+        color: white;
+        padding: 30px 20px;
+        text-align: center;
+        margin-top: 50px;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+      }
+
+      .footer-content {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .footer-info {
+        opacity: 0.8;
+        margin-bottom: 10px;
+      }
+
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 2.2rem;
+        }
+
+        .projects-container {
+          grid-template-columns: 1fr;
+        }
+
+        .card-icon {
+          width: 50px;
+          height: 50px;
+          font-size: 1.5rem;
+        }
+      }
+
+      /* Animation */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .project-card {
+        animation: fadeInUp 0.5s ease-out forwards;
+      }
+
+      .project-card:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+      .project-card:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .project-card:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+      .project-card:nth-child(4) {
+        animation-delay: 0.4s;
+      }
+      .project-card:nth-child(5) {
+        animation-delay: 0.5s;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>计算思维之问题求解期末优秀作品</h1>
+      <p class="subtitle">探索数据背后的故事，展现计算思维的魅力</p>
+    </header>
+
+    <div class="container">
+      <div class="projects-container">
+        <div class="project-card">
+          <div class="card-header">
+            <div class="card-icon">📊</div>
+            <h3 class="card-title">短视频平台新闻传播特性分析</h3>
+          </div>
+          <div class="card-body">
+            <p class="card-description">
+              基于抖音、快手平台的新闻传播特性与用户行为深度数据分析，探索短视频时代新闻传播的新规律与新趋势。
+            </p>
+            <a
+              href="短视频平台新闻传播特性与用户行为洞察分析.html"
+              class="card-link"
+              target="_blank"
+              >查看详情</a
+            >
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="card-header">
+            <div class="card-icon">📚</div>
+            <h3 class="card-title">B站高数课评论分析</h3>
+          </div>
+          <div class="card-body">
+            <p class="card-description">
+              分析B站高等数学课程评论数据，挖掘学习者的学习行为、情感倾向与需求痛点，为在线教育优化提供数据支撑。
+            </p>
+            <a href="B站高数课评论分析.html" class="card-link" target="_blank"
+              >查看详情</a
+            >
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="card-header">
+            <div class="card-icon">👨‍👩‍👧‍👦</div>
+            <h3 class="card-title">中国低生育率分析</h3>
+          </div>
+          <div class="card-body">
+            <p class="card-description">
+              深入分析中国低生育率现状、影响因素与发展趋势，结合多维度数据探讨人口结构变化对社会经济的潜在影响。
+            </p>
+            <a href="中国低生育率分析.html" class="card-link" target="_blank"
+              >查看详情</a
+            >
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="card-header">
+            <div class="card-icon">🍽️</div>
+            <h3 class="card-title">大众点评top600分析</h3>
+          </div>
+          <div class="card-body">
+            <p class="card-description">
+              基于大众点评top600餐厅数据，分析城市餐饮消费趋势、用户偏好与评价特征，探索餐饮行业发展规律。
+            </p>
+            <a href="大众点评top600.html" class="card-link" target="_blank"
+              >查看详情</a
+            >
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="card-header">
+            <div class="card-icon">🎬</div>
+            <h3 class="card-title">视频传播效果影响因素分析</h3>
+          </div>
+          <div class="card-body">
+            <p class="card-description">
+              探索影响视频内容传播效果的关键因素，分析标题、封面、时长、发布时间等要素对观看量、互动率的影响机制。
+            </p>
+            <a
+              href="视频传播效果影响因素分析.html"
+              class="card-link"
+              target="_blank"
+              >查看详情</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="footer-content">
+        <p class="footer-info">计算思维之问题求解期末优秀作品展示</p>
+        <p class="footer-info">© 2025 数据分析课程</p>
+      </div>
+    </footer>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
