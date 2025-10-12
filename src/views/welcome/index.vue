@@ -1,3 +1,5 @@
+<!-- 以下内容已被注释掉 -->
+<!--
 <script setup lang="ts"></script>
 <template>
   <main>
@@ -190,3 +192,4 @@
   transform: translateX(4px);
 }
 </style>
+-->

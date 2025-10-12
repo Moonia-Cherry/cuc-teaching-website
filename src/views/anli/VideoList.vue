@@ -47,7 +47,6 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
-import { getVideoListApi } from "@/api/videos";
 
 // 响应式数据
 const videoList = ref([]);
@@ -56,25 +55,27 @@ const searchKeyword = ref("");
 const isLoading = ref(true);
 const defaultPoster = "https://picsum.photos/400/225?random=100";
 
-// 页面加载时从后端获取视频列表
-const fetchVideos = async (search = "") => {
+// 页面加载时从public/Video目录获取视频列表
+const fetchVideos = async () => {
   isLoading.value = true;
   try {
-    const res = await getVideoListApi();
-    if (res && res.code === 0 && Array.isArray(res.data)) {
-      // 保证每个 item 有必要字段
-      videoList.value = res.data.map(v => ({
-        id: v.id ?? "",
-        title:
-          v.title ??
-          (v.filename ? v.filename.replace(/\.[^/.]+$/, "") : "untitled"),
-        url: v.url, // 后端返回可直接访问的 url
-        poster: v.poster ?? ""
-      }));
-    } else {
-      console.warn("getVideoListApi 返回结构异常或 code 非 0", res);
-      videoList.value = [];
-    }
+    // 直接从public/Video目录读取视频文件
+    const videoFiles = [
+      { id: "1", filename: "00.计算思维导论.mp4" },
+      { id: "2", filename: "1-1-1 计算机硬件.mp4" },
+      { id: "3", filename: "1-1-2 计算机软件.mp4" },
+      { id: "4", filename: "1-1-3 二进制.mp4" },
+      { id: "5", filename: "1-1-4 R进制转十进制.mp4" },
+      { id: "6", filename: "1-2-1 数值的表示.mp4" }
+    ];
+
+    // 构建视频数据
+    videoList.value = videoFiles.map(v => ({
+      id: v.id,
+      title: v.filename.replace(/\.[^/.]+$/, ""),
+      url: `/test/Video/${encodeURIComponent(v.filename)}`, // 由于服务器配置了基础URL为/test/，需要加上前缀
+      poster: ""
+    }));
   } catch (err) {
     console.error("获取视频列表失败", err);
     videoList.value = [];
@@ -151,7 +152,8 @@ const displayList = computed(() => {
 
 // 点击视频打开播放页
 const openVideo = video => {
-  const url = `/video-player.html?src=${encodeURIComponent(video.url)}&title=${encodeURIComponent(video.title)}`;
+  // 由于服务器配置了基础URL为/test/，所以需要在视频播放器URL前加上前缀
+  const url = `/test/video-player.html?src=${encodeURIComponent(video.url)}&title=${encodeURIComponent(video.title)}`;
   window.open(url, "_blank");
 };
 </script>
