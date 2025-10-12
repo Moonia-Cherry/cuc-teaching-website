@@ -5,21 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>视频播放</title>
     <style>
-      body {
+      * {
         margin: 0;
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
         background-color: #000;
         color: #fff;
         font-family: Arial, sans-serif;
+        overflow: hidden;
       }
 
       header {
-        padding: 10px 20px;
+        padding: 15px 20px;
         background-color: #1e88e5;
         text-align: center;
         font-size: 18px;
+        font-weight: bold;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        z-index: 10;
+        position: relative;
       }
 
       .video-container {
@@ -28,30 +42,138 @@
         justify-content: center;
         align-items: center;
         background-color: #000;
+        position: relative;
+        width: 100%;
+        height: calc(100vh - 50px);
+        /* 减去header高度 */
       }
 
       video {
         max-width: 100%;
         max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        /* 保持视频比例，不裁剪内容 */
+      }
+
+      .loading {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #fff;
+      }
+
+      .spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #3498db;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin-bottom: 10px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .error {
+        position: absolute;
+        text-align: center;
+        color: #ff4444;
+        padding: 20px;
+        max-width: 80%;
+      }
+
+      .error button {
+        margin-top: 10px;
+        padding: 8px 16px;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .error button:hover {
+        background-color: #2980b9;
       }
     </style>
   </head>
+
   <body>
     <header id="video-title">视频播放</header>
     <div class="video-container">
-      <video id="player" controls></video>
+      <div id="loading" class="loading">
+        <div class="spinner"></div>
+        <div>加载视频中...</div>
+      </div>
+      <div id="error" class="error" style="display: none">
+        <p>无法加载视频，请检查网络连接或视频文件是否存在。</p>
+        <button id="retry-btn">重试</button>
+      </div>
+      <video id="player" controls style="display: none"></video>
     </div>
 
     <script>
       const params = new URLSearchParams(window.location.search);
-      const src = params.get("src");
-      const title = params.get("title");
+      let src = params.get("src");
+      const title = params.get("title") || "视频播放";
 
       const video = document.getElementById("player");
       const header = document.getElementById("video-title");
+      const loading = document.getElementById("loading");
+      const error = document.getElementById("error");
+      const retryBtn = document.getElementById("retry-btn");
 
-      video.src = src;
+      // 设置页面标题
+      document.title = title;
       header.textContent = title;
+
+      // 加载视频函数
+      function loadVideo() {
+        // 确保src是相对于当前目录的路径
+        if (src && !src.startsWith("http") && !src.startsWith("/")) {
+          src = "/" + src;
+        }
+
+        // 显示加载状态
+        loading.style.display = "flex";
+        video.style.display = "none";
+        error.style.display = "none";
+
+        // 设置视频源
+        video.src = src;
+
+        // 尝试加载视频
+        video.load();
+      }
+
+      // 视频加载成功
+      video.addEventListener("loadeddata", function () {
+        loading.style.display = "none";
+        video.style.display = "block";
+      });
+
+      // 视频加载失败
+      video.addEventListener("error", function () {
+        loading.style.display = "none";
+        error.style.display = "block";
+      });
+
+      // 重试按钮点击事件
+      retryBtn.addEventListener("click", loadVideo);
+
+      // 初始化加载视频
+      loadVideo();
     </script>
   </body>
 </html>
